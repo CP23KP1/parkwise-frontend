@@ -1,6 +1,6 @@
-"use client";
-import React, { useState } from "react";
+import React from "react";
 import Sidebar from "../components/sidebar";
+
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
@@ -8,11 +8,18 @@ interface DashboardLayoutProps {
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   return (
     <html>
+      <head>
+      </head>
       <body>
         <div className="flex">
-        <Sidebar />
-        {children}
+          <Sidebar />
+          
+          <main className="flex-grow p-4">
+            {children}
+          </main>
         </div>
+        <footer>
+        </footer>
       </body>
     </html>
   );
