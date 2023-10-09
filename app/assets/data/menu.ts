@@ -2,46 +2,46 @@ export const menuType = [
   {
     name: "Home",
     icon: "/menu/icons-dashboard.png",
-    link: "/menu/icons-dashboard.png",
+    link: "/dashboard",
   },
   {
     name: "Parking",
     icon: "/menu/parking.png",
-    link: "test",
+    link: "/dashboard/parking",
   },
   {
     name: "Staff",
     icon: "/menu/staff.png",
-    link: "test",
+    link: "/dashboard/staff",
   },
   {
     name: "Device",
     icon: "/menu/device.png",
-    link: "test",
+    link: "/dashboard/device",
   },
   {
     name: "Carbon",
     icon: "/menu/low-carbon.png",
-    link: "test",
+    link: "/dashboard/carbon",
   },
   {
     name: "Zone",
     icon: "/menu/zone.png",
-    link: "test",
+    link: "/dashboard/zone",
   },
   {
     name: "Logs",
     icon: "/menu/logs.png",
-    link: "test",
+    link: "/dashboard/logs",
   },
   {
     name: "Cars",
     icon: "/menu/car.png",
-    link: "test",
+    link: "/dashboard/car",
   },
   {
     name: "Users",
     icon: "/menu/users.png",
-    link: "test",
+    link: "/dashboard/users",
   },
 ];
