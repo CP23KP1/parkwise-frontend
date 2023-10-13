@@ -1,13 +1,20 @@
 // ResponsiveTable.tsx
-import React from "react";
+import React, { useState } from "react";
 import { Column, useTable } from "react-table";
 import { CarRowData } from "@/app/assets/data/car";
+import "react-responsive-modal/styles.css";
+import { Modal } from "react-responsive-modal";
+import Swal from "sweetalert2";
 
 interface Props {
   data: CarRowData[];
 }
 
 const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
+  const [open, setOpen] = useState(false);
+
+  const onOpenModal = () => setOpen(true);
+  const onCloseModal = () => setOpen(false);
   const columns: Column<CarRowData>[] = React.useMemo(
     () => [
       {
@@ -53,49 +60,92 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
 
   const handleEdit = (id: number) => {
     // Implement your edit logic here
-    alert(`Edit row with ID: ${id}`);
+    // alert(`Edit row with ID: ${id}`);
+    setOpen(true);
   };
 
   const handleDelete = (id: number) => {
-    // Implement your delete logic here
-    alert(`Delete row with ID: ${id}`);
+    Swal.fire({
+      text: "Are you sure to delete this?",
+      icon: "warning",
+      iconColor:'red',
+      showCancelButton: true,
+      confirmButtonText: "Confirm",
+      cancelButtonText: "Cancel",
+    })
   };
 
   return (
-    <div className="table-container w-72 sm:w-full"  >
-      <div
-        className="table-wrapper"
-        style={{ maxHeight: "400px", overflowY: "auto" }}
-      >
-        <table {...getTableProps()} className="responsive-table">
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
+    <>
+      <Modal open={open} onClose={onCloseModal}>
+        <div className="mx-10 my-4">
+          <h2 className="font-bold text-xl">Edit Car</h2>
+          <div className="flex flex-col gap-6">
+            <div className="pt-4">
+              <p>Carplate</p>
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              />
+            </div>
+            <div>
+              <p>Description</p>
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              />
+            </div>
+            <div>
+              <p>Owner</p>
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              />
+            </div>
+            <div className="flex justify-start">
+              <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
+                Edit
+              </button>
+            </div>
+          </div>
+          <div></div>
+        </div>
+      </Modal>
+      <div className="table-container w-72 sm:w-full">
+        <div
+          className="table-wrapper"
+          style={{ maxHeight: "400px", overflowY: "auto" }}
+        >
+          <table {...getTableProps()} className="responsive-table">
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <th {...column.getHeaderProps()}>
+                      {column.render("Header")}
+                    </th>
+                  ))}
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {rows.map((row) => {
+                prepareRow(row);
+                return (
+                  <tr {...row.getRowProps()}>
+                    {row.cells.map((cell) => {
+                      return (
+                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -8,13 +8,9 @@ interface Props {
   data: ZoneRowData[];
 }
 
-const ResponsiveTable: React.FC<Props> = ({ data }) => {
+const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
   const columns: Column<ZoneRowData>[] = React.useMemo(
     () => [
-      {
-        Header: "ID",
-        accessor: "id",
-      },
       {
         Header: "Name",
         accessor: "name",
@@ -101,4 +97,4 @@ const ResponsiveTable: React.FC<Props> = ({ data }) => {
   );
 };
 
-export default ResponsiveTable;
+export default ResponsiveZoneTable;
