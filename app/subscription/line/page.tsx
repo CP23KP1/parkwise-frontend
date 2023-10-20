@@ -6,10 +6,12 @@ const Line = () => {
   const [profile, setProfile] = useState(Object);
 
   useEffect(() => {
-    liff.init({ liffId: "2001081274-LNKPDKOj" }).then(() => {
-      console.log("LIFF initialized");
-      handleLogin();
-    });
+    liff
+      .init({ liffId: process.env.NEXT_PUBLIC_LINE_LOGIN_API as string })
+      .then(() => {
+        console.log("LIFF initialized");
+        handleLogin();
+      });
   }, []);
 
   const handleLogin = async () => {
@@ -18,7 +20,7 @@ const Line = () => {
       const userID = await liff.getIDToken();
       setProfile(userProfile);
       console.log(userProfile);
-      console.log(userID)
+      console.log(userID);
     } catch (err) {
       console.log(err);
     }
@@ -26,29 +28,43 @@ const Line = () => {
 
   return (
     <div>
-      <div className="">
-        
-        {profile && (
-          <div className="">
-            <div className="flex justify-center rounded">
-              <div className="w-1/4 h-1/4 md:w-1/6 md:h-1/6 ">
-                <img src={profile.pictureUrl} className="rounded" />
-              </div>
-            </div>
-            <div className="flex justify-center">
-              <div className="w-72">
-                <div className="grid grid-cols-2">
-                  <h1>User ID:</h1>
-                  <h1>{profile.userId}</h1>
+      <div className="login-bg h-screen">
+        <div className="flex justify-center">
+          <div className="bg-white w-4/12 h-3/4 border-2 rounded-3xl shadow-lg p-8 mt-10">
+            {profile && (
+              <div className="">
+                <div className="flex justify-center rounded">
+                  <div className="w-3/4 h-3/4 md:w-2/6 md:h-2/6 ">
+                    <img src={profile.pictureUrl} className="rounded" />
+                  </div>
                 </div>
-                <div className="grid grid-cols-2">
-                  <h1>Display Name: </h1>
-                  <h1>{profile.displayName}</h1>
+                <div className="flex justify-center">
+                  <div className="w-72">
+       
+                    <div className="flex justify-center gap-6 mt-4">
+                      <h1>ชื่อไลน์พนักงาน: </h1>
+                      <h1>{profile.displayName}</h1>
+                    </div>
+                    <div className="mt-4">
+                      <p>รหัสพนักงาน: </p>
+                      <input
+                        type="text"
+                        className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 mt-2"
+                        placeholder="Enter text..."
+                      />
+                    </div>
+                    <div className="relative mt-10 text-center">
+                      <button className="group relative px-6 py-3 text-white bg-blue-500 border border-blue-500 rounded-md transition-transform transform scale-100 hover:scale-105 duration-500">
+                        สมัครรับบริการแจ้งเตือน
+                        <div className="hidden absolute w-64 h-64 bg-red-500 rounded-full opacity-0 group-hover:opacity-100"></div>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
