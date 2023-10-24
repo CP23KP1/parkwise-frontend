@@ -3,11 +3,22 @@ import { ZoneRowData } from "@/app/assets/data/zone";
 import ResponsiveTable from "@/app/components/table";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxPopover,
+  ComboboxList,
+  ComboboxOption,
+} from "@reach/combobox";
+import "@reach/combobox/styles.css";
 
 const Zone = () => {
-  
   const data: ZoneRowData[] = [
     { id: 1, name: "ใต้อาคาร LX", avaliable: 30, service: 12 },
     { id: 2, name: "ตึก FIBO", avaliable: 25, service: 9 },
@@ -18,7 +29,11 @@ const Zone = () => {
   const onCloseModal = () => setOpen(false);
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+    libraries: ["places"],
   });
+
+  const center = useMemo(() => ({ lat: "44", lng: "44" }), []);
+  const [selected, setSelected] = useState(null);
 
   return (
     <>
@@ -48,11 +63,19 @@ const Zone = () => {
               />
             </div>
             {isLoaded ? (
-              <GoogleMap
-                zoom={10}
-                center={{ lat: 44, lng: 44 }}
-                mapContainerStyle={{ width: "200px", height: "200px" }}
-              />
+              <>
+                <div className="places-container">
+                  {/* <PlacesAutoComplete setSelected={setSelected}/> */}
+                </div>
+                <GoogleMap
+                  zoom={16}
+                  center={{ lat: 13.6512990907, lng: 100.493667011 }}
+                  mapContainerStyle={{ width: "350px", height: "350px" }}
+                  
+                >
+                  <Marker position={{ lat: 13.6512990907, lng: 100.493667011 }}></Marker>
+                  </GoogleMap>
+              </>
             ) : (
               <></>
             )}
@@ -80,6 +103,48 @@ const Zone = () => {
         <ResponsiveTable data={data} />
       </div>
     </>
+  );
+};
+
+
+interface PlacesAutoCompleteProps {
+  setSelected: (location: { lat: number, lng: number }) => void;
+}
+
+const PlacesAutoComplete: React.FC<PlacesAutoCompleteProps> = ({ setSelected }) => {
+  const handleSelect = async (address: string) => {
+    const results = await getGeocode({ address });
+    const { lat, lng } = await getLatLng(results[0]);
+    setSelected({ lat, lng });
+  }
+  
+  const {
+    ready,
+    value,
+    setValue,
+    suggestions: { status, data },
+    clearSuggestions,
+  } = usePlacesAutocomplete();
+  return (
+    <Combobox onSelect={handleSelect}>
+      <ComboboxInput
+        value={value}
+        onChange={(e) => {
+          setValue(e.target.value);
+        }}
+        disabled={!ready}
+        placeholder="Enter an address"
+      />
+      <ComboboxPopover>
+        <ComboboxList>
+          {status === "OK" &&
+            data.map((place, index) => (
+              <ComboboxOption key={index} value={place.description} />
+            ))
+          }
+        </ComboboxList>
+      </ComboboxPopover>
+    </Combobox>
   );
 };
 
