@@ -1,6 +1,6 @@
 "use client";
 import { ZoneRowData } from "@/app/assets/data/zone";
-import ResponsiveTable from "@/app/components/table";
+import ResponsiveTable from "@/app/components/zone/zone-table";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import React, { useMemo, useState } from "react";
@@ -20,8 +20,8 @@ import "@reach/combobox/styles.css";
 
 const Zone = () => {
   const data: ZoneRowData[] = [
-    { id: 1, name: "ใต้อาคาร LX", avaliable: 30, service: 12 },
-    { id: 2, name: "ตึก FIBO", avaliable: 25, service: 9 },
+    { id: 1, name: "ใต้อาคาร LX", address: "ตึก LX", maximum_capacity: 50, occupancy: 25, description:"อาคารภายใน KMUTT", avaliable:25, lat: 13.6512990907, long: 100.493667011},
+    { id: 1, name: "FIBO", address: "ตึก FIBO", maximum_capacity: 50, occupancy: 25, description:"อาคารภายใน KMUTT", avaliable:25, lat: 13.6512990907, long: 100.493667011},
   ];
   const [open, setOpen] = useState(false);
 
@@ -48,8 +48,22 @@ const Zone = () => {
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
+            <div className="pt-4">
+              <p>Description</p>
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              />
+            </div>
             <div>
-              <p>Avaliable</p>
+              <p>Max Capacity</p>
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              />
+            </div>
+            <div>
+              <p>Address</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"

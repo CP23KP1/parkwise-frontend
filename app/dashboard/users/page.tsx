@@ -13,17 +13,17 @@ const User = () => {
   const data: UserRowData[] = [
     {
       id: 1,
-      name: "นายใจดี มั่งมี",
+      firstName: "ใจดี",
+      lastName:"มั่งมี",
       phone: "0891234567",
       email: "test@gmail.com",
-      position: "เจ้าหน้าที่",
     },
     {
       id: 2,
-      name: "นายใจดี มั่งมี",
+      firstName: "ใจดี",
+      lastName:"มั่งมี",
       phone: "0891234567",
       email: "test@gmail.com",
-      position: "เจ้าหน้าที่",
     },
   ];
   return (
@@ -33,14 +33,14 @@ const User = () => {
           <h2 className="font-bold text-xl">Create User</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>Name</p>
+              <p>First Name</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
-            <div>
-              <p>Position</p>
+            <div className="pt-4">
+              <p>Last Name</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"

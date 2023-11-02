@@ -67,8 +67,6 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
     useTable({ columns, data });
 
   const handleEdit = (data: ParkingRowData) => {
-    // Implement your edit logic here
-    // alert(`Edit row with ID: ${id}`);
     setName(data.name);
     setDescription(data.description);
     setAmount(data.amount.toString());
@@ -77,12 +75,19 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
   };
 
   const handleDelete = (id: number) => {
-    // Implement your delete logic here
     Swal.fire({
-      title:"Are you sure to delete this?",
+      title: "คุณต้องการที่จะลบหรือไม่?",
       showCancelButton: true,
-      confirmButtonText: `Delete`,
-    })
+      icon:'warning',
+      iconColor:'#DC143C',
+      confirmButtonText: `ใช่`,
+      confirmButtonColor: "#DC143C",
+      cancelButtonText: `ไม่`,
+  }).then((data) => {
+    if(data.isConfirmed){
+      console.log('confirm jaaa')
+    }
+  })
   };
 
   return (

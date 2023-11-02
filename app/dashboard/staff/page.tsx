@@ -9,7 +9,8 @@ const Staff = () => {
   const data: StaffRowData[] = [
     {
       id: 1,
-      name: "นายใจดี มั่งมี",
+      firstName: "ใจดี",
+      lastName: "มั่งมี",
       phone: "0891234567",
       carOwn: ["กข-1234", "กข-5678"],
       email: "jaidee@kmutt.ac.th",
@@ -18,7 +19,8 @@ const Staff = () => {
     },
     {
       id: 2,
-      name: "นายเจริญ สุขใจ",
+      firstName: "เจริญ",
+      lastName: "สุขใจ",
       phone: "0891234568",
       carOwn: ["ขค-1234", "ขค-5678"],
       email: "jaroen@kmutt.ac.th",
@@ -36,8 +38,15 @@ const Staff = () => {
         <div className="mx-10 my-4">
           <h2 className="font-bold text-xl">Create Staff</h2>
           <div className="flex flex-col gap-6">
+          <div className="pt-4">
+              <p>First Name</p>
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              />
+            </div>
             <div className="pt-4">
-              <p>Name</p>
+              <p>Last Name</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"

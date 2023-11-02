@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import React, { useState } from "react";
 import { menuType } from "../assets/data/menu";
 import SidebarItem from "./sidebar-item";
@@ -66,7 +66,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                         </>
                     )}
                 </div>
-                <div className="w-full">
+                <div className="w-full" style={{ overflowY: "auto", maxHeight: "calc(100vh - 64px)" }}>
                     {menuType.map((item) => {
                         return (
                             <SidebarItem
