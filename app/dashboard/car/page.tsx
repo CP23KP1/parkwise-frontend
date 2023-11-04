@@ -4,6 +4,8 @@ import { CarRowData } from "@/app/assets/data/car";
 import ResponsiveCarTable from "@/app/components/cars/car-table";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
+import FilterButton from "@/app/components/button/filter";
+import { FilterMenuProps } from "@/app/components/button/filter-menu";
 
 const Car = () => {
   const data: CarRowData[] = [
@@ -26,6 +28,21 @@ const Car = () => {
       owner: "นายมั่นคง มั่งคั่ง",
     },
   ];
+
+  const filterData: FilterMenuProps[] = [
+    {
+      title: "ทั้งหมด",
+      func: () => console.log("ทั้งหมด"),
+    },
+    {
+      title: "ทั้งหมด",
+      func: () => console.log("ทั้งหมด"),
+    },
+    {
+      title: "ทั้งหมด",
+      func: () => console.log("ทั้งหมด"),
+    },
+  ]
 
   const [open, setOpen] = useState(false);
 
@@ -91,15 +108,36 @@ const Car = () => {
       <div className="w-72 sm:w-full">
         <h1 className="text-xl font-bold">Car</h1>
       </div>
-      <div className="flex justify-end">
+      <div className="flex justify-between my-4 align-middle">
+        <div className="w-10/12 flex align-middle">
+          <input
+            type="text"
+            className="border-2 border-solid border-gray-600 w-8/12 md:w-4/12 h-10 pl-3"
+            placeholder="ค้นหา"
+          />
+          <div className="mt-2 ml-2">
+            <FilterButton data={filterData as never} />
+          </div>
+        </div>
         <button
           className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
           onClick={onOpenModal}
         >
-          Add
+          เพิ่ม
         </button>
       </div>
       <ResponsiveCarTable data={data} />
+      <div className="mt-8 flex align-middle gap-4">
+        <button className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded">
+          <img src="/svg/back-button.svg" className="w-5 h-5" />
+        </button>
+        <div>
+          <p className="text-center mt-2">1 / 14</p>
+        </div>
+        <button className="flex items-center space-x-2 border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded">
+          <img src="/svg/next-button.svg" className="w-5 h-5" />
+        </button>
+      </div>
     </>
   );
 };
