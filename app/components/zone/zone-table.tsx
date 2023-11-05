@@ -5,12 +5,13 @@ import { UserRowData } from "@/app/assets/data/user";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
+import { ZoneRowData } from "@/app/assets/data/zone";
 
 interface Props {
-  data: UserRowData[];
+  data: ZoneRowData[];
 }
 
-const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
+const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
   const [open, setOpen] = useState(false);
 
   const onOpenModal = () => setOpen(true);
@@ -20,23 +21,35 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
 
-  const columns: Column<UserRowData>[] = React.useMemo(
+  const columns: Column<ZoneRowData>[] = React.useMemo(
     () => [
       {
-        Header: "First Name",
-        accessor: "firstName",
+        Header: "Zone Name",
+        accessor: "name",
       },
       {
-        Header: "Last Name",
-        accessor: "lastName",
+        Header: "Description",
+        accessor: "description",
       },
       {
-        Header: "Email",
-        accessor: "email",
+        Header: "Max Capacity",
+        accessor: "maximum_capacity",
       },
       {
-        Header: "Mobile No",
-        accessor: "phone",
+        Header: "Occupancy",
+        accessor:'occupancy',
+      },
+      {
+        Header: "Address",
+        accessor: "address",
+      },
+      {
+        Header: "Latitude",
+        accessor: "lat",
+      },
+      {
+        Header: "Longitude",
+        accessor: "long",
       },
       {
         Header: "Actions",
@@ -68,28 +81,28 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
     useTable({ columns, data });
 
   const handleEdit = (data: any) => {
-    console.log(data)
-    setFirstName(data.firstName)
-    setLastName(data.lastName)
-    setEmail(data.email)
-    setPhone(data.phone)
-    onOpenModal()
+    console.log(data);
+    setFirstName(data.firstName);
+    setLastName(data.lastName);
+    setEmail(data.email);
+    setPhone(data.phone);
+    onOpenModal();
   };
 
   const handleDelete = (id: number) => {
     Swal.fire({
-      title: "คุณต้องการที่จะลบหรือไม่?",
-      showCancelButton: true,
-      icon: "warning",
-      iconColor: "#DC143C",
-      confirmButtonText: `ใช่`,
-      confirmButtonColor: "#DC143C",
-      cancelButtonText: `ไม่`,
-    }).then((data) => {
-      if (data.isConfirmed) {
-        console.log("confirm jaaa");
-      }
-    });
+        title: "คุณต้องการที่จะลบหรือไม่?",
+        showCancelButton: true,
+        icon: "warning",
+        iconColor: "#DC143C",
+        confirmButtonText: `ใช่`,
+        confirmButtonColor: "#DC143C",
+        cancelButtonText: `ไม่`,
+      }).then((data) => {
+        if (data.isConfirmed) {
+          console.log("confirm jaaa");
+        }
+      });
   };
 
   return (
@@ -97,10 +110,10 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
       {" "}
       <Modal open={open} onClose={onCloseModal}>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">Edit Staff</h2>
+          <h2 className="font-bold text-xl">Edit Zone</h2>
           <div className="flex flex-col gap-6">
-          <div className="pt-4">
-              <p>First Name</p>
+            <div className="pt-4">
+              <p>Zone Name</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -108,7 +121,15 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div className="pt-4">
-              <p>Last Name</p>
+              <p>Description</p>
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+                value={firstName}
+              />
+            </div>
+            <div className="pt-4">
+              <p>Max Capacity</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -116,7 +137,7 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div>
-              <p>Email</p>
+              <p>Address</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -124,7 +145,15 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div>
-              <p>Mobile No</p>
+              <p>Latitude</p>
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+                value={phone}
+              />
+            </div>
+            <div>
+              <p>Longtitude</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -178,4 +207,4 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
   );
 };
 
-export default ResponsiveUserTable;
+export default ResponsiveZoneTable;

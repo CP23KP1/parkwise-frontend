@@ -3,7 +3,7 @@ import React from "react";
 
 const Login = () => {
   return (
-    <div className="login-bg h-full w-full flex justify-center items-center bg-gradient-to-b from-blue-500 to-blue-700">
+    <div className="login-bg h-screen w-full flex justify-center items-center bg-gradient-to-b from-blue-500 to-blue-700">
       <div className="bg-white w-4/12 h-3/4 border-2 rounded-3xl shadow-lg p-8">
         <div className="text-center">
           <img
@@ -80,9 +80,9 @@ const Login = () => {
             Login
           </button>
           </div>
-          <div className="flex justify-center">
+          {/* <div className="flex justify-center">
           <img src="/login/msoathlogin.png" className="h-12 w-72"/>
-          </div>
+          </div> */}
         </form>
       </div>
     </div>

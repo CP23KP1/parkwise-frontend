@@ -16,7 +16,8 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
 
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [position, setPosition] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -24,8 +25,12 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
   const columns: Column<StaffRowData>[] = React.useMemo(
     () => [
       {
-        Header: "Name",
-        accessor: "name",
+        Header: "First Name",
+        accessor: "firstName",
+      },
+      {
+        Header: "Last Name",
+        accessor: "lastName",
       },
       {
         Header: "Position",
@@ -51,6 +56,10 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
       {
         Header: "Service",
         accessor: "service",
+        Cell: ({ cell }) => {
+          const service = cell.value;
+          return <div className={cell.value ? 'text-green-400' : 'text-red-500'}>{service ? "Active" : "Inactive"}</div>;
+        }
       },
       {
         Header: "Actions",
@@ -82,7 +91,8 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
     useTable({ columns, data });
 
   const handleEdit = (data: StaffRowData) => {
-    setName(data.name);
+    setFirstName(data.firstName);
+    setLastName(data.lastName);
     setPosition(data.position);
     setEmail(data.email);
     setPhone(data.phone);
@@ -91,13 +101,18 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
   };
 
   const handleDelete = (id: number) => {
-    // Implement your delete logic here
-    // alert(`Delete row with ID: ${id}`);
     Swal.fire({
-      title: "Are you sure to delete this?",
-      confirmButtonText: "Confirm",
+      title: "คุณต้องการที่จะลบหรือไม่?",
       showCancelButton: true,
-      showCloseButton: true,
+      icon: "warning",
+      iconColor: "#DC143C",
+      confirmButtonText: `ใช่`,
+      confirmButtonColor: "#DC143C",
+      cancelButtonText: `ไม่`,
+    }).then((data) => {
+      if (data.isConfirmed) {
+        console.log("confirm jaaa");
+      }
     });
   };
 
@@ -108,11 +123,19 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
           <h2 className="font-bold text-xl">Create Staff</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>Name</p>
+              <p>First Name</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
-                value={name}
+                value={firstName}
+              />
+            </div>
+            <div className="pt-4">
+              <p>Last Name</p>
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+                value={lastName}
               />
             </div>
             <div>

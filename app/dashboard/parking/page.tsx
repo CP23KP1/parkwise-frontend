@@ -1,7 +1,15 @@
+// @ts-nocheck
 "use client";
+import DeleteModal from "@/app/components/modal/delete-modal";
 import ResponsiveParkingTable from "@/app/components/parking/parking-table";
+import Popup from "reactjs-popup";
+import "reactjs-popup/dist/index.css";
 import { useState } from "react";
 import Modal from "react-responsive-modal";
+import FilterButton, {
+  FilterButtonProps,
+} from "@/app/components/button/filter";
+import { FilterMenuProps } from "@/app/components/button/filter-menu";
 
 const Parking = () => {
   const [open, setOpen] = useState(false);
@@ -21,6 +29,21 @@ const Parking = () => {
       amount: 2,
       zone: "ตึก FIBO",
       description: "ตึก FIBO",
+    },
+  ];
+
+  const filterData: FilterButtonProps = [
+    {
+      title: "ทั้งหมด",
+      func: () => console.log("ทั้งหมด"),
+    },
+    {
+      title: "ทั้งหมด",
+      func: () => console.log("ทั้งหมด"),
+    },
+    {
+      title: "ทั้งหมด",
+      func: () => console.log("ทั้งหมด"),
     },
   ];
   return (
@@ -70,12 +93,36 @@ const Parking = () => {
         <div>
           <h1 className="text-xl font-bold">Parking</h1>
         </div>
-        <div className="flex justify-end">
-          <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white" onClick={onOpenModal}>
+        <div className="flex justify-between my-4 align-middle">
+          <div className="w-10/12 flex align-middle">
+            <input
+              type="text"
+              className="border-2 border-solid border-gray-600 w-8/12 md:w-4/12 h-10 pl-3"
+              placeholder="ค้นหา"
+            />
+            <div className="mt-2 ml-2">
+              <FilterButton data={filterData as never} />
+            </div>
+          </div>
+          <button
+            className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
+            onClick={onOpenModal}
+          >
             เพิ่ม
           </button>
         </div>
         <ResponsiveParkingTable data={data} />
+        <div className="mt-8 flex align-middle gap-4">
+          <button className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded">
+            <img src="/svg/back-button.svg" className="w-5 h-5" />
+          </button>
+          <div>
+            <p className="text-center mt-2">1 / 14</p>
+          </div>
+          <button className="flex items-center space-x-2 border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded">
+            <img src="/svg/next-button.svg" className="w-5 h-5" />
+          </button>
+        </div>
       </div>
     </>
   );
