@@ -6,6 +6,7 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
 import { ZoneRowData } from "@/app/assets/data/zone";
+import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 
 interface Props {
   data: ZoneRowData[];
@@ -16,10 +17,12 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
 
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [zoneName, setZoneName] = useState("");
+  const [description, setDescription] = useState("");
+  const [maxCapacity, setMaxCapacity] = useState(0);
+  const [address, setAddress] = useState("");
+  const [lat, setLat] = useState(0);
+  const [long, setLong] = useState(0);
 
   const columns: Column<ZoneRowData>[] = React.useMemo(
     () => [
@@ -82,10 +85,12 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
 
   const handleEdit = (data: any) => {
     console.log(data);
-    setFirstName(data.firstName);
-    setLastName(data.lastName);
-    setEmail(data.email);
-    setPhone(data.phone);
+    setZoneName(data.name);
+    setDescription(data.description);
+    setMaxCapacity(data.maximum_capacity);
+    setAddress(data.address);
+    setLat(data.lat);
+    setLong(data.long);
     onOpenModal();
   };
 
@@ -105,19 +110,33 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
       });
   };
 
+  const [selectedLatLng, setSelectedLatLng] = useState({ lat: 13.6512990907, lng: 100.493667011 });
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+    libraries: ["places"],
+  });
+
+  const handleMapClick = (e: any) => {
+    const lat = e.latLng.lat();
+    const lng = e.latLng.lng();
+    console.log("Clicked Latitude:", lat);
+    console.log("Clicked Longitude:", lng);
+    setSelectedLatLng({ lat, lng });
+  };
+
   return (
     <>
       {" "}
       <Modal open={open} onClose={onCloseModal}>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">Edit Zone</h2>
+          <h2 className="font-bold text-xl">Create Zone</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>Zone Name</p>
+              <p>Name</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
-                value={firstName}
+                value={zoneName}
               />
             </div>
             <div className="pt-4">
@@ -125,15 +144,15 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
-                value={firstName}
+                value={description}
               />
             </div>
-            <div className="pt-4">
+            <div>
               <p>Max Capacity</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
-                value={lastName}
+                value={maxCapacity}
               />
             </div>
             <div>
@@ -141,7 +160,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
-                value={email}
+                value={address}
               />
             </div>
             <div>
@@ -149,7 +168,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
-                value={phone}
+                value={selectedLatLng.lat}
               />
             </div>
             <div>
@@ -157,9 +176,41 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
-                value={phone}
+                value={selectedLatLng.lng}
               />
             </div>
+            {isLoaded ? (
+              <>
+                <div className="places-container">
+                </div>
+                <GoogleMap
+                  zoom={16}
+                  center={selectedLatLng}
+                  mapContainerStyle={{ width: "350px", height: "350px" }}
+                  onClick={handleMapClick}
+                >
+                  <Marker
+                    position={selectedLatLng}
+                    onLoad={(marker) => {
+                      const position = marker.getPosition();
+                      if (position) {
+                        const lat = position.lat();
+                        const lng = position.lng();
+                        console.log("Selected Latitude:", lat);
+                        console.log("Selected Longitude:", lng);
+                        setSelectedLatLng((prevState) => ({
+                          ...prevState,
+                          lat,
+                          lng,
+                        }));
+                      }
+                    }}
+                  />
+                </GoogleMap>
+              </>
+            ) : (
+              <></>
+            )}
             <div className="flex justify-start">
               <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
                 Add
