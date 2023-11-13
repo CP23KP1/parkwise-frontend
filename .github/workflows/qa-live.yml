@@ -1,0 +1,26 @@
+name: QA-LIVE
+
+on:
+    push:
+        branches:
+            - qa-live
+
+jobs:
+    QA-LIVE:
+        runs-on: self-hosted
+
+        steps:
+            - name: Checkout 🛎
+              uses: actions/checkout@master
+              with:
+                  path: "qa-parkwise-frontend/"
+
+            - name: Setup env 🛠
+              env:
+                  ENV: ${{ secrets.ENV }}
+              run: |
+                  touch qa-parkwise-frontend/.env
+                  echo "$ENV" >> qa-parkwise-frontend/.env
+
+            - name: Docker compose 🐳
+              run: docker-compose -f qa-parkwise-frontend/docker-compose.yml up -d --build qa-parkwise-frontend
