@@ -1,13 +1,16 @@
-version: '3'
+version: "3.7"
 services:
-  nextjs-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    volumes:
-      - .:/app
-    environment:
-      - NODE_ENV=development
-    command: npm run dev
+    qa-parkwise-frontend:
+        container_name: qa-parkwise-frontend
+        image: cp23kp1/node-qa-parkwise-frontend
+        build: .
+        restart: always
+        networks:
+            - backend
+        ports:
+            - "3000:3000"
+
+networks:
+    backend:
+        external:
+            name: backend
