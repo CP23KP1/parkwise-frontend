@@ -34,6 +34,10 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
         accessor: "price",
       },
       {
+        Header: "Zone",
+        accessor: "zone",
+      },
+      {
         Header: "Actions",
         accessor: "actions",
         Cell: ({ row }) => {
@@ -71,15 +75,19 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
   };
 
   const handleDelete = (id: number) => {
-    // Implement your delete logic here
-    // alert(`Delete row with ID: ${id}`);
     Swal.fire({
-      title: 'Are you really want to delete this device?',
-      confirmButtonText: 'Confirm',
-      cancelButtonText: 'Cancel',
+      title: "คุณต้องการที่จะลบหรือไม่?",
       showCancelButton: true,
-      showCloseButton: true
-    })
+      icon: "warning",
+      iconColor: "#DC143C",
+      confirmButtonText: `ใช่`,
+      confirmButtonColor: "#DC143C",
+      cancelButtonText: `ไม่`,
+    }).then((data) => {
+      if (data.isConfirmed) {
+        console.log("confirm jaaa");
+      }
+    });
   };
 
   return (
@@ -111,6 +119,15 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                 className="border-2 border-solid border-gray-600 w-80 h-10"
                 value={price}
               />
+            </div>
+            <div>
+              <p>Zone</p>
+              <select
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              >
+                <option>ใต้ตึก LX</option>
+                <option>ตึก FIBO</option>
+              </select>
             </div>
             <div className="flex justify-start">
               <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">

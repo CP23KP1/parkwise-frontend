@@ -18,12 +18,24 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
   const columns: Column<CarRowData>[] = React.useMemo(
     () => [
       {
-        Header: "Carplate",
+        Header: "License Plate",
         accessor: "carPlate",
       },
       {
-        Header: "Description",
-        accessor: "description",
+        Header: "Color",
+        accessor: "color",
+      },
+      {
+        Header: "Brand",
+        accessor: "brand",
+      },
+      {
+        Header: "Model",
+        accessor: "model",
+      },
+      {
+        Header: "Year",
+        accessor: "year",
       },
       {
         Header: "Owner",
@@ -66,13 +78,18 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
 
   const handleDelete = (id: number) => {
     Swal.fire({
-      text: "Are you sure to delete this?",
-      icon: "warning",
-      iconColor:'red',
+      title: "คุณต้องการที่จะลบหรือไม่?",
       showCancelButton: true,
-      confirmButtonText: "Confirm",
-      cancelButtonText: "Cancel",
-    })
+      icon: "warning",
+      iconColor: "#DC143C",
+      confirmButtonText: `ใช่`,
+      confirmButtonColor: "#DC143C",
+      cancelButtonText: `ไม่`,
+    }).then((data) => {
+      if (data.isConfirmed) {
+        console.log("confirm jaaa");
+      }
+    });
   };
 
   return (

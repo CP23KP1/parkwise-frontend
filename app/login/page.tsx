@@ -1,8 +1,49 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
+import Axios from "axios";
+import Swal from "sweetalert2";
+import { checkAuth } from "../helper/auth";
+import TextInput from "../components/input/input";
 
 const Login = () => {
+  useEffect(() => {
+    if (checkAuth()) {
+      window.location.href = "/dashboard";
+    }
+  }, []);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const login = async (e: any) => {
+    e.preventDefault();
+    Swal.fire({
+      title: "ระบบกำลังประมวลผล",
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      html: '<div style="display: flex; justify-content: center; align-items: center; height: 100%;"><div class="custom-spinner"></div></div>',
+    });
+
+    await Axios.post(
+      process.env.NEXT_PUBLIC_API_HOST + "/auth/login",
+      {
+        email: email,
+        password: password,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    ).then((response) => {
+      localStorage.setItem("access_token", response.data.access_token);
+      localStorage.setItem("refresh_token", response.data.refresh_token);
+      console.log(response.data);
+      window.location.href = "/dashboard";
+    });
+  };
   return (
-    <div className="login-bg h-full w-full flex justify-center items-center bg-gradient-to-b from-blue-500 to-blue-700">
+    <div className="login-bg h-screen w-full flex justify-center items-center bg-gradient-to-b from-blue-500 to-blue-700">
       <div className="bg-white w-4/12 h-3/4 border-2 rounded-3xl shadow-lg p-8">
         <div className="text-center">
           <img
@@ -12,12 +53,14 @@ const Login = () => {
           />
           <h2 className="text-2xl font-bold mb-4">ParkWise</h2>
         </div>
-        <form className="space-y-4">
+        <div className="space-y-4">
           <div className="relative">
-            <input
-              type="text"
-              placeholder="Username"
-              className="w-full h-10 pl-3 pr-10 rounded border-2 border-neutral-600 focus:border-blue-500 focus:ring focus:ring-blue-500"
+            <TextInput
+              type="email"
+              placeHolder="Email"
+              onChange={(e) => {
+                setEmail(e.target.value as any);
+              }}
             />
             <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400">
               <svg
@@ -43,10 +86,12 @@ const Login = () => {
             </span>
           </div>
           <div className="relative">
-            <input
+            <TextInput
               type="password"
-              placeholder="Password"
-              className="w-full h-10 pl-3 pr-10 rounded border-2 border-neutral-600 focus:border-blue-500 focus:ring focus:ring-blue-500"
+              placeHolder="Password"
+              onChange={(e) => {
+                setPassword(e.target.value as any);
+              }}
             />
             <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400">
               <svg
@@ -72,17 +117,15 @@ const Login = () => {
             </span>
           </div>
           <div className="flex justify-center">
-          <button
-            type="submit"
-            className="w-72 h-12 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-500"
-          >
-            Login
-          </button>
+            <button
+              type="submit"
+              className="w-72 h-12 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-500"
+              onClick={(e) => login(e)}
+            >
+              Login
+            </button>
           </div>
-          <div className="flex justify-center">
-          <img src="/login/msoathlogin.png" className="h-12 w-72"/>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   );
