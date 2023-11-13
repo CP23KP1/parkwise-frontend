@@ -6,6 +6,7 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import FilterButton from "@/app/components/button/filter";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
+import TextInput from "@/app/components/input/input";
 
 const Staff = () => {
   const data: StaffRowData[] = [
@@ -57,45 +58,27 @@ const Staff = () => {
           <div className="flex flex-col gap-6">
           <div className="pt-4">
               <p>First Name</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-              />
+              <TextInput type="text"/>
             </div>
             <div className="pt-4">
               <p>Last Name</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-              />
+              <TextInput type="text"/>
             </div>
             <div>
               <p>Position</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-              />
+              <TextInput type="text"/>
             </div>
             <div>
               <p>Email</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-              />
+              <TextInput type="text"/>
             </div>
             <div>
               <p>Mobile No</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-              />
+              <TextInput type="text"/>
             </div>{" "}
             <div>
               <p>Car Own <br/><p className="text-sm">(Example Input: กข-2343 กทม, ขค-2145 ชลบุรี)</p></p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-              />
+              <TextInput type="text"/>
             </div>
             <div className="flex justify-start">
               <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
@@ -129,7 +112,6 @@ const Staff = () => {
           </button>
         </div>
         <ResponsiveStaffTable data={data} />
-
          <div className="mt-8 flex align-middle gap-4">
           <button className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded">
             <img src="/svg/back-button.svg" className="w-5 h-5" />

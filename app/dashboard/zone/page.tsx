@@ -3,12 +3,14 @@ import { ZoneRowData } from "@/app/assets/data/zone";
 import ResponsiveTable from "@/app/components/zone/zone-table";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import "@reach/combobox/styles.css";
 import FilterButton, {
 } from "@/app/components/button/filter";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
+import axios from 'axios'
+import TextInput from "@/app/components/input/input";
 
 const Zone = () => {
   const data: ZoneRowData[] = [
@@ -76,6 +78,7 @@ const Zone = () => {
           <div className="flex flex-col gap-6">
             <div className="pt-4">
               <p>Name</p>
+              <TextInput  />
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
