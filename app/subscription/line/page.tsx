@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import liff from "@line/liff";
+import TextInput from "@/app/components/input/input";
 
 const Line = () => {
   const [profile, setProfile] = useState(Object);
@@ -40,18 +41,13 @@ const Line = () => {
                 </div>
                 <div className="flex justify-center">
                   <div className="w-72">
-       
                     <div className="flex justify-center gap-6 mt-4">
                       <h1>ชื่อไลน์พนักงาน: </h1>
                       <h1>{profile.displayName}</h1>
                     </div>
                     <div className="mt-4">
                       <p>รหัสพนักงาน: </p>
-                      <input
-                        type="text"
-                        className="w-full px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-200 mt-2"
-                        placeholder="Enter text..."
-                      />
+                      <TextInput type="text" placeHolder="Enter Text..."/>
                     </div>
                     <div className="relative mt-10 text-center">
                       <button className="group relative px-6 py-3 text-white bg-blue-500 border border-blue-500 rounded-md transition-transform transform scale-100 hover:scale-105 duration-500">

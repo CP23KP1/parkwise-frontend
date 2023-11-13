@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { menuType } from "../assets/data/menu";
 import SidebarItem from "./sidebar-item";
+import { logout } from "../helper/auth";
 
 interface SidebarProps {
     open?: boolean;
@@ -21,7 +22,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
             <div className="pt-4">
                 {openSidebar ? (
                     <>
-                        <div className="cursor-pointer block text-center bg-red-500 text-white mx-6 p-3 rounded-md hover:bg-red-700">
+                        <div className="cursor-pointer block text-center bg-red-500 text-white mx-6 p-3 rounded-md hover:bg-red-700" onClick={logout}>
                             <button>Logout</button>
                         </div>
                     </>
