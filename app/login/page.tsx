@@ -38,9 +38,15 @@ const Login = () => {
     ).then((response) => {
       localStorage.setItem("access_token", response.data.access_token);
       localStorage.setItem("refresh_token", response.data.refresh_token);
-      console.log(response.data);
       window.location.href = "/dashboard";
-    });
+    }).catch((error) => {
+      console.log(error)
+      Swal.fire({
+        title: "ชื่อผู้ใช้หรือรหัสผ่านผิด กรุณาลองใหม่อีกครั้ง",
+        allowEscapeKey: false,
+        allowOutsideClick: false,
+      });
+    })
   };
   return (
     <div className="login-bg h-screen w-full flex justify-center items-center bg-gradient-to-b from-blue-500 to-blue-700">
