@@ -22,23 +22,23 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
   const columns: Column<DeviceRowData>[] = React.useMemo(
     () => [
       {
-        Header: "Name",
+        Header: "ชื่อ",
         accessor: "name",
       },
       {
-        Header: "Description",
+        Header: "คำอธิบาย",
         accessor: "description",
       },
       {
-        Header: "Price",
+        Header: "ราาคา",
         accessor: "price",
       },
       {
-        Header: "Zone",
+        Header: "โซน",
         accessor: "zone",
       },
       {
-        Header: "Actions",
+        Header: "การดำเนินการ",
         accessor: "actions",
         Cell: ({ row }) => {
           return (
@@ -47,13 +47,13 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                 onClick={() => handleEdit(row.original)}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
-                Edit
+                แก้ไข
               </button>
               <button
                 onClick={() => handleDelete(row.original.id)}
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               >
-                Delete
+                ลบ
               </button>
             </div>
           );
@@ -97,7 +97,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
           <h2 className="font-bold text-xl">Edit Device</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>Name</p>
+              <p>ชื่อ</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -105,7 +105,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div>
-              <p>Description</p>
+              <p>คำอธิบาย</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -113,7 +113,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div>
-              <p>Price</p>
+              <p>ราคา</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -121,7 +121,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div>
-              <p>Zone</p>
+              <p>โซน</p>
               <select
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               >
@@ -131,7 +131,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
             </div>
             <div className="flex justify-start">
               <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
-                Edit
+                แก้ไข
               </button>
             </div>
           </div>

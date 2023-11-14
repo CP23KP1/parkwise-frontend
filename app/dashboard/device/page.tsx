@@ -51,28 +51,28 @@ const Device = () => {
           <h2 className="font-bold text-xl">Create Device</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>Name</p>
+              <p>ชื่อ</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
             <div>
-              <p>Description</p>
+              <p>คำอธิบาย</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
             <div>
-              <p>Price</p>
+              <p>ราคา</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
             <div>
-              <p>Zone</p>
+              <p>โซน</p>
               <select className="border-2 border-solid border-gray-600 w-80 h-10">
                 <option>ใต้ตึก LX</option>
                 <option>ตึก FIBO</option>
@@ -80,7 +80,7 @@ const Device = () => {
             </div>
             <div className="flex justify-start">
               <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
-                Add
+                เพิ่ม
               </button>
             </div>
           </div>

@@ -10,19 +10,19 @@ const ResponsiveCarbonTable: React.FC<Props> = ({ data }) => {
   const columns: Column<CarbonRowData>[] = React.useMemo(
     () => [
       {
-        Header: "Carplate",
+        Header: "ป้ายทะเบียนรถ",
         accessor: "carPlate",
       },
       {
-        Header: "From",
+        Header: "จาก",
         accessor: "from",
       },
       {
-        Header: "Destination",
+        Header: "จุดหมาย",
         accessor: "destination",
       },
       {
-        Header: "Amount",
+        Header: "จำนวน",
         accessor: "amount",
       },
     ],

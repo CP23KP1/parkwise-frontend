@@ -18,31 +18,31 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
   const columns: Column<CarRowData>[] = React.useMemo(
     () => [
       {
-        Header: "License Plate",
+        Header: "ป้ายทะเบียนรถ",
         accessor: "carPlate",
       },
       {
-        Header: "Color",
+        Header: "สี",
         accessor: "color",
       },
       {
-        Header: "Brand",
+        Header: "ยี่ห้อ",
         accessor: "brand",
       },
       {
-        Header: "Model",
+        Header: "แบบ",
         accessor: "model",
       },
       {
-        Header: "Year",
+        Header: "ปี",
         accessor: "year",
       },
       {
-        Header: "Owner",
+        Header: "เจ้าของ",
         accessor: "owner",
       },
       {
-        Header: "Actions",
+        Header: "การดำเนินการ",
         accessor: "actions",
         Cell: ({ row }) => {
           return (
@@ -51,13 +51,13 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                 onClick={() => handleEdit(row.original.id)}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
-                Edit
+                แก้ไข
               </button>
               <button
                 onClick={() => handleDelete(row.original.id)}
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               >
-                Delete
+                ลบ
               </button>
             </div>
           );
@@ -106,14 +106,14 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div>
-              <p>Description</p>
+              <p>คำอธิบาย</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
             <div>
-              <p>Owner</p>
+              <p>เจ้าของ</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -121,7 +121,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
             </div>
             <div className="flex justify-start">
               <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
-                Edit
+                แก้ไข
               </button>
             </div>
           </div>

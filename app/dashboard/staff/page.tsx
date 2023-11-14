@@ -58,31 +58,49 @@ const Staff = () => {
           <div className="flex flex-col gap-6">
           <div className="pt-4">
               <p>First Name</p>
-              <TextInput type="text"/>
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              />
             </div>
             <div className="pt-4">
               <p>Last Name</p>
-              <TextInput type="text"/>
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              />
             </div>
             <div>
               <p>Position</p>
-              <TextInput type="text"/>
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              />
             </div>
             <div>
               <p>Email</p>
-              <TextInput type="text"/>
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              />
             </div>
             <div>
               <p>Mobile No</p>
-              <TextInput type="text"/>
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              />
             </div>{" "}
             <div>
               <p>Car Own <br/><p className="text-sm">(Example Input: กข-2343 กทม, ขค-2145 ชลบุรี)</p></p>
-              <TextInput type="text"/>
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              />
             </div>
             <div className="flex justify-start">
               <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
-                Add
+                เพิ่ม
               </button>
             </div>
           </div>

@@ -53,28 +53,28 @@ const Parking = () => {
           <h2 className="font-bold text-xl">Create Parking</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>Name</p>
+              <p>ชื่อ</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
             <div>
-              <p>Description</p>
+              <p>คำอธิบาย</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
             <div>
-              <p>Amount</p>
+              <p>จำนวน</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
             <div>
-              <p>Zone</p>
+              <p>โซน</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -82,7 +82,7 @@ const Parking = () => {
             </div>{" "}
             <div className="flex justify-start">
               <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
-                Add
+                เพิ่ม
               </button>
             </div>
           </div>
@@ -91,7 +91,7 @@ const Parking = () => {
       </Modal>
       <div className="w-72 sm:w-full">
         <div>
-          <h1 className="text-xl font-bold">Parking</h1>
+          <h1 className="text-xl font-bold">ที่จอดรถ</h1>
         </div>
         <div className="flex justify-between my-4 align-middle">
           <div className="w-10/12 flex align-middle">

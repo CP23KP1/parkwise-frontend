@@ -45,9 +45,9 @@ const Logs = () => {
       <div>
         <h1 className="text-xl font-bold">Logs</h1>
         <select className="form-select block border-solid border-2 rounded-md w-32 h-10 border-gray-600 my-4">
-          <option>Zone 1</option>
-          <option>Zone 2</option>
-          <option>Zone 3</option>
+          <option>โซน 1</option>
+          <option>โซน 2</option>
+          <option>โซน 3</option>
         </select>
       </div>
       <div className="flex flex-col md:flex-row gap-5">

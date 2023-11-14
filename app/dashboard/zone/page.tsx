@@ -78,43 +78,34 @@ const Zone = () => {
           <div className="flex flex-col gap-6">
             <div className="pt-4">
               <p>Name</p>
-              <TextInput  />
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
             <div className="pt-4">
-              <p>Description</p>
+              <p>คำอธิบาย</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
             <div>
-              <p>Max Capacity</p>
+              <p>จำนวนรถสูงสุดที่จอดได้</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
             <div>
-              <p>Address</p>
+              <p>ที่อยู่</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
             <div>
-              <p>Latitude</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-                value={selectedLatLng.lat}
-              />
-            </div>
-            <div>
-              <p>Longtitude</p>
+              <p>Service</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -155,7 +146,7 @@ const Zone = () => {
             )}
             <div className="flex justify-start">
               <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
-                Add
+                เพิ่ม
               </button>
             </div>
           </div>

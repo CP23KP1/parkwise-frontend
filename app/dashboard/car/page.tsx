@@ -55,42 +55,42 @@ const Car = () => {
           <h2 className="font-bold text-xl">Create Car</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>License Plate</p>
+              <p>ป้ายทะเบียนรถ</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
             <div className="pt-4">
-              <p>Color</p>
+              <p>สี</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
             <div className="pt-4">
-              <p>Brand</p>
+              <p>แบรนด์</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
             <div className="pt-4">
-              <p>Model</p>
+              <p>รุ่น</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
             <div className="pt-4">
-              <p>Year</p>
+              <p>ปี</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
               />
             </div>
             <div>
-              <p>Owner</p>
+              <p>เจ้าของ</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -98,7 +98,7 @@ const Car = () => {
             </div>
             <div className="flex justify-start">
               <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
-                Edit
+                แก้ไข
               </button>
             </div>
           </div>

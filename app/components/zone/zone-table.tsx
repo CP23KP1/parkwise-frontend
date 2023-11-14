@@ -27,35 +27,35 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
   const columns: Column<ZoneRowData>[] = React.useMemo(
     () => [
       {
-        Header: "Zone Name",
+        Header: "ชื่อโซน",
         accessor: "name",
       },
       {
-        Header: "Description",
+        Header: "คำอธิบาย",
         accessor: "description",
       },
       {
-        Header: "Max Capacity",
+        Header: "จำนวนรถที่รองรับได้",
         accessor: "maximum_capacity",
       },
       {
-        Header: "Occupancy",
+        Header: "ใช้งานอยู่",
         accessor:'occupancy',
       },
       {
-        Header: "Address",
+        Header: "ที่อยู่",
         accessor: "address",
       },
       {
-        Header: "Latitude",
+        Header: "ละติจูด",
         accessor: "lat",
       },
       {
-        Header: "Longitude",
+        Header: "ลองติจูด",
         accessor: "long",
       },
       {
-        Header: "Actions",
+        Header: "การดำเนินการ",
         accessor: "actions",
         Cell: ({ row }) => {
           return (
@@ -64,13 +64,13 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                 onClick={() => handleEdit(row.original)}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
-                Edit
+                แก้ไข
               </button>
               <button
                 onClick={() => handleDelete(row.original.id)}
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               >
-                Delete
+                ลบ
               </button>
             </div>
           );
@@ -132,7 +132,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
           <h2 className="font-bold text-xl">Create Zone</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>Name</p>
+              <p>Zone Name</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -140,14 +140,14 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div className="pt-4">
-              <p>Description</p>
+              <p>คำอธิบาย</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
                 value={description}
               />
             </div>
-            <div>
+            <div className="pt-4">
               <p>Max Capacity</p>
               <input
                 type="text"
@@ -156,7 +156,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div>
-              <p>Address</p>
+              <p>ที่อยู่</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -164,7 +164,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div>
-              <p>Latitude</p>
+              <p>ละติจูด</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -172,7 +172,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div>
-              <p>Longtitude</p>
+              <p>ลองติจูด</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -213,7 +213,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
             )}
             <div className="flex justify-start">
               <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
-                Add
+                เพิ่ม
               </button>
             </div>
           </div>

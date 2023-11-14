@@ -53,23 +53,35 @@ const User = () => {
           <div className="flex flex-col gap-6">
             <div className="pt-4">
               <p>First Name</p>
-              <TextInput />
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              />
             </div>
             <div className="pt-4">
               <p>Last Name</p>
-              <TextInput />
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              />
             </div>
             <div>
               <p>Email</p>
-              <TextInput />
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              />
             </div>
             <div>
               <p>Mobile No</p>
-              <TextInput />
+              <input
+                type="text"
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+              />
             </div>
             <div className="flex justify-start">
               <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
-                Add
+                เพิ่ม
               </button>
             </div>
           </div>

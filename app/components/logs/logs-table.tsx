@@ -12,23 +12,23 @@ const ResponsiveLogsTable: React.FC<Props> = ({ data }) => {
   const columns: Column<LogsRowData>[] = React.useMemo(
     () => [
       {
-        Header: "Car Plate",
+        Header: "ป้ายทะเบียนรถ",
         accessor: "carPlate",
       },
       {
-        Header: "Details",
+        Header: "รายละเอียด",
         accessor: "details",
       },
       {
-        Header: "Owner",
+        Header: "เจ้าของ",
         accessor: "owner",
       },
       {
-        Header: "Position",
+        Header: "ตำแหน่ง",
         accessor: "position",
       },
       {
-        Header: "Datetime",
+        Header: "วันเวลา",
         accessor: "datetime",
       },
     ],

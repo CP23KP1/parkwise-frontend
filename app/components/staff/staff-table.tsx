@@ -25,27 +25,27 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
   const columns: Column<StaffRowData>[] = React.useMemo(
     () => [
       {
-        Header: "First Name",
+        Header: "ชื่อ",
         accessor: "firstName",
       },
       {
-        Header: "Last Name",
+        Header: "นามสกุล",
         accessor: "lastName",
       },
       {
-        Header: "Position",
+        Header: "ตำแหน่ง",
         accessor: "position",
       },
       {
-        Header: "Email",
+        Header: "อีเมล",
         accessor: "email",
       },
       {
-        Header: "Mobile No",
+        Header: "เบอร์โทรศัพท์",
         accessor: "phone",
       },
       {
-        Header: "Car Own",
+        Header: "เป็นเจ้าของรถ",
         accessor: "carOwn",
         Cell: ({ cell }) => {
           const carOwnArray = cell.value;
@@ -54,7 +54,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
         },
       },
       {
-        Header: "Service",
+        Header: "บริการ",
         accessor: "service",
         Cell: ({ cell }) => {
           const service = cell.value;
@@ -62,7 +62,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
         }
       },
       {
-        Header: "Actions",
+        Header: "การดำเนินการ",
         accessor: "actions",
         Cell: ({ row }) => {
           return (
@@ -71,13 +71,13 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                 onClick={() => handleEdit(row.original)}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
-                Edit
+                แก้ไข
               </button>
               <button
                 onClick={() => handleDelete(row.original.id)}
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               >
-                Delete
+                ลบ
               </button>
             </div>
           );
@@ -123,7 +123,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
           <h2 className="font-bold text-xl">Create Staff</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>First Name</p>
+              <p>ชื่อ</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -131,7 +131,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div className="pt-4">
-              <p>Last Name</p>
+              <p>นามสกุล</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -139,7 +139,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div>
-              <p>Position</p>
+              <p>ตำแหน่ง</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -147,7 +147,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div>
-              <p>Email</p>
+              <p>อีเมล</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -155,7 +155,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div>
-              <p>Mobile No</p>
+              <p>เบอร์โทรศัพท์</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -164,7 +164,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
             </div>{" "}
             <div>
               <p>
-                Car Own <br />
+                เป็นเจ้าของรถ <br />
                 <p className="text-sm">
                   (Example Input: กข-2343 กทม, ขค-2145 ชลบุรี)
                 </p>
