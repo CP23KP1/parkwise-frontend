@@ -7,7 +7,7 @@ import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
 import { ZoneRowData } from "@/app/assets/data/zone";
-import { fetchZone } from "@/app/dashboard/device/function";
+import { deleteDevice, editDevice, fetchZone } from "@/app/dashboard/device/function";
 
 interface Props {
   data: DeviceRowData[];
@@ -18,6 +18,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
 
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
+  const [deviceId, setDeviceId] = useState(0);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
@@ -81,6 +82,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
     useTable({ columns, data });
 
   const handleEdit = (data: DeviceRowData) => {
+    setDeviceId(data.id)
     setName(data.name);
     setDescription(data.description);
     setPrice(data.price.toString());
@@ -100,14 +102,13 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
       cancelButtonText: `ไม่`,
     }).then((data) => {
       if (data.isConfirmed) {
-        console.log("confirm jaaa");
+        deleteDevice(id)
       }
     });
   };
 
   return (
     <div className="table-container w-72 sm:w-full">
-      {zoneId}
       <Modal open={open} onClose={onCloseModal} center>
         <div className="mx-10 my-4">
           <h2 className="font-bold text-xl">Edit Device</h2>
@@ -151,8 +152,8 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
               </select>
             </div>
             <div className="flex justify-start">
-              <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
-                Edit
+              <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white" onClick={() => editDevice(deviceId.toString(), name, description, price, zoneId.toString())}>
+                แก้ไข
               </button>
             </div>
           </div>

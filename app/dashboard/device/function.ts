@@ -67,12 +67,71 @@ export const fetchZone = async (setData: any) => {
   }
 };
 
-export const editDevice = async () => {
-  if (checkAuth()) {
-    const token = localStorage.getItem("access_token");
-    axios
-      .get(process.env.NEXT_PUBLIC_API_HOST + "/zones", {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+export const editDevice = async (
+  id: string,
+  name: string,
+  description: string,
+  price: string,
+  zoneId: string
+) => {
+  try {
+    if (checkAuth()) {
+      const token = localStorage.getItem("access_token");
+      axios.put(
+        process.env.NEXT_PUBLIC_API_HOST + "/zones/" + id,
+        {
+          name: name,
+          description: description,
+          price: parseFloat(price),
+          zoneId: parseInt(zoneId),
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+    }
+    Swal.fire({
+      icon: "success",
+      title: "แก้ไขเรียบร้อยแล้ว",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.reload();
+      }
+    });
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "มีบางอย่างผิดพลาด",
+      text: "กรุณาลองใหม่อีกครั้ง",
+    });
   }
+};
+
+export const deleteDevice = async (id: number) => {
+  try {
+    if (checkAuth()) {
+      const token = localStorage.getItem("access_token");
+      axios
+        .delete(process.env.NEXT_PUBLIC_API_HOST + "/zones/" + id.toString(), {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(() => {
+          Swal.fire({
+            icon: "success",
+            title: "ทำการลบเสร็จสิ้น",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload();
+            }
+          });
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: "มีบางอย่างผิดพลาด",
+            text: "กรุณาลองใหม่อีกครั้ง",
+          });
+        });
+    }
+  } catch (error) {}
 };
