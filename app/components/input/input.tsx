@@ -3,7 +3,7 @@ interface TextInputProps {
   placeHolder?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   className?: string;
-  value?: string
+  value?: string | number;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -11,10 +11,12 @@ const TextInput: React.FC<TextInputProps> = ({
   placeHolder,
   onChange,
   className,
+  value,
 }) => {
   return (
     <>
       <input
+        value={value}
         type={type}
         placeholder={placeHolder}
         onChange={onChange}

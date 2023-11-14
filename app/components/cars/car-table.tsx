@@ -5,6 +5,7 @@ import { CarRowData } from "@/app/assets/data/car";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
+import TextInput from "../input/input";
 
 interface Props {
   data: CarRowData[];
@@ -100,24 +101,15 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
           <div className="flex flex-col gap-6">
             <div className="pt-4">
               <p>Carplate</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-              />
+              <TextInput />
             </div>
             <div>
               <p>Description</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-              />
+              <TextInput />
             </div>
             <div>
               <p>Owner</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-              />
+              <TextInput />
             </div>
             <div className="flex justify-start">
               <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">

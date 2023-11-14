@@ -4,6 +4,7 @@ import Modal from "react-responsive-modal";
 import { Column, useTable } from "react-table";
 import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
+import TextInput from "../input/input";
 
 interface Props {
   data: ParkingRowData[];
@@ -98,35 +99,19 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
           <div className="flex flex-col gap-6">
             <div className="pt-4">
               <p>Name</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-                value={name}
-              />
+              <TextInput value={name}/>
             </div>
             <div>
               <p>Description</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-                value={description}
-              />
+              <TextInput value={description}/>
             </div>
             <div>
               <p>Amount</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-                value={amount}
-              />
+              <TextInput value={amount}/>
             </div>
             <div>
               <p>Zone</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-                value={zone}
-              />
+              <TextInput value={zone}/>
             </div>{" "}
             <div className="flex justify-start">
               <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
