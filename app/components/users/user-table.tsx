@@ -25,19 +25,15 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
     () => [
       {
         Header: "First Name",
-        accessor: "firstName",
+        accessor: "firstname",
       },
       {
         Header: "Last Name",
-        accessor: "lastName",
+        accessor: "lastname",
       },
       {
         Header: "Email",
         accessor: "email",
-      },
-      {
-        Header: "Mobile No",
-        accessor: "phone",
       },
       {
         Header: "Actions",
