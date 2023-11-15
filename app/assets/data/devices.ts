@@ -3,6 +3,7 @@ export interface DeviceRowData {
   name: string;
   description: string;
   price: number;
-  zone_id: string | number;
+  brand: string;
+  zoneId: string | number;
   actions?: any;
 }

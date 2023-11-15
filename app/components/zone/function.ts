@@ -13,16 +13,16 @@ export const editZone = async (
   if (checkAuth()) {
     const token = localStorage.getItem("access_token");
     await axios
-      .put(
+      .patch(
         process.env.NEXT_PUBLIC_API_HOST + "/zones/" + id,
         {
           name: name,
           description: description,
-          maximum_capacity: parseInt(maxCapacity),
+          maximumCapacity: parseInt(maxCapacity),
           address: address,
           occupancy: 0,
-          lat: selectedLatLng.lat,
-          long: selectedLatLng.lng,
+          latitude: selectedLatLng.lat,
+          longitude: selectedLatLng.lng,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -59,7 +59,7 @@ export const deleteZone = async (id: string | number) => {
       .then(() => {
         Swal.fire({
           icon: "success",
-          title: "แก้ไขสำเร็จแล้ว",
+          title: "ลบข้อมูลเรียบร้อยแล้ว",
         }).then((result) => {
           if (result.isConfirmed) {
             window.location.reload();

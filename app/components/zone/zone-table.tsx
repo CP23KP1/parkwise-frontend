@@ -53,7 +53,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
       },
       {
         Header: "Max Capacity",
-        accessor: "maximum_capacity",
+        accessor: "maximumCapacity",
       },
       {
         Header: "Occupancy",
@@ -65,11 +65,11 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
       },
       {
         Header: "Latitude",
-        accessor: "lat",
+        accessor: "latitude",
       },
       {
         Header: "Longitude",
-        accessor: "long",
+        accessor: "longitude",
       },
       {
         Header: "Actions",
@@ -104,11 +104,11 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
     setId(data.id);
     setZoneName(data.name);
     setDescription(data.description);
-    setMaxCapacity(data.maximum_capacity);
+    setMaxCapacity(data.maximumCapacity);
     setAddress(data.address);
     setSelectedLatLng({
-      lat: parseFloat(data.lat) || 0,
-      lng: parseFloat(data.long) || 0,
+      lat: parseFloat(data.latitude) || 0,
+      lng: parseFloat(data.longitude) || 0,
     });
     onOpenModal();
   };

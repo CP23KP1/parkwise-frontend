@@ -22,6 +22,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [brand, setBrand] = useState("");
   const [zoneId, setZoneId] = useState(0);
   const [zone, setZone] = useState<ZoneRowData[]>([]);
 
@@ -49,8 +50,12 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
         accessor: "price",
       },
       {
+        Header: "Brand",
+        accessor: "brand",
+      },
+      {
         Header: "Zone",
-        accessor: "zone_id",
+        accessor: "zoneId",
       },
       {
         Header: "Actions",
@@ -86,7 +91,8 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
     setName(data.name);
     setDescription(data.description);
     setPrice(data.price.toString());
-    setZoneId(data.zone_id as number);
+    setBrand(data.brand.toString());
+    setZoneId(data.zoneId as number);
     onOpenModal();
     // alert(`Edit row with ID: ${id}`);
   };
@@ -136,6 +142,13 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div>
+              <p>Brand</p>
+              <TextInput
+                value={brand}
+                onChange={(e) => setBrand(e.target.value)}
+              />
+            </div>
+            <div>
               <p>Zone</p>
               <select
                 className="border-2 border-solid border-gray-600 w-80 h-10"
@@ -152,7 +165,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
               </select>
             </div>
             <div className="flex justify-start">
-              <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white" onClick={() => editDevice(deviceId.toString(), name, description, price, zoneId.toString())}>
+              <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white" onClick={() => editDevice(deviceId.toString(), name, description, price, brand, zoneId.toString())}>
                 แก้ไข
               </button>
             </div>

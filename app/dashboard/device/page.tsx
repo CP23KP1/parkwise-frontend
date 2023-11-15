@@ -15,6 +15,7 @@ const Device = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [brand, setBrand] = useState("");
   const [zone, setZone] = useState<ZoneRowData[]>([]);
   const [zoneId, setZoneId] = useState(0);
   const [deviceShow, setDeviceShow] = useState<DeviceRowData[]>([]);
@@ -23,7 +24,7 @@ const Device = () => {
   const onCloseModal = () => setOpen(false);
 
   useEffect(() => {
-    fetchZone(setZone);
+    fetchZone(setZone, setZoneId);
     fetchDevice(setDeviceShow);
   }, []);
 
@@ -68,6 +69,13 @@ const Device = () => {
               />
             </div>
             <div>
+              <p>Brand</p>
+              <TextInput
+                value={brand}
+                onChange={(e) => setBrand(e.target.value)}
+              />
+            </div>
+            <div>
               <p>Price</p>
               <TextInput
                 type="number"
@@ -94,7 +102,13 @@ const Device = () => {
               <button
                 className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
                 onClick={() =>
-                  createDevice(name, description, price, zoneId.toString())
+                  createDevice(
+                    name,
+                    description,
+                    price,
+                    brand,
+                    zoneId.toString()
+                  )
                 }
               >
                 Add

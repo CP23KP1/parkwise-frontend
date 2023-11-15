@@ -11,13 +11,14 @@ export const fetchZone = (setDataShow: any) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        const data = response.data as ZoneRowData[];
+        console.log(response.data.data)
+        const data = response.data.data as ZoneRowData[];
         setDataShow(data);
       })
       .catch((error: any) => {
-        return [];
+        setDataShow([]);
       });
-    return [];
+    setDataShow([]);
   }
 };
 
@@ -40,11 +41,11 @@ export const createZone = async (
         {
           name: name,
           description: description,
-          maximum_capacity: parseInt(maxCapacity),
+          maximumCapacity: parseInt(maxCapacity),
           address: address,
           occupancy: 0,
-          lat: selectedLatLng.lat,
-          long: selectedLatLng.lng,
+          latitude: selectedLatLng.lat,
+          longitude: selectedLatLng.lng,
         },
         {
           headers: { Authorization: `Bearer ${token}` },

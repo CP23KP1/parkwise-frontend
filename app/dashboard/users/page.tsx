@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UserRowData } from "@/app/assets/data/user";
 import ResponsiveUserTable from "@/app/components/users/user-table";
 import "react-responsive-modal/styles.css";
@@ -7,28 +7,21 @@ import { Modal } from "react-responsive-modal";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import FilterButton from "@/app/components/button/filter";
 import TextInput from "@/app/components/input/input";
+import { createUser, fetchUsers } from "./function";
 
 const User = () => {
   const [open, setOpen] = useState(false);
 
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
-  const data: UserRowData[] = [
-    {
-      id: 1,
-      firstName: "ใจดี",
-      lastName: "มั่งมี",
-      phone: "0891234567",
-      email: "test@gmail.com",
-    },
-    {
-      id: 2,
-      firstName: "ใจดี",
-      lastName: "มั่งมี",
-      phone: "0891234567",
-      email: "test@gmail.com",
-    },
-  ];
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [users, setUsers] = useState<UserRowData[]>([]);
+  useEffect(() => {
+    fetchUsers(setUsers);
+  }, []);
 
   const filterData: FilterMenuProps[] = [
     {
@@ -53,22 +46,28 @@ const User = () => {
           <div className="flex flex-col gap-6">
             <div className="pt-4">
               <p>First Name</p>
-              <TextInput />
+              <TextInput onChange={(e) => setFirstName(e.target.value)} />
             </div>
             <div className="pt-4">
               <p>Last Name</p>
-              <TextInput />
+              <TextInput onChange={(e) => setLastName(e.target.value)} />
             </div>
             <div>
               <p>Email</p>
-              <TextInput />
+              <TextInput onChange={(e) => setEmail(e.target.value)} />
             </div>
-            <div>
-              <p>Mobile No</p>
-              <TextInput />
+            <div className="pt-4">
+              <p>Password</p>
+              <TextInput
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
             <div className="flex justify-start">
-              <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
+              <button
+                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
+                onClick={() => createUser(email, password, firstName, lastName)}
+              >
                 Add
               </button>
             </div>
@@ -98,7 +97,7 @@ const User = () => {
             เพิ่ม
           </button>
         </div>
-        <ResponsiveUserTable data={data} />
+        <ResponsiveUserTable data={[]} />
         <div className="mt-8 flex align-middle gap-4">
           <button className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded">
             <img src="/svg/back-button.svg" className="w-5 h-5" />
