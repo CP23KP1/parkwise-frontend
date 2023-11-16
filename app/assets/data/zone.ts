@@ -20,10 +20,10 @@ export interface ZoneRowData {
     name: string;
     description: string;
     occupancy: number;
-    maximum_capacity: number;
+    maximumCapacity: number;
     address: string;
     avaliable: number;
-    lat: number;
-    long: number;
+    latitude: number;
+    longitude: number;
     actions?: Cell
   }

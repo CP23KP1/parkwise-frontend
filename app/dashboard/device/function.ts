@@ -6,6 +6,7 @@ export const createDevice = async (
   name: string,
   description: string,
   price: string,
+  brand: string,
   zoneId: string
 ) => {
   try {
@@ -17,7 +18,8 @@ export const createDevice = async (
           name: name,
           description: description,
           price: parseInt(price),
-          zone_id: parseInt(zoneId),
+          brand: brand,
+          zoneId: parseInt(zoneId),
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -41,20 +43,31 @@ export const createDevice = async (
   }
 };
 
-export const fetchDevice = (setDevice: any) => {
+export const fetchDevice = (
+  setDevice: any,
+  setPage: any,
+  setAllPage: any,
+  page?: any
+) => {
   if (checkAuth()) {
+    let url = process.env.NEXT_PUBLIC_API_HOST + "/devices";
+    if (page) {
+      url += `?page=${page}`;
+    }
     const token = localStorage.getItem("access_token");
     axios
-      .get(process.env.NEXT_PUBLIC_API_HOST + "/devices", {
+      .get(url, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        setDevice(res.data);
+        setDevice(res.data.data);
+        setPage(res.data.meta.page);
+        setAllPage(res.data.meta.pageCount);
       });
   }
 };
 
-export const fetchZone = async (setData: any) => {
+export const fetchZone = async (setData: any, setZoneId?: any) => {
   if (checkAuth()) {
     const token = localStorage.getItem("access_token");
     axios
@@ -62,7 +75,8 @@ export const fetchZone = async (setData: any) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        setData(res.data);
+        setData(res.data.data);
+        setZoneId && setZoneId(res.data.data[0].id);
       });
   }
 };
@@ -72,17 +86,19 @@ export const editDevice = async (
   name: string,
   description: string,
   price: string,
+  brand: string,
   zoneId: string
 ) => {
   try {
     if (checkAuth()) {
       const token = localStorage.getItem("access_token");
-      axios.put(
-        process.env.NEXT_PUBLIC_API_HOST + "/zones/" + id,
+      axios.patch(
+        process.env.NEXT_PUBLIC_API_HOST + "/devices/" + id,
         {
           name: name,
           description: description,
-          price: parseFloat(price),
+          price: parseInt(price),
+          brand: brand,
           zoneId: parseInt(zoneId),
         },
         {
@@ -112,9 +128,12 @@ export const deleteDevice = async (id: number) => {
     if (checkAuth()) {
       const token = localStorage.getItem("access_token");
       axios
-        .delete(process.env.NEXT_PUBLIC_API_HOST + "/zones/" + id.toString(), {
-          headers: { Authorization: `Bearer ${token}` },
-        })
+        .delete(
+          process.env.NEXT_PUBLIC_API_HOST + "/devices/" + id.toString(),
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
         .then(() => {
           Swal.fire({
             icon: "success",

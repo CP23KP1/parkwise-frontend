@@ -3,24 +3,35 @@ import { checkAuth } from "@/app/helper/auth";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-export const fetchZone = (setDataShow: any) => {
+export const fetchZone = (
+  setDataShow: any,
+  setPage: any,
+  setAllPage: any,
+  page?: string
+) => {
+  let url = process.env.NEXT_PUBLIC_API_HOST + "/zones";
+  if (page) {
+    url += `?page=${page}`;
+  }
   if (checkAuth()) {
     const token = localStorage.getItem("access_token");
     axios
-      .get(process.env.NEXT_PUBLIC_API_HOST + "/zones", {
+      .get(url, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((response) => {
-        const data = response.data as ZoneRowData[];
+        console.log(response.data);
+        const data = response.data.data as ZoneRowData[];
+        setPage(response.data.meta.page);
+        setAllPage(response.data.meta.pageCount);
         setDataShow(data);
       })
       .catch((error: any) => {
-        return [];
+        setDataShow([]);
       });
-    return [];
+    setDataShow([]);
   }
 };
-
 
 export const createZone = async (
   name: string,
@@ -40,11 +51,11 @@ export const createZone = async (
         {
           name: name,
           description: description,
-          maximum_capacity: parseInt(maxCapacity),
+          maximumCapacity: parseInt(maxCapacity),
           address: address,
           occupancy: 0,
-          lat: selectedLatLng.lat,
-          long: selectedLatLng.lng,
+          latitude: selectedLatLng.lat,
+          longitude: selectedLatLng.lng,
         },
         {
           headers: { Authorization: `Bearer ${token}` },

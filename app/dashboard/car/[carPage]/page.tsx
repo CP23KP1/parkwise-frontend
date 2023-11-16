@@ -7,7 +7,7 @@ import { Modal } from "react-responsive-modal";
 import FilterButton from "@/app/components/button/filter";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import TextInput from "@/app/components/input/input";
-import { createCar, fetchCar } from "./function";
+import { createCar, fetchCar } from "../function";
 import { usePathname } from "next/navigation";
 
 const Car = () => {
@@ -17,18 +17,28 @@ const Car = () => {
   const [model, setModel] = useState("");
   const [year, setYear] = useState("");
   const [ownerId, setOwnerId] = useState("");
+  const [car, setCar] = useState<CarRowData[]>([]);
   const [page, setPage] = useState(0);
   const [allPage, setAllPage] = useState(0);
   const pathname = usePathname();
 
-  const [car, setCar] = useState<CarRowData[]>([]);
-  useEffect(() => {
-    fetchCar(setCar, setPage, setAllPage);
-  }, []);
+  const getPage = () => {
+    var parts = pathname.split("/");
+    var page = parts[parts.length - 1];
+    return page;
+  };
 
   const handleNextPage = () => {
     window.location.href = `/dashboard/car/${page + 1}`;
   };
+
+  const handlePrevPage = () => {
+    window.location.href = `/dashboard/car/${page - 1}`;
+  };
+
+  useEffect(() => {
+    fetchCar(setCar, setPage, setAllPage, getPage());
+  }, []);
 
   const filterData: FilterMenuProps[] = [
     {
@@ -121,7 +131,8 @@ const Car = () => {
       <div className="mt-8 flex align-middle gap-4">
         <button
           className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-          disabled={page === 1}
+          onClick={handlePrevPage}
+          disabled={page == 1}
         >
           <img src="/svg/back-button.svg" className="w-5 h-5" />
         </button>

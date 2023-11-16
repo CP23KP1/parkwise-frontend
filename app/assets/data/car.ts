@@ -1,10 +1,10 @@
 export interface CarRowData {
   id: number;
-  carPlate: string;
+  licensePlate: string;
   color: string;
   brand: string;
   model: string;
   year: number;
-  owner: string;
+  staffId: string;
   actions?: any;
 }

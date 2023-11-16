@@ -7,8 +7,9 @@ import React, { useEffect, useState } from "react";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import FilterButton from "@/app/components/button/filter";
 import TextInput from "@/app/components/input/input";
-import { createDevice, fetchDevice, fetchZone } from "./function";
 import { ZoneRowData } from "@/app/assets/data/zone";
+import { createDevice, fetchDevice, fetchZone } from "../function";
+import { usePathname } from "next/navigation";
 
 const Device = () => {
   const [open, setOpen] = useState(false);
@@ -24,15 +25,26 @@ const Device = () => {
 
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
+  const pathname = usePathname();
 
-  useEffect(() => {
-    fetchZone(setZone, setZoneId);
-    fetchDevice(setDeviceShow, setPage, setAllPage);
-  }, []);
+  const getPage = () => {
+    var parts = pathname.split("/");
+    var page = parts[parts.length - 1];
+    return page;
+  };
 
   const handleNextPage = () => {
     window.location.href = `/dashboard/device/${page + 1}`;
   };
+
+  const handlePrevPage = () => {
+    window.location.href = `/dashboard/device/${page - 1}`;
+  };
+
+  useEffect(() => {
+    fetchZone(setZone, setZoneId);
+    fetchDevice(setDeviceShow, setPage, setAllPage, getPage());
+  }, []);
 
   const filterData: FilterMenuProps[] = [
     {
@@ -150,7 +162,8 @@ const Device = () => {
       <div className="mt-8 flex align-middle gap-4">
         <button
           className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-          disabled
+          onChange={handlePrevPage}
+          disabled={page == 1}
         >
           <img src="/svg/back-button.svg" className="w-5 h-5" />
         </button>
@@ -161,7 +174,7 @@ const Device = () => {
         </div>
         <button
           className="flex items-center space-x-2 border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-          onClick={handleNextPage}
+          onChange={handleNextPage}
           disabled={page == allPage}
         >
           <img src="/svg/next-button.svg" className="w-5 h-5" />

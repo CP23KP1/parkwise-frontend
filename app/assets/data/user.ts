@@ -1,8 +1,7 @@
 export interface UserRowData {
     id: number;
-    firstName: string;
-    lastName: string;
+    firstname: string;
+    lastname: string;
     email: string;
-    phone: string;
     actions?: any
 }
