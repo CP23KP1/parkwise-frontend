@@ -45,16 +45,27 @@ export const createCar = async (
   }
 };
 
-export const fetchCar = (setCar: any) => {
+export const fetchCar = (
+  setCar: any,
+  setPage: any,
+  setAllPage: any,
+  page?: string
+) => {
+  let url = process.env.NEXT_PUBLIC_API_HOST + "/cars";
+  if (page) {
+    url += `?page=${page}`;
+  }
   if (checkAuth()) {
     const token = localStorage.getItem("access_token");
     axios
-      .get(process.env.NEXT_PUBLIC_API_HOST + "/cars", {
+      .get(url, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
         console.log(res.data);
         setCar(res.data.data);
+        setPage(res.data.meta.page);
+        setAllPage(res.data.meta.pageCount);
       });
   }
 };
