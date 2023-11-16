@@ -11,11 +11,11 @@ import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import axios from "axios";
 import TextInput from "@/app/components/input/input";
 import { checkAuth } from "@/app/helper/auth";
+import { createZone, fetchZone } from "../function";
 import { error } from "console";
 import Swal from "sweetalert2";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
-import { createZone, fetchZone } from "./function";
 
 const Zone = () => {
   const [dataShow, setDataShow] = useState<ZoneRowData[]>([]);
@@ -28,20 +28,27 @@ const Zone = () => {
   const [allPage, setAllPage] = useState(0);
   const pathname = usePathname();
 
+  const getPage = () => {
+    var parts = pathname.split("/");
+    var page = parts[parts.length - 1];
+    return page;
+  };
+
   const handleNextPage = () => {
+    setPage(parseInt(getPage()));
     window.location.href = `/dashboard/zone/${page + 1}`;
   };
 
-  const getPage = () => {
-    var parts = pathname.split("/");
-
-    var lastPart = parts[parts.length];
-
-    console.log(lastPart);
+  const handlePrevPage = () => {
+    if (parseInt(getPage()) != 1) {
+      setPage(parseInt(getPage()));
+      window.location.href = `/dashboard/zone/${page - 1}`;
+    }
   };
+
   useEffect(() => {
     getPage();
-    fetchZone(setDataShow, setPage, setAllPage);
+    fetchZone(setDataShow, setPage, setAllPage, getPage());
   }, []);
   const [open, setOpen] = useState(false);
   const onOpenModal = () => setOpen(true);
@@ -76,7 +83,6 @@ const Zone = () => {
       setCreateStatus
     );
   };
-
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
     libraries: ["places"],
@@ -213,6 +219,7 @@ const Zone = () => {
         <div className="mt-8 flex align-middle gap-4">
           <button
             className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
+            onClick={handlePrevPage}
             disabled={page == 1}
           >
             <img src="/svg/back-button.svg" className="w-5 h-5" />

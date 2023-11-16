@@ -53,6 +53,7 @@ export const fetchCar = (setCar: any) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
+        console.log(res.data);
         setCar(res.data.data);
       });
   }
