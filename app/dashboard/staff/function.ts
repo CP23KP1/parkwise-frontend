@@ -2,14 +2,24 @@ import { checkAuth } from "@/app/helper/auth";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-export const fetchStaff = async (setStaff: any) => {
+export const fetchStaff = async (
+  setStaff: any,
+  setPage: any,
+  setAllPage: any,
+  page?: string
+) => {
+  if (page === undefined) {
+    page = "1";
+  }
   if (checkAuth()) {
     const token = localStorage.getItem("access_token");
     await axios
-      .get(process.env.NEXT_PUBLIC_API_HOST + "/staffs", {
+      .get(process.env.NEXT_PUBLIC_API_HOST + `/staffs?page=${page}&limit=10`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((data) => {
+        setPage(data.data.meta.page);
+        setAllPage(data.data.meta.pageCount);
         setStaff(data.data.data);
       });
   }
