@@ -6,6 +6,7 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
+import { deleteStaff, editStaff } from "./function";
 
 interface Props {
   data: StaffRowData[];
@@ -19,23 +20,18 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [position, setPosition] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [carOwn, setCarOwn] = useState<string[]>([]);
+  const [id, setId] = useState(0);
   const columns: Column<StaffRowData>[] = React.useMemo(
     () => [
       {
         Header: "First Name",
-        accessor: "firstName",
+        accessor: "firstname",
       },
       {
         Header: "Last Name",
-        accessor: "lastName",
-      },
-      {
-        Header: "Position",
-        accessor: "position",
+        accessor: "lastname",
       },
       {
         Header: "Email",
@@ -43,16 +39,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
       },
       {
         Header: "Mobile No",
-        accessor: "phone",
-      },
-      {
-        Header: "Car Own",
-        accessor: "carOwn",
-        Cell: ({ cell }) => {
-          const carOwnArray = cell.value;
-          const carOwnString = carOwnArray.join(", ");
-          return <div>{carOwnString}</div>;
-        },
+        accessor: "phoneNumber",
       },
       {
         Header: "Service",
@@ -96,12 +83,11 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
     useTable({ columns, data });
 
   const handleEdit = (data: StaffRowData) => {
-    setFirstName(data.firstName);
-    setLastName(data.lastName);
-    setPosition(data.position);
+    setId(data.id);
+    setFirstName(data.firstname);
+    setLastName(data.lastname);
     setEmail(data.email);
-    setPhone(data.phone);
-    setCarOwn(data.carOwn);
+    setPhone(data.phoneNumber);
     setOpen(true);
   };
 
@@ -116,7 +102,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
       cancelButtonText: `ไม่`,
     }).then((data) => {
       if (data.isConfirmed) {
-        console.log("confirm jaaa");
+        deleteStaff(id);
       }
     });
   };
@@ -125,40 +111,42 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
     <>
       <Modal open={open} onClose={onCloseModal}>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">Create Staff</h2>
+          <h2 className="font-bold text-xl">Edit Staff</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
               <p>First Name</p>
-              <TextInput value={firstName} />
+              <TextInput
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
             </div>
             <div className="pt-4">
               <p>Last Name</p>
-              <TextInput value={lastName} />
-            </div>
-            <div>
-              <p>Position</p>
-              <TextInput value={position} />
+              <TextInput
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
             </div>
             <div>
               <p>Email</p>
-              <TextInput value={email} />
+              <TextInput
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <div>
               <p>Mobile No</p>
-              <TextInput value={phone} />
-            </div>
-            <div>
-              <p>
-                Car Own <br />
-                <p className="text-sm">
-                  (Example Input: กข-2343 กทม, ขค-2145 ชลบุรี)
-                </p>
-              </p>
-              <TextInput value={carOwn.join(", ")} />
+              <TextInput
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
             </div>
             <div className="flex justify-start">
-              <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
-                Add
+              <button
+                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
+                onClick={() => editStaff(id, firstName, lastName, email, phone)}
+              >
+                แก้ไข
               </button>
             </div>
           </div>
