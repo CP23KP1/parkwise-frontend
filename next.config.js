@@ -3,7 +3,7 @@ const nextConfig = {
     images: {
         formats: ["image/webp"],
     },
-    basePath: "/kp1/",
+    basePath: "/kp1",
     assetPrefix: "/kp1/",
 };
 
