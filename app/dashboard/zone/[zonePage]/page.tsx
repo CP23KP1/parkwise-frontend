@@ -16,6 +16,7 @@ import { error } from "console";
 import Swal from "sweetalert2";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
+import { getPublicBasePath } from "@/app/helper/basePath";
 
 const Zone = () => {
   const [dataShow, setDataShow] = useState<ZoneRowData[]>([]);
@@ -222,7 +223,7 @@ const Zone = () => {
             onClick={handlePrevPage}
             disabled={page == 1}
           >
-            <img src="/svg/back-button.svg" className="w-5 h-5" />
+            <img src={getPublicBasePath('/svg/back-button.svg')} className="w-5 h-5" />
           </button>
           <div>
             <p className="text-center mt-2">
@@ -234,7 +235,7 @@ const Zone = () => {
             onClick={handleNextPage}
             disabled={page == allPage}
           >
-            <img src="/svg/next-button.svg" className="w-5 h-5" />
+            <img src={getPublicBasePath('/svg/next-button.svg')} className="w-5 h-5" />
           </button>
         </div>
       </div>

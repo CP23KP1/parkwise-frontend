@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { menuType } from "../assets/data/menu";
 import SidebarItem from "./sidebar-item";
 import { logout } from "../helper/auth";
+import { getPublicBasePath } from "../helper/basePath";
 
 interface SidebarProps {
     open?: boolean;
@@ -28,7 +29,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                     </>
                 ) : (
                     <div className="w-12 h-12 pl-4 hover:cursor-pointer">
-                        <img src="/menu/logout.png" alt="Logout" />
+                        <img src={getPublicBasePath('/menu/logout.png')} alt="Logout" />
                     </div>
                 )}
             </div>
@@ -48,7 +49,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                             onClick={handleClickOpenSidebar}
                         >
                             <img
-                                src="/menu/hamburger_menu.png"
+                                src={getPublicBasePath('/menu/hamburger_menu.png')}
                                 alt="Hamburger Menu"
                             />
                         </div>
@@ -57,7 +58,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                         <>
                             <div className="w-10">
                                 <img
-                                    src="/logo/kmutt_logo.jpg"
+                                    src={getPublicBasePath("/logo/kmutt_logo.jpg")}
                                     alt="KMUTT Logo"
                                 />
                             </div>

@@ -9,6 +9,7 @@ import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import TextInput from "@/app/components/input/input";
 import { usePathname } from "next/navigation";
 import { createStaff, fetchStaff } from "../function";
+import { getPublicBasePath } from "@/app/helper/basePath";
 
 const Staff = () => {
   const pathname = usePathname();
@@ -133,7 +134,7 @@ const Staff = () => {
             onClick={handlePrevPage}
             disabled={page == 1}
           >
-            <img src="/svg/back-button.svg" className="w-5 h-5" />
+            <img src={getPublicBasePath('/svg/back-button.svg')} className="w-5 h-5" />
           </button>
           <div>
             <p className="text-center mt-2">
@@ -145,7 +146,7 @@ const Staff = () => {
             onClick={handleNextPage}
             disabled={page == allPage}
           >
-            <img src="/svg/next-button.svg" className="w-5 h-5" />
+            <img src={getPublicBasePath('/svg/next-button.svg')} className="w-5 h-5" />
           </button>
         </div>
       </div>

@@ -9,6 +9,7 @@ import FilterButton from "@/app/components/button/filter";
 import TextInput from "@/app/components/input/input";
 import { createDevice, fetchDevice, fetchZone } from "./function";
 import { ZoneRowData } from "@/app/assets/data/zone";
+import { getPublicBasePath } from "@/app/helper/basePath";
 
 const Device = () => {
   const [open, setOpen] = useState(false);
@@ -152,7 +153,7 @@ const Device = () => {
           className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
           disabled
         >
-          <img src="/svg/back-button.svg" className="w-5 h-5" />
+          <img src={getPublicBasePath('/svg/back-button.svg')} className="w-5 h-5" />
         </button>
         <div>
           <p className="text-center mt-2">
@@ -164,7 +165,7 @@ const Device = () => {
           onClick={handleNextPage}
           disabled={page == allPage}
         >
-          <img src="/svg/next-button.svg" className="w-5 h-5" />
+          <img src={getPublicBasePath('/svg/next-button.svg')} className="w-5 h-5" />
         </button>
       </div>
     </>

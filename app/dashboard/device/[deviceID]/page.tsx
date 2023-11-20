@@ -10,6 +10,7 @@ import TextInput from "@/app/components/input/input";
 import { ZoneRowData } from "@/app/assets/data/zone";
 import { createDevice, fetchDevice, fetchZone } from "../function";
 import { usePathname } from "next/navigation";
+import { getPublicBasePath } from "@/app/helper/basePath";
 
 const Device = () => {
   const [open, setOpen] = useState(false);
@@ -165,7 +166,7 @@ const Device = () => {
           onChange={handlePrevPage}
           disabled={page == 1}
         >
-          <img src="/svg/back-button.svg" className="w-5 h-5" />
+          <img src={getPublicBasePath('/svg/back-button.svg')} className="w-5 h-5" />
         </button>
         <div>
           <p className="text-center mt-2">
@@ -177,7 +178,7 @@ const Device = () => {
           onChange={handleNextPage}
           disabled={page == allPage}
         >
-          <img src="/svg/next-button.svg" className="w-5 h-5" />
+          <img src={getPublicBasePath('/svg/next-button.svg')} className="w-5 h-5" />
         </button>
       </div>
     </>

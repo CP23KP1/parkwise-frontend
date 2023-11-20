@@ -1,5 +1,6 @@
 import Popup from "reactjs-popup";
 import FilterMenu, { FilterMenuProps } from "./filter-menu";
+import { getPublicBasePath } from "@/app/helper/basePath";
 
 export interface FilterButtonProps {
   data: FilterMenuProps[];
@@ -11,7 +12,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({ data }) => {
       trigger={
         <div>
           <button>
-            <img src="/svg/filter.svg" />
+            <img src={getPublicBasePath('/svg/filter.svg')} />
           </button>
         </div>
       }

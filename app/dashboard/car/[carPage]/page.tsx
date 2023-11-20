@@ -9,6 +9,7 @@ import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import TextInput from "@/app/components/input/input";
 import { createCar, fetchCar } from "../function";
 import { usePathname } from "next/navigation";
+import { getPublicBasePath } from "@/app/helper/basePath";
 
 const Car = () => {
   const [licensePlate, setLicensePlate] = useState("");
@@ -134,7 +135,7 @@ const Car = () => {
           onClick={handlePrevPage}
           disabled={page == 1}
         >
-          <img src="/svg/back-button.svg" className="w-5 h-5" />
+          <img src={getPublicBasePath('/svg/back-button.svg')} className="w-5 h-5" />
         </button>
         <div>
           <p className="text-center mt-2">
@@ -146,7 +147,7 @@ const Car = () => {
           onClick={handleNextPage}
           disabled={page == allPage}
         >
-          <img src="/svg/next-button.svg" className="w-5 h-5" />
+          <img src={getPublicBasePath('/svg/next-button.svg')} className="w-5 h-5" />
         </button>
       </div>
     </>
