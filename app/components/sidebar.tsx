@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { menuType } from "../assets/data/menu";
 import SidebarItem from "./sidebar-item";
 import { logout } from "../helper/auth";
-import { BASE_PATH } from "@/app/utils/constants";
 import { getPublicBasePath } from "../helper/basePath";
 
 interface SidebarProps {

@@ -4,7 +4,6 @@ import Axios from "axios";
 import Swal from "sweetalert2";
 import { checkAuth } from "../helper/auth";
 import TextInput from "../components/input/input";
-import { BASE_PATH } from "@/app/utils/constants";
 import { getPublicBasePath } from "../helper/basePath";
 
 const Login = () => {
