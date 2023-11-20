@@ -17,10 +17,10 @@ jobs:
 
             - name: Setup env 🛠
               env:
-                  ENV: ${{ secrets.ENV }}
+                  QA_ENV: ${{ secrets.QA_ENV }}
               run: |
                   touch qa-parkwise-frontend/.env
-                  echo "$ENV" >> qa-parkwise-frontend/.env
+                  echo "$QA_ENV" >> qa-parkwise-frontend/.env
 
             - name: Docker compose 🐳
               run: docker-compose -f qa-parkwise-frontend/docker-compose.yml up -d --build qa-parkwise-frontend

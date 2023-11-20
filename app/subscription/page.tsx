@@ -46,7 +46,6 @@ const Subscription = () => {
         <div className="flex justify-center cursor-pointer">
           <img src={getPublicBasePath('/login/btn_login_base.png')} onClick={handleLineLogin} />
         </div>
-
       </div>
     </div>
   );
