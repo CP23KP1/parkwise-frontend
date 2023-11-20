@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 export default function Home() {
     useEffect(() => {
-        window.location.href = "/kp1/login";
+        window.location.href = "/login";
     }, []);
     return (
         <div>

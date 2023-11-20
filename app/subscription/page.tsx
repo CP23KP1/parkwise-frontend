@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import liff from "@line/liff";
+import { getPublicBasePath } from "../helper/basePath";
 
 const Subscription = () => {
   useEffect(() => {
@@ -33,7 +34,7 @@ const Subscription = () => {
       <div className="bg-white w-9/12 lg:w-4/12 h-3/4 border-2 rounded-3xl shadow-lg md:p-8">
         <div className="text-center mt-10">
           <img
-            src="/logo/kmutt_logo.jpg"
+            src={getPublicBasePath("/logo/kmutt_logo.jpg")}
             alt="KMUTT Logo"
             className="w-24 mx-auto mb-8"
           />
@@ -43,9 +44,11 @@ const Subscription = () => {
         </div>
 
         <div className="flex justify-center cursor-pointer">
-          <img src="/login/btn_login_base.png" onClick={handleLineLogin} />
+          <img
+            src={getPublicBasePath("/login/btn_login_base.png")}
+            onClick={handleLineLogin}
+          />
         </div>
-
       </div>
     </div>
   );

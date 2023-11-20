@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { checkAuth } from "../helper/auth";
 import TextInput from "../components/input/input";
 import { BASE_PATH } from "@/app/utils/constants";
+import { getPublicBasePath } from "../helper/basePath";
 
 const Login = () => {
     useEffect(() => {
@@ -48,7 +49,7 @@ const Login = () => {
             <div className="bg-white w-4/12 h-3/4 border-2 rounded-3xl shadow-lg p-8">
                 <div className="text-center">
                     <img
-                        src={`${BASE_PATH}/logo/kmutt_logo.jpg`}
+                        src={getPublicBasePath('/logo/kmutt_logo.jpg')}
                         alt="KMUTT Logo"
                         className="w-24 mx-auto mb-8"
                     />

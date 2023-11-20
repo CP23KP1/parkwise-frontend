@@ -10,6 +10,7 @@ import FilterButton, {
   FilterButtonProps,
 } from "@/app/components/button/filter";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
+import { getPublicBasePath } from "@/app/helper/basePath";
 
 const Parking = () => {
   const [open, setOpen] = useState(false);
@@ -114,13 +115,13 @@ const Parking = () => {
         <ResponsiveParkingTable data={data} />
         <div className="mt-8 flex align-middle gap-4">
           <button className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded">
-            <img src="/svg/back-button.svg" className="w-5 h-5" />
+            <img src={getPublicBasePath("/svg/back-button.svg")} className="w-5 h-5" />
           </button>
           <div>
             <p className="text-center mt-2">1 / 14</p>
           </div>
           <button className="flex items-center space-x-2 border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded">
-            <img src="/svg/next-button.svg" className="w-5 h-5" />
+            <img src={getPublicBasePath("/svg/next-button.svg")} className="w-5 h-5" />
           </button>
         </div>
       </div>
