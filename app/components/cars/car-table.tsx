@@ -5,6 +5,9 @@ import { CarRowData } from "@/app/assets/data/car";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
+import TextInput from "../input/input";
+import { createCar } from "@/app/dashboard/car/function";
+import { deleteCar, editCar } from "./function";
 
 interface Props {
   data: CarRowData[];
@@ -15,11 +18,20 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
 
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
+
+  const [carId, setCarId] = useState(0);
+  const [licensePlate, setLicensePlate] = useState("");
+  const [color, setColor] = useState("");
+  const [brand, setBrand] = useState("");
+  const [model, setModel] = useState("");
+  const [year, setYear] = useState("");
+  const [ownerId, setOwnerId] = useState("");
+
   const columns: Column<CarRowData>[] = React.useMemo(
     () => [
       {
         Header: "License Plate",
-        accessor: "carPlate",
+        accessor: "licensePlate",
       },
       {
         Header: "Color",
@@ -39,7 +51,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
       },
       {
         Header: "Owner",
-        accessor: "owner",
+        accessor: "staffId",
       },
       {
         Header: "Actions",
@@ -48,7 +60,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
           return (
             <div className="flex gap-5">
               <button
-                onClick={() => handleEdit(row.original.id)}
+                onClick={() => handleEdit(row.original)}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
                 Edit
@@ -70,9 +82,14 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
 
-  const handleEdit = (id: number) => {
-    // Implement your edit logic here
-    // alert(`Edit row with ID: ${id}`);
+  const handleEdit = (data: any) => {
+    setCarId(data.id);
+    setLicensePlate(data.licensePlate);
+    setColor(data.color);
+    setBrand(data.brand);
+    setModel(data.model);
+    setYear(data.year);
+    setOwnerId(data.staffId);
     setOpen(true);
   };
 
@@ -87,7 +104,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
       cancelButtonText: `ไม่`,
     }).then((data) => {
       if (data.isConfirmed) {
-        console.log("confirm jaaa");
+        deleteCar(id);
       }
     });
   };
@@ -96,32 +113,67 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
     <>
       <Modal open={open} onClose={onCloseModal}>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">Edit Car</h2>
+          <h2 className="font-bold text-xl">Create Car</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>Carplate</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
+              <p>License Plate</p>
+              <TextInput
+                value={licensePlate}
+                onChange={(e) => setLicensePlate(e.target.value)}
               />
             </div>
-            <div>
-              <p>Description</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
+            <div className="pt-4">
+              <p>Color</p>
+              <TextInput
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+              />
+            </div>
+            <div className="pt-4">
+              <p>Brand</p>
+              <TextInput
+                value={brand}
+                onChange={(e) => setBrand(e.target.value)}
+              />
+            </div>
+            <div className="pt-4">
+              <p>Model</p>
+              <TextInput
+                value={model}
+                onChange={(e) => setModel(e.target.value)}
+              />
+            </div>
+            <div className="pt-4">
+              <p>Year</p>
+              <TextInput
+                type="number"
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
               />
             </div>
             <div>
               <p>Owner</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
+              <TextInput
+                value={ownerId}
+                onChange={(e) => setOwnerId(e.target.value)}
               />
             </div>
             <div className="flex justify-start">
-              <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
-                Edit
+              <button
+                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
+                onClick={() =>
+                  editCar(
+                    carId,
+                    licensePlate,
+                    color,
+                    brand,
+                    model,
+                    parseInt(year),
+                    ownerId
+                  )
+                }
+              >
+                Create
               </button>
             </div>
           </div>

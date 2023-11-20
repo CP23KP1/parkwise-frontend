@@ -7,6 +7,8 @@ import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
 import { ZoneRowData } from "@/app/assets/data/zone";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import TextInput from "../input/input";
+import { deleteZone, editZone } from "./function";
 
 interface Props {
   data: ZoneRowData[];
@@ -17,12 +19,27 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
 
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
+  const [id, setId] = useState("");
   const [zoneName, setZoneName] = useState("");
   const [description, setDescription] = useState("");
-  const [maxCapacity, setMaxCapacity] = useState(0);
+  const [maxCapacity, setMaxCapacity] = useState("");
   const [address, setAddress] = useState("");
-  const [lat, setLat] = useState(0);
-  const [long, setLong] = useState(0);
+  const [lat, setLat] = useState("");
+  const [long, setLong] = useState("");
+
+  const handleLatChange = (event: any) => {
+    setSelectedLatLng({
+      ...selectedLatLng,
+      lat: parseFloat(event.target.value) || 0,
+    });
+  };
+
+  const handleLngChange = (event: any) => {
+    setSelectedLatLng({
+      ...selectedLatLng,
+      lng: parseFloat(event.target.value) || 0,
+    });
+  };
 
   const columns: Column<ZoneRowData>[] = React.useMemo(
     () => [
@@ -36,11 +53,11 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
       },
       {
         Header: "Max Capacity",
-        accessor: "maximum_capacity",
+        accessor: "maximumCapacity",
       },
       {
         Header: "Occupancy",
-        accessor:'occupancy',
+        accessor: "occupancy",
       },
       {
         Header: "Address",
@@ -48,11 +65,11 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
       },
       {
         Header: "Latitude",
-        accessor: "lat",
+        accessor: "latitude",
       },
       {
         Header: "Longitude",
-        accessor: "long",
+        accessor: "longitude",
       },
       {
         Header: "Actions",
@@ -84,33 +101,49 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
     useTable({ columns, data });
 
   const handleEdit = (data: any) => {
-    console.log(data);
+    setId(data.id);
     setZoneName(data.name);
     setDescription(data.description);
-    setMaxCapacity(data.maximum_capacity);
+    setMaxCapacity(data.maximumCapacity);
     setAddress(data.address);
-    setLat(data.lat);
-    setLong(data.long);
+    setSelectedLatLng({
+      lat: parseFloat(data.latitude) || 0,
+      lng: parseFloat(data.longitude) || 0,
+    });
     onOpenModal();
   };
 
   const handleDelete = (id: number) => {
     Swal.fire({
-        title: "คุณต้องการที่จะลบหรือไม่?",
-        showCancelButton: true,
-        icon: "warning",
-        iconColor: "#DC143C",
-        confirmButtonText: `ใช่`,
-        confirmButtonColor: "#DC143C",
-        cancelButtonText: `ไม่`,
-      }).then((data) => {
-        if (data.isConfirmed) {
-          console.log("confirm jaaa");
-        }
-      });
+      title: "คุณต้องการที่จะลบหรือไม่?",
+      showCancelButton: true,
+      icon: "warning",
+      iconColor: "#DC143C",
+      confirmButtonText: `ใช่`,
+      confirmButtonColor: "#DC143C",
+      cancelButtonText: `ไม่`,
+    }).then((data) => {
+      if (data.isConfirmed) {
+        deleteZone(id)
+      }
+    });
   };
 
-  const [selectedLatLng, setSelectedLatLng] = useState({ lat: 13.6512990907, lng: 100.493667011 });
+  const handleEditZone = async () => {
+    await editZone(
+      id,
+      zoneName,
+      description,
+      maxCapacity,
+      address,
+      selectedLatLng
+    );
+  };
+
+  const [selectedLatLng, setSelectedLatLng] = useState({
+    lat: 13.6512990907,
+    lng: 100.493667011,
+  });
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
     libraries: ["places"],
@@ -133,56 +166,49 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
           <div className="flex flex-col gap-6">
             <div className="pt-4">
               <p>Name</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
+              <TextInput
                 value={zoneName}
+                onChange={(e) => setZoneName(e.target.value)}
               />
             </div>
             <div className="pt-4">
               <p>Description</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
+              <TextInput
                 value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
             <div>
               <p>Max Capacity</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
+              <TextInput
                 value={maxCapacity}
+                onChange={(e) => setMaxCapacity(e.target.value)}
               />
             </div>
             <div>
               <p>Address</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
+              <TextInput
                 value={address}
+                onChange={(e) => setAddress(e.target.value)}
               />
             </div>
             <div>
               <p>Latitude</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
+              <TextInput
                 value={selectedLatLng.lat}
+                onChange={(e) => handleLatChange(e.target.value)}
               />
             </div>
             <div>
               <p>Longtitude</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
+              <TextInput
                 value={selectedLatLng.lng}
+                onChange={(e) => handleLngChange(e.target.value)}
               />
             </div>
             {isLoaded ? (
               <>
-                <div className="places-container">
-                </div>
+                <div className="places-container"></div>
                 <GoogleMap
                   zoom={16}
                   center={selectedLatLng}
@@ -196,8 +222,6 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                       if (position) {
                         const lat = position.lat();
                         const lng = position.lng();
-                        console.log("Selected Latitude:", lat);
-                        console.log("Selected Longitude:", lng);
                         setSelectedLatLng((prevState) => ({
                           ...prevState,
                           lat,
@@ -212,8 +236,12 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
               <></>
             )}
             <div className="flex justify-start">
-              <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
-                Add
+              {/* TODO */}
+              <button
+                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
+                onClick={handleEditZone}
+              >
+                แก้ไข
               </button>
             </div>
           </div>

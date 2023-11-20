@@ -7,17 +7,22 @@ import { Modal } from "react-responsive-modal";
 import FilterButton from "@/app/components/button/filter";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import TextInput from "@/app/components/input/input";
-import { createStaff, fetchStaff } from "./function";
 import { usePathname } from "next/navigation";
+import { createStaff, fetchStaff } from "../function";
 import { getPublicBasePath } from "@/app/helper/basePath";
 
 const Staff = () => {
   const pathname = usePathname();
 
+  const getPage = () => {
+    var parts = pathname.split("/");
+    var page = parts[parts.length - 1];
+    return page;
+  };
 
   const [staff, setStaff] = useState<StaffRowData[]>([]);
   useEffect(() => {
-    fetchStaff(setStaff, setPage, setAllPage);
+    fetchStaff(setStaff, setPage, setAllPage, getPage());
   }, []);
 
   const [firstName, setFirstName] = useState("");
@@ -26,6 +31,14 @@ const Staff = () => {
   const [phone, setPhone] = useState("");
   const [page, setPage] = useState(0);
   const [allPage, setAllPage] = useState(0);
+
+  const handleNextPage = () => {
+    window.location.href = `/dashboard/staff/${page + 1}`;
+  };
+
+  const handlePrevPage = () => {
+    window.location.href = `/dashboard/staff/${page - 1}`;
+  };
 
   const filterData: FilterMenuProps[] = [
     {
@@ -46,14 +59,6 @@ const Staff = () => {
 
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
-
-  const handleNextPage = () => {
-    window.location.href = `/dashboard/staff/${page + 1}`;
-  };
-
-  const handlePrevPage = () => {
-    window.location.href = `/dashboard/staff/${page - 1}`;
-  };
   return (
     <>
       <Modal open={open} onClose={onCloseModal}>
@@ -126,7 +131,7 @@ const Staff = () => {
         <div className="mt-8 flex align-middle gap-4">
           <button
             className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-            onClick={handleNextPage}
+            onClick={handlePrevPage}
             disabled={page == 1}
           >
             <img src={getPublicBasePath('/svg/back-button.svg')} className="w-5 h-5" />
@@ -138,7 +143,7 @@ const Staff = () => {
           </div>
           <button
             className="flex items-center space-x-2 border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-            onClick={handlePrevPage}
+            onClick={handleNextPage}
             disabled={page == allPage}
           >
             <img src={getPublicBasePath('/svg/next-button.svg')} className="w-5 h-5" />

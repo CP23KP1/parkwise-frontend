@@ -12,7 +12,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({ data }) => {
       trigger={
         <div>
           <button>
-            <img src={getPublicBasePath("/svg/filter.svg")} />
+            <img src={getPublicBasePath('/svg/filter.svg')} />
           </button>
         </div>
       }

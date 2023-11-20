@@ -1,10 +1,13 @@
 // ResponsiveTable.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Column, useTable } from "react-table";
 import { DeviceRowData } from "@/app/assets/data/devices";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
+import TextInput from "../input/input";
+import { ZoneRowData } from "@/app/assets/data/zone";
+import { deleteDevice, editDevice, fetchZone } from "@/app/dashboard/device/function";
 
 interface Props {
   data: DeviceRowData[];
@@ -15,9 +18,22 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
 
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
+  const [deviceId, setDeviceId] = useState(0);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [brand, setBrand] = useState("");
+  const [zoneId, setZoneId] = useState(0);
+  const [zone, setZone] = useState<ZoneRowData[]>([]);
+
+  useEffect(() => {
+    fetchZone(setZone);
+  }, []);
+
+  const handleZoneChange = (event: any) => {
+    const selectedZoneId = parseInt(event.target.value, 10);
+    setZoneId(selectedZoneId);
+  };
 
   const columns: Column<DeviceRowData>[] = React.useMemo(
     () => [
@@ -34,8 +50,12 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
         accessor: "price",
       },
       {
+        Header: "Brand",
+        accessor: "brand",
+      },
+      {
         Header: "Zone",
-        accessor: "zone",
+        accessor: "zoneId",
       },
       {
         Header: "Actions",
@@ -67,9 +87,12 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
     useTable({ columns, data });
 
   const handleEdit = (data: DeviceRowData) => {
+    setDeviceId(data.id)
     setName(data.name);
     setDescription(data.description);
     setPrice(data.price.toString());
+    setBrand(data.brand.toString());
+    setZoneId(data.zoneId as number);
     onOpenModal();
     // alert(`Edit row with ID: ${id}`);
   };
@@ -85,7 +108,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
       cancelButtonText: `ไม่`,
     }).then((data) => {
       if (data.isConfirmed) {
-        console.log("confirm jaaa");
+        deleteDevice(id)
       }
     });
   };
@@ -93,45 +116,57 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
   return (
     <div className="table-container w-72 sm:w-full">
       <Modal open={open} onClose={onCloseModal} center>
-      <div className="mx-10 my-4">
+        <div className="mx-10 my-4">
           <h2 className="font-bold text-xl">Edit Device</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
               <p>Name</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
+              <TextInput
                 value={name}
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div>
               <p>Description</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
+              <TextInput
                 value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
             <div>
               <p>Price</p>
-              <input
-                type="text"
-                className="border-2 border-solid border-gray-600 w-80 h-10"
+              <TextInput
+                type="number"
                 value={price}
+                onChange={(e) => setPrice(e.target.value)}
+              />
+            </div>
+            <div>
+              <p>Brand</p>
+              <TextInput
+                value={brand}
+                onChange={(e) => setBrand(e.target.value)}
               />
             </div>
             <div>
               <p>Zone</p>
               <select
                 className="border-2 border-solid border-gray-600 w-80 h-10"
+                onChange={handleZoneChange}
               >
-                <option>ใต้ตึก LX</option>
-                <option>ตึก FIBO</option>
+                {
+                zone.map((data) => {
+                  return (
+                    <option key={data.id} value={data.id}>
+                      {data.name}
+                    </option>
+                  );
+                })}
               </select>
             </div>
             <div className="flex justify-start">
-              <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
-                Edit
+              <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white" onClick={() => editDevice(deviceId.toString(), name, description, price, brand, zoneId.toString())}>
+                แก้ไข
               </button>
             </div>
           </div>

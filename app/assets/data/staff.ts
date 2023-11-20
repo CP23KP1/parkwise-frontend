@@ -2,12 +2,11 @@ import { Cell } from "react-table";
 
 export interface StaffRowData {
     id: number;
-    firstName: string;
-    lastName: string;
+    firstname: string;
+    lastname: string;
     position: string;
     email: string;
-    phone: string;
-    carOwn: string[];
+    phoneNumber: string;
     service: boolean
     actions?: any
 }
