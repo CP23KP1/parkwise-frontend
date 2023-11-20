@@ -11,6 +11,7 @@ const nextConfig = {
             },
         ];
     },
+    basePath: process.env.NODE_ENV === "production" ? "/kp1" : "",
     assetPrefix: process.env.NODE_ENV === "production" ? "/kp1/" : "",
     publicRuntimeConfig: {
         basePath: process.env.NEXT_PUBLIC_BASEPATH,
