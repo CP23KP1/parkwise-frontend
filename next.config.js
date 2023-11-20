@@ -6,7 +6,7 @@ const nextConfig = {
     async rewrites() {
         return [
             {
-                source: "/kp1/:path*",
+                source: "/:path*",
                 destination: "https://capstone23.sit.kmutt.ac.th/kp1/:path*",
             },
         ];
