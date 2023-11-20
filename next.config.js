@@ -7,7 +7,7 @@ const nextConfig = {
         return [
             {
                 source: "/:path*",
-                destination: "https://capstone23.sit.kmutt.ac.th/kp1/:path*",
+                destination: "/kp1/:path*",
             },
         ];
     },
