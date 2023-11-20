@@ -3,8 +3,8 @@ const nextConfig = {
     images: {
         formats: ["image/webp"],
     },
-    basePath: "/kp1",
-    assetPrefix: "/kp1/",
+    basePath: process.env.NODE_ENV === "production" ? "/kp1" : "",
+    assetPrefix: process.env.NODE_ENV === "production" ? "/kp1/" : "",
 };
 
 module.exports = nextConfig;
