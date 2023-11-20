@@ -11,17 +11,7 @@ const nextConfig = {
             },
         ];
     },
-    // basePath: process.env.NODE_ENV === "production" ? "/kp1" : "",
-    // assetPrefix: process.env.NODE_ENV === "production" ? "/kp1/" : "",
-    // redirects: async () => {
-    //     return [
-    //         {
-    //             source: "/kp1",
-    //             destination: "/kp1/login",
-    //             permanent: true,
-    //         },
-    //     ];
-    // },
+    assetPrefix: process.env.NODE_ENV === "production" ? "/kp1/" : "",
 };
 
 module.exports = nextConfig;
