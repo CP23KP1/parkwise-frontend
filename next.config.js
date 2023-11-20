@@ -12,6 +12,9 @@ const nextConfig = {
         ];
     },
     assetPrefix: process.env.NODE_ENV === "production" ? "/kp1/" : "",
+    publicRuntimeConfig: {
+        basePath: process.env.NEXT_PUBLIC_BASEPATH,
+    },
 };
 
 module.exports = nextConfig;
