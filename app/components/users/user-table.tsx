@@ -15,15 +15,20 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
 
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+
   const columns: Column<UserRowData>[] = React.useMemo(
     () => [
       {
-        Header: "Name",
-        accessor: "name",
+        Header: "First Name",
+        accessor: "firstName",
       },
       {
-        Header: "Position",
-        accessor: "position",
+        Header: "Last Name",
+        accessor: "lastName",
       },
       {
         Header: "Email",
@@ -40,7 +45,7 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
           return (
             <div className="flex gap-5">
               <button
-                onClick={() => handleEdit(row.original.id)}
+                onClick={() => handleEdit(row.original)}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
                 Edit
@@ -62,22 +67,29 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
 
-  const handleEdit = (id: number) => {
-    // Implement your edit logic here
-    // alert(`Edit row with ID: ${id}`);
+  const handleEdit = (data: any) => {
+    console.log(data)
+    setFirstName(data.firstName)
+    setLastName(data.lastName)
+    setEmail(data.email)
+    setPhone(data.phone)
     onOpenModal()
   };
 
   const handleDelete = (id: number) => {
-    // Implement your delete logic here
-    // alert(`Delete row with ID: ${id}`);
     Swal.fire({
-      text: "Are you sure you want to delete this user?",
-      icon: "warning",
+      title: "คุณต้องการที่จะลบหรือไม่?",
       showCancelButton: true,
-      confirmButtonText: "Yes",
-      cancelButtonText: "No",
-    })
+      icon: "warning",
+      iconColor: "#DC143C",
+      confirmButtonText: `ใช่`,
+      confirmButtonColor: "#DC143C",
+      cancelButtonText: `ไม่`,
+    }).then((data) => {
+      if (data.isConfirmed) {
+        console.log("confirm jaaa");
+      }
+    });
   };
 
   return (
@@ -87,18 +99,20 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
         <div className="mx-10 my-4">
           <h2 className="font-bold text-xl">Edit Staff</h2>
           <div className="flex flex-col gap-6">
-            <div className="pt-4">
-              <p>Name</p>
+          <div className="pt-4">
+              <p>First Name</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
+                value={firstName}
               />
             </div>
-            <div>
-              <p>Position</p>
+            <div className="pt-4">
+              <p>Last Name</p>
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
+                value={lastName}
               />
             </div>
             <div>
@@ -106,6 +120,7 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
+                value={email}
               />
             </div>
             <div>
@@ -113,6 +128,7 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
               <input
                 type="text"
                 className="border-2 border-solid border-gray-600 w-80 h-10"
+                value={phone}
               />
             </div>
             <div className="flex justify-start">

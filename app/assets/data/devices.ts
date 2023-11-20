@@ -1,7 +1,8 @@
 export interface DeviceRowData {
   id: number;
   name: string;
-  price: number;
   description: string;
+  price: number;
+  zone: string;
   actions?: any;
 }

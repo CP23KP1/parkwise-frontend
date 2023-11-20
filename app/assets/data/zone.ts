@@ -6,13 +6,24 @@ export interface ZoneTableHeaderData {
     name: string;
     value: number;
     avaliable: number;
+    description: string;
+    occupancy: number;
+    maximum_capacity: number;
+    address: string;
+    lat: number;
+    long: number;
+    actions?: Cell
 }
 
 export interface ZoneRowData {
     id: number;
     name: string;
+    description: string;
+    occupancy: number;
+    maximum_capacity: number;
+    address: string;
     avaliable: number;
-    service: number
+    lat: number;
+    long: number;
     actions?: Cell
-    // Add more columns as needed
   }
