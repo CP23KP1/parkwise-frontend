@@ -1,8 +1,9 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import { menuType } from "../assets/data/menu";
 import SidebarItem from "./sidebar-item";
 import { logout } from "../helper/auth";
+import { BASE_PATH } from "@/app/utils/constants";
 
 interface SidebarProps {
     open?: boolean;
@@ -22,13 +23,19 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
             <div className="pt-4">
                 {openSidebar ? (
                     <>
-                        <div className="cursor-pointer block text-center bg-red-500 text-white mx-6 p-3 rounded-md hover:bg-red-700" onClick={logout}>
+                        <div
+                            className="cursor-pointer block text-center bg-red-500 text-white mx-6 p-3 rounded-md hover:bg-red-700"
+                            onClick={logout}
+                        >
                             <button>Logout</button>
                         </div>
                     </>
                 ) : (
                     <div className="w-12 h-12 pl-4 hover:cursor-pointer">
-                        <img src="/menu/logout.png" alt="Logout" />
+                        <img
+                            src={`${BASE_PATH}/menu/logout.png`}
+                            alt="Logout"
+                        />
                     </div>
                 )}
             </div>
@@ -67,7 +74,13 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                         </>
                     )}
                 </div>
-                <div className="w-full" style={{ overflowY: "auto", maxHeight: "calc(100vh - 64px)" }}>
+                <div
+                    className="w-full"
+                    style={{
+                        overflowY: "auto",
+                        maxHeight: "calc(100vh - 64px)",
+                    }}
+                >
                     {menuType.map((item) => {
                         return (
                             <SidebarItem
