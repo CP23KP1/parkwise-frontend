@@ -37,9 +37,10 @@ export const createUser = async (
 export const fetchUsers = async (setUsers: any) => {
   if (checkAuth()) {
     await axios
-      .get(process.env.NEXT_PUBLIC_API_HOST + "/users")
+      .get(process.env.NEXT_PUBLIC_API_HOST + "/admin")
       .then((data) => {
         setUsers(data.data.data);
       });
   }
 };
+
