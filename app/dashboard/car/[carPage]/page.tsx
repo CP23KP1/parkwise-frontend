@@ -30,11 +30,11 @@ const Car = () => {
   };
 
   const handleNextPage = () => {
-    window.location.href = `/dashboard/car/${page + 1}`;
+    window.location.href = getPublicBasePath(`/dashboard/car/${page + 1}`);
   };
 
   const handlePrevPage = () => {
-    window.location.href = `/dashboard/car/${page - 1}`;
+    window.location.href = getPublicBasePath(`/dashboard/car/${page - 1}`);
   };
 
   useEffect(() => {

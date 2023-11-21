@@ -9,7 +9,7 @@ import { getPublicBasePath } from "../helper/basePath";
 const Login = () => {
     useEffect(() => {
         if (checkAuth()) {
-            window.location.href = "/dashboard";
+            window.location.href = getPublicBasePath("/dashboard");
         }
     }, []);
     const [email, setEmail] = useState("");
@@ -40,7 +40,7 @@ const Login = () => {
             localStorage.setItem("access_token", response.data.access_token);
             localStorage.setItem("refresh_token", response.data.refresh_token);
             console.log(response.data);
-            window.location.href = "/dashboard";
+            window.location.href = getPublicBasePath("/dashboard");
         });
     };
     return (
