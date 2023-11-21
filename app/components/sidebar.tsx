@@ -85,9 +85,9 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                         return (
                             <SidebarItem
                                 key={item.name}
-                                icon={item.icon}
+                                icon={getPublicBasePath(item.icon)}
                                 name={item.name}
-                                link={item.link}
+                                link={getPublicBasePath(item.link)}
                                 open={openSidebar}
                             />
                         );
