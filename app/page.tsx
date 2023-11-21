@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect } from "react";
+import { getPublicBasePath } from "./helper/basePath";
 export default function Home() {
     useEffect(() => {
-        window.location.href = "/login";
+        window.location.href = getPublicBasePath("/login");
     }, []);
     return (
         <div>

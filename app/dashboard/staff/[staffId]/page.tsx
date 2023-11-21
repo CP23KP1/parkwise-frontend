@@ -33,11 +33,11 @@ const Staff = () => {
   const [allPage, setAllPage] = useState(0);
 
   const handleNextPage = () => {
-    window.location.href = `/dashboard/staff/${page + 1}`;
+    window.location.href = getPublicBasePath(`/dashboard/staff/${page + 1}`);
   };
 
   const handlePrevPage = () => {
-    window.location.href = `/dashboard/staff/${page - 1}`;
+    window.location.href = getPublicBasePath(`/dashboard/staff/${page - 1}`);
   };
 
   const filterData: FilterMenuProps[] = [

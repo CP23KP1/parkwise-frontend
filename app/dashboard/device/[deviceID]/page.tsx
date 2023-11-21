@@ -35,11 +35,11 @@ const Device = () => {
   };
 
   const handleNextPage = () => {
-    window.location.href = `/dashboard/device/${page + 1}`;
+    window.location.href = getPublicBasePath(`/dashboard/device/${page + 1}`);
   };
 
   const handlePrevPage = () => {
-    window.location.href = `/dashboard/device/${page - 1}`;
+    window.location.href = getPublicBasePath(`/dashboard/device/${page - 1}`);
   };
 
   useEffect(() => {

@@ -37,13 +37,13 @@ const Zone = () => {
 
   const handleNextPage = () => {
     setPage(parseInt(getPage()));
-    window.location.href = `/dashboard/zone/${page + 1}`;
+    window.location.href = getPublicBasePath(`/dashboard/zone/${page + 1}`);
   };
 
   const handlePrevPage = () => {
     if (parseInt(getPage()) != 1) {
       setPage(parseInt(getPage()));
-      window.location.href = `/dashboard/zone/${page - 1}`;
+      window.location.href = getPublicBasePath(`/dashboard/zone/${page - 1}`);
     }
   };
 

@@ -32,7 +32,7 @@ const Device = () => {
   }, []);
 
   const handleNextPage = () => {
-    window.location.href = `/dashboard/device/${page + 1}`;
+    window.location.href = getPublicBasePath(`/dashboard/device/${page + 1}`);
   };
 
   const filterData: FilterMenuProps[] = [
