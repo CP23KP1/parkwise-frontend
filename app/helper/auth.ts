@@ -1,3 +1,5 @@
+import { getPublicBasePath } from "./basePath";
+
 export const checkAuth = () => {
   // TODO: create more auth to check token expried?
   if (
@@ -12,6 +14,6 @@ export const checkAuth = () => {
 export const logout = () => {
     localStorage.removeItem("access_token")
     localStorage.removeItem("refresh_token")
-    window.location.href = "/login"
+    window.location.href = getPublicBasePath("/login")
 }
 

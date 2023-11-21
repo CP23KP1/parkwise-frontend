@@ -48,11 +48,11 @@ const Staff = () => {
   const onCloseModal = () => setOpen(false);
 
   const handleNextPage = () => {
-    window.location.href = `/dashboard/staff/${page + 1}`;
+    window.location.href = getPublicBasePath(`/dashboard/staff/${page + 1}`);
   };
 
   const handlePrevPage = () => {
-    window.location.href = `/dashboard/staff/${page - 1}`;
+    window.location.href = getPublicBasePath(`/dashboard/staff/${page - 1}`);
   };
   return (
     <>

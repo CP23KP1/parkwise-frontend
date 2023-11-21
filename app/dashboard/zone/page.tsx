@@ -30,7 +30,7 @@ const Zone = () => {
   const pathname = usePathname();
 
   const handleNextPage = () => {
-    window.location.href = `/dashboard/zone/${page + 1}`;
+    window.location.href = getPublicBasePath(`/dashboard/zone/${page + 1}`);
   };
 
   const getPage = () => {
