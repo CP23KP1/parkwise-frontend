@@ -34,13 +34,23 @@ export const createUser = async (
     });
 };
 
-export const fetchUsers = async (setUsers: any) => {
+export const fetchUsers = async (
+  setUsers: any,
+  setPage: any,
+  setAllPage: any,
+  page: any
+) => {
   if (checkAuth()) {
+    const token = localStorage.getItem("access_token");
+    if (page === undefined) page = 1; 
     await axios
-      .get(process.env.NEXT_PUBLIC_API_HOST + "/admin")
+      .get(process.env.NEXT_PUBLIC_API_HOST + `/admin?page=${page}&limit=10`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((data) => {
         setUsers(data.data.data);
+        setPage(data.data.meta.page);
+        setAllPage(data.data.meta.pageCount);
       });
   }
 };
-

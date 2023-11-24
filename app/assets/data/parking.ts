@@ -3,6 +3,7 @@ interface ParkingRowData {
     name: string;
     description: string;
     amount: number;
-    zone: string;
+    zoneId: any;
+    zone: any;
     actions?: any;
 }

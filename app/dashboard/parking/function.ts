@@ -2,57 +2,59 @@ import { checkAuth } from "@/app/helper/auth";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-export const fetchStaff = async (
-  setStaff: any,
+export const fetchParking = (
+  setParking: any,
   setPage: any,
-  setAllPage: any,
-  page?: number
+  setPageAll: any,
+  page: string
 ) => {
   if (page === undefined) {
-    page = 1;
+    page = "1";
   }
   if (checkAuth()) {
     const token = localStorage.getItem("access_token");
-    await axios
-      .get(process.env.NEXT_PUBLIC_API_HOST + `/staffs?page=${page}&limit=10`, {
+    axios
+      .get(process.env.NEXT_PUBLIC_API_HOST + `/parking?page=${page}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((data) => {
-        setPage(data.data.meta.page);
-        setAllPage(data.data.meta.pageCount);
-        setStaff(data.data.data);
+      .then((response) => {
+        const data = response.data.data;
+        setPage(response.data.meta.page);
+        setPageAll(response.data.meta.pageCount);
+        setParking(data);
       });
   }
 };
 
-export const createStaff = async (
-  firstName: string,
-  lastName: string,
-  email: string,
-  phoneNumber: string
+export const createParking = async (
+  name: string,
+  description: string,
+  amount: number,
+  zoneId: number
 ) => {
   if (checkAuth()) {
     const token = localStorage.getItem("access_token");
-    axios
+    await axios
       .post(
-        process.env.NEXT_PUBLIC_API_HOST + "/staffs",
+        process.env.NEXT_PUBLIC_API_HOST + "/parking",
         {
-          firstname: firstName,
-          lastname: lastName,
-          email: email,
-          phoneNumber: phoneNumber,
+          name: name,
+          description: description,
+          amount: parseInt(amount.toString()),
+          zoneId: zoneId,
         },
         { headers: { Authorization: `Bearer ${token}` } }
       )
       .then(() => {
         Swal.fire({
           icon: "success",
-          title: "ทำการสร้างเสร็จสิ้น",
+          title: "สร้างเรียบร้อยแล้ว",
         }).then((result) => {
           if (result.isConfirmed) {
             window.location.reload();
           }
         });
+        window.location.reload();
       })
       .catch((error) => {
         Swal.fire({

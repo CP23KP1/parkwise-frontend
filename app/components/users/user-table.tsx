@@ -6,6 +6,7 @@ import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
+import { deleteAdmin, editAdmin } from "./function";
 
 interface Props {
   data: UserRowData[];
@@ -16,10 +17,11 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
 
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
+  const [id, setId] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
 
   const columns: Column<UserRowData>[] = React.useMemo(
     () => [
@@ -65,12 +67,11 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
     useTable({ columns, data });
 
   const handleEdit = (data: any) => {
-    console.log(data)
-    setFirstName(data.firstName)
-    setLastName(data.lastName)
-    setEmail(data.email)
-    setPhone(data.phone)
-    onOpenModal()
+    setId(data.id)
+    setFirstName(data.firstname);
+    setLastName(data.lastname);
+    setEmail(data.email);
+    onOpenModal();
   };
 
   const handleDelete = (id: number) => {
@@ -84,7 +85,7 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
       cancelButtonText: `ไม่`,
     }).then((data) => {
       if (data.isConfirmed) {
-        console.log("confirm jaaa");
+        deleteAdmin(id);
       }
     });
   };
@@ -96,25 +97,40 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
         <div className="mx-10 my-4">
           <h2 className="font-bold text-xl">Edit Staff</h2>
           <div className="flex flex-col gap-6">
-          <div className="pt-4">
+            <div className="pt-4">
               <p>First Name</p>
-              <TextInput value={firstName} />
+              <TextInput
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
             </div>
             <div className="pt-4">
               <p>Last Name</p>
-              <TextInput value={lastName} />
+              <TextInput
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
             </div>
             <div>
               <p>Email</p>
-              <TextInput value={email} />
+              <TextInput
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <div>
-              <p>Mobile No</p>
-              <TextInput value={phone} />
+              <p>Password</p>
+              <TextInput
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
             <div className="flex justify-start">
-              <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
-                Add
+              <button
+                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
+                onClick={() => editAdmin(parseInt(id), firstName, lastName, email, password)}
+              >
+                แก้ไข
               </button>
             </div>
           </div>

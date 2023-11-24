@@ -7,7 +7,11 @@ import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
 import { ZoneRowData } from "@/app/assets/data/zone";
-import { deleteDevice, editDevice, fetchZone } from "@/app/dashboard/device/function";
+import {
+  deleteDevice,
+  editDevice,
+  fetchZone,
+} from "@/app/dashboard/device/function";
 
 interface Props {
   data: DeviceRowData[];
@@ -55,7 +59,12 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
       },
       {
         Header: "Zone",
-        accessor: "zoneId",
+        accessor: "zone",
+        Cell: ({ row }) => {
+          return (
+            <div className="flex flex-col gap-2">{row.original.zone.name}</div>
+          );
+        },
       },
       {
         Header: "Actions",
@@ -87,7 +96,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
     useTable({ columns, data });
 
   const handleEdit = (data: DeviceRowData) => {
-    setDeviceId(data.id)
+    setDeviceId(data.id);
     setName(data.name);
     setDescription(data.description);
     setPrice(data.price.toString());
@@ -108,7 +117,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
       cancelButtonText: `ไม่`,
     }).then((data) => {
       if (data.isConfirmed) {
-        deleteDevice(id)
+        deleteDevice(id);
       }
     });
   };
@@ -154,8 +163,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                 className="border-2 border-solid border-gray-600 w-80 h-10"
                 onChange={handleZoneChange}
               >
-                {
-                zone.map((data) => {
+                {zone.map((data) => {
                   return (
                     <option key={data.id} value={data.id}>
                       {data.name}
@@ -165,7 +173,19 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
               </select>
             </div>
             <div className="flex justify-start">
-              <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white" onClick={() => editDevice(deviceId.toString(), name, description, price, brand, zoneId.toString())}>
+              <button
+                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
+                onClick={() =>
+                  editDevice(
+                    deviceId.toString(),
+                    name,
+                    description,
+                    price,
+                    brand,
+                    zoneId.toString()
+                  )
+                }
+              >
                 แก้ไข
               </button>
             </div>

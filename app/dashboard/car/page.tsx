@@ -27,8 +27,14 @@ const Car = () => {
     fetchCar(setCar, setPage, setAllPage);
   }, []);
 
-  const handleNextPage = () => {
-    window.location.href = getPublicBasePath(`/dashboard/car/${page + 1}`);
+  const handlePrevPage = async () => {
+    await fetchCar(setCar, setPage, setAllPage, (page - 1).toString());
+    setPage(page - 1);
+  };
+
+  const handleNextPage = async () => {
+    await fetchCar(setCar, setPage, setAllPage, (page + 1).toString());
+    setPage(page + 1);
   };
 
   const filterData: FilterMenuProps[] = [
@@ -98,7 +104,7 @@ const Car = () => {
         </div>
       </Modal>
       <div className="w-72 sm:w-full">
-        <h1 className="text-xl font-bold">Car</h1>
+        <h1 className="text-xl font-bold">รถยนต์</h1>
       </div>
       <div className="flex justify-between my-4 align-middle">
         <div className="w-10/12 flex align-middle">
@@ -123,8 +129,12 @@ const Car = () => {
         <button
           className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
           disabled={page === 1}
+          onClick={handlePrevPage}
         >
-          <img src={getPublicBasePath('/svg/back-button.svg')} className="w-5 h-5" />
+          <img
+            src={getPublicBasePath("/svg/back-button.svg")}
+            className="w-5 h-5"
+          />
         </button>
         <div>
           <p className="text-center mt-2">
@@ -136,7 +146,10 @@ const Car = () => {
           onClick={handleNextPage}
           disabled={page == allPage}
         >
-          <img src={getPublicBasePath('/svg/next-button.svg')} className="w-5 h-5" />
+          <img
+            src={getPublicBasePath("/svg/next-button.svg")}
+            className="w-5 h-5"
+          />
         </button>
       </div>
     </>

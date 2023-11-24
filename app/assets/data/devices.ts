@@ -5,5 +5,6 @@ export interface DeviceRowData {
   price: number;
   brand: string;
   zoneId: string | number;
+  zone: any;
   actions?: any;
 }

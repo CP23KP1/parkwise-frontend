@@ -40,8 +40,8 @@ export const menuType = [
     link: "/dashboard/car",
   },
   {
-    name: "Users",
+    name: "Admin",
     icon: "/menu/users.png",
-    link: "/dashboard/users",
+    link: "/dashboard/admin",
   },
 ];
