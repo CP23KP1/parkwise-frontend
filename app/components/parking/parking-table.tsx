@@ -1,10 +1,13 @@
 // ResponsiveTable.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-responsive-modal";
 import { Column, useTable } from "react-table";
 import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
+import { deleteParking, editParking } from "./function";
+import { ZoneRowData } from "@/app/assets/data/zone";
+import { fetchZone } from "@/app/dashboard/device/function";
 
 interface Props {
   data: ParkingRowData[];
@@ -16,10 +19,21 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
 
+  const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
-  const [zone, setZone] = useState("");
+  const [zone, setZone] = useState<ZoneRowData[]>([]);
+  const [zoneId, setZoneId] = useState("");
+
+  useEffect(() => {
+    fetchZone(setZone);
+  }, []);
+
+  const handleZoneChange = (e: any) => {
+    setZoneId(e.target.value);
+  };
+
   const columns: Column<ParkingRowData>[] = React.useMemo(
     () => [
       {
@@ -37,6 +51,10 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
       {
         Header: "Zone",
         accessor: "zone",
+        Cell: ({ row }) => {
+          console.log("row jaa", row);
+          return <p>{row.original.zone.name}</p>;
+        },
       },
       {
         Header: "Actions",
@@ -68,10 +86,12 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
     useTable({ columns, data });
 
   const handleEdit = (data: ParkingRowData) => {
+    console.log('data', data)
+    setId(data.id.toString());
     setName(data.name);
     setDescription(data.description);
     setAmount(data.amount.toString());
-    setZone(data.zone);
+    setZoneId(data.zoneId);
     setOpen(true);
   };
 
@@ -79,16 +99,16 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
     Swal.fire({
       title: "คุณต้องการที่จะลบหรือไม่?",
       showCancelButton: true,
-      icon:'warning',
-      iconColor:'#DC143C',
+      icon: "warning",
+      iconColor: "#DC143C",
       confirmButtonText: `ใช่`,
       confirmButtonColor: "#DC143C",
       cancelButtonText: `ไม่`,
-  }).then((data) => {
-    if(data.isConfirmed){
-      console.log('confirm jaaa')
-    }
-  })
+    }).then((data) => {
+      if (data.isConfirmed) {
+        deleteParking(id);
+      }
+    });
   };
 
   return (
@@ -99,23 +119,50 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
           <div className="flex flex-col gap-6">
             <div className="pt-4">
               <p>Name</p>
-              <TextInput value={name}/>
+              <TextInput
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </div>
             <div>
               <p>Description</p>
-              <TextInput value={description}/>
+              <TextInput
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
             </div>
             <div>
               <p>Amount</p>
-              <TextInput value={amount}/>
+              <TextInput
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+              />
             </div>
             <div>
               <p>Zone</p>
-              <TextInput value={zone}/>
+              <div>
+                <select
+                  className="border-2 border-solid border-gray-600 w-80 h-10"
+                  onChange={handleZoneChange}
+                >
+                  {zone.map((data) => {
+                    return (
+                      <option key={data.id} value={data.id}>
+                        {data.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>{" "}
             </div>{" "}
             <div className="flex justify-start">
-              <button className="btn bg-sky-400 py-2 px-4 rounded-md text-white">
-                Add
+              <button
+                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
+                onClick={() =>
+                  editParking(id, name, description, amount, parseInt(zoneId))
+                }
+              >
+                แก้ไข
               </button>
             </div>
           </div>

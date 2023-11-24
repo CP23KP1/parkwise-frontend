@@ -81,3 +81,16 @@ export const createZone = async (
     }
   }
 };
+
+export const countZone = async (setCount: any) => {
+  if (checkAuth()) {
+    const token = localStorage.getItem("access_token");
+    axios
+      .get(process.env.NEXT_PUBLIC_API_HOST + "/zones", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        setCount(res.data.meta.itemCount);
+      });
+  }
+};

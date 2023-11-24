@@ -154,3 +154,16 @@ export const deleteDevice = async (id: number) => {
     }
   } catch (error) {}
 };
+
+export const countDevice = async (setData: any) => {
+  if (checkAuth()) {
+    const token = localStorage.getItem("access_token");
+    axios
+      .get(process.env.NEXT_PUBLIC_API_HOST + "/devices", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        setData(res.data.meta.itemCount);
+      });
+  }
+};

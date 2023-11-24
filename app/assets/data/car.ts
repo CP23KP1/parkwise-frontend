@@ -6,5 +6,6 @@ export interface CarRowData {
   model: string;
   year: number;
   staffId: string;
+  staff: any;
   actions?: any;
 }

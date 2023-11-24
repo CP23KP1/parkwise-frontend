@@ -51,7 +51,10 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
       },
       {
         Header: "Owner",
-        accessor: "staffId",
+        accessor: "staff",
+        Cell: ({ row }) => {
+          return <p>{row.original.staff.firstname} {row.original.staff.lastname}</p>;
+        },
       },
       {
         Header: "Actions",
