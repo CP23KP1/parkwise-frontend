@@ -7,10 +7,11 @@ import { Modal } from "react-responsive-modal";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import FilterButton from "@/app/components/button/filter";
 import TextInput from "@/app/components/input/input";
-import { createUser, fetchUsers } from "./function";
 import { getPublicBasePath } from "@/app/helper/basePath";
+import { createUser, fetchUsers } from "../function";
+import { usePathname } from "next/navigation";
 
-const User = () => {
+const Admin = () => {
   const [open, setOpen] = useState(false);
 
   const onOpenModal = () => setOpen(true);
@@ -20,9 +21,19 @@ const User = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [users, setUsers] = useState<UserRowData[]>([]);
+  const [page, setPage] = useState(1);
+  const [allPage, setAllPage] = useState(1);
+  const pathname = usePathname();
+
+  const getPage = () => {
+    var parts = pathname.split("/");
+    var page = parts[parts.length - 1];
+    return page;
+  };
   useEffect(() => {
-    fetchUsers(setUsers);
+    fetchUsers(setUsers, setPage, setAllPage, getPage());
   }, []);
+
 
   const filterData: FilterMenuProps[] = [
     {
@@ -39,6 +50,13 @@ const User = () => {
     },
   ];
 
+  const handleNextPage = () => {
+    window.location.href = getPublicBasePath(`/dashboard/admin/${page + 1}`);
+  }
+
+  const handlePrevPage = () => {
+    window.location.href = getPublicBasePath(`/dashboard/admin/${page - 1}`);
+  }
   return (
     <>
       <Modal open={open} onClose={onCloseModal}>
@@ -78,7 +96,7 @@ const User = () => {
       </Modal>
       <div className="w-72 sm:w-full">
         <div>
-          <h1 className="text-xl font-bold">User</h1>
+          <h1 className="text-xl font-bold">Admin</h1>
         </div>
         <div className="flex justify-between my-4 align-middle">
           <div className="w-10/12 flex align-middle">
@@ -98,16 +116,24 @@ const User = () => {
             เพิ่ม
           </button>
         </div>
-        <ResponsiveUserTable data={[]} />
+        <ResponsiveUserTable data={users} />
         <div className="mt-8 flex align-middle gap-4">
           <button className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded">
-            <img src={getPublicBasePath('/svg/back-button.svg')} className="w-5 h-5" />
+            <img
+              src={getPublicBasePath("/svg/back-button.svg")}
+              className="w-5 h-5"
+            />
           </button>
           <div>
-            <p className="text-center mt-2">1 / 14</p>
+            <p className="text-center mt-2">
+              {page} / {allPage}
+            </p>
           </div>
           <button className="flex items-center space-x-2 border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded">
-            <img src={getPublicBasePath('/svg/next-button.svg')} className="w-5 h-5" />
+            <img
+              src={getPublicBasePath("/svg/next-button.svg")}
+              className="w-5 h-5"
+            />
           </button>
         </div>
       </div>
@@ -115,4 +141,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Admin;

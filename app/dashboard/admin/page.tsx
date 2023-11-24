@@ -1,53 +1,32 @@
-// @ts-nocheck
 "use client";
-import DeleteModal from "@/app/components/modal/delete-modal";
-import ResponsiveParkingTable from "@/app/components/parking/parking-table";
-import Popup from "reactjs-popup";
-import "reactjs-popup/dist/index.css";
-import { useEffect, useState } from "react";
-import Modal from "react-responsive-modal";
-import FilterButton, {
-  FilterButtonProps,
-} from "@/app/components/button/filter";
+import React, { useEffect, useState } from "react";
+import { UserRowData } from "@/app/assets/data/user";
+import ResponsiveUserTable from "@/app/components/users/user-table";
+import "react-responsive-modal/styles.css";
+import { Modal } from "react-responsive-modal";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
+import FilterButton from "@/app/components/button/filter";
 import TextInput from "@/app/components/input/input";
+import { createUser, fetchUsers } from "./function";
 import { getPublicBasePath } from "@/app/helper/basePath";
-import { createParking, fetchParking } from "./function";
-import { fetchZone } from "../device/function";
 
-const Parking = () => {
+const User = () => {
   const [open, setOpen] = useState(false);
+
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
-  const [parking, setParking] = useState<ParkingRowData[]>([]);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [users, setUsers] = useState<UserRowData[]>([]);
   const [page, setPage] = useState(1);
-  const [pageAll, setPageAll] = useState(1);
-  const [zone, setZone] = useState<ZoneRowData[]>([]);
-  const [zoneId, setZoneId] = useState<ZoneRowData[]>([]);
-  const [name, setName] = useState("");
-  const [desc, setDesc] = useState("");
-  const [amount, setAmount] = useState(0);
-
+  const [allPage, setAllPage] = useState(1);
   useEffect(() => {
-    fetchZone(setZone, setZoneId);
-    fetchParking(setParking, setPage, setPageAll, page);
+    fetchUsers(setUsers, setPage, setAllPage, page);
   }, []);
 
-  const handleZoneChange = (e) => {
-    setZoneId(e.target.value);
-  };
-
-  const handleNextPage = async () => {
-    await fetchParking(setParking, setPage, setPageAll, page + 1);
-    setPage(page + 1);
-  };
-
-  const handlePrevPage = async () => {
-    await fetchParking(setParking, setPage, setPageAll, page - 1);
-    setPage(page + 1);
-  };
-
-  const filterData: FilterButtonProps = [
+  const filterData: FilterMenuProps[] = [
     {
       title: "ทั้งหมด",
       func: () => console.log("ทั้งหมด"),
@@ -61,46 +40,55 @@ const Parking = () => {
       func: () => console.log("ทั้งหมด"),
     },
   ];
+
+  const handleNextPage = async () => {
+    await fetchUsers(
+      setUsers,
+      setPage,
+      setAllPage,
+      parseInt(page.toString()) + 1
+    );
+    setPage(parseInt(page.toString()) + 1);
+  };
+
+  const handlePrevPage = async () => {
+    await fetchUsers(
+      setUsers,
+      setPage,
+      setAllPage,
+      parseInt(page.toString()) - 1
+    );
+    setPage(parseInt(page.toString()) - 1);
+  };
   return (
     <>
       <Modal open={open} onClose={onCloseModal}>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">Create Parking</h2>
+          <h2 className="font-bold text-xl">Create User</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>Name</p>
-              <TextInput onChange={(e) => setName(e.target.value)} />
+              <p>First Name</p>
+              <TextInput onChange={(e) => setFirstName(e.target.value)} />
+            </div>
+            <div className="pt-4">
+              <p>Last Name</p>
+              <TextInput onChange={(e) => setLastName(e.target.value)} />
             </div>
             <div>
-              <p>Description</p>
-              <TextInput onChange={(e) => setDesc(e.target.value)} />
+              <p>Email</p>
+              <TextInput onChange={(e) => setEmail(e.target.value)} />
             </div>
-            <div>
-              <p>Amount</p>
+            <div className="pt-4">
+              <p>Password</p>
               <TextInput
-                type="number"
-                onChange={(e) => setAmount(e.target.value)}
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <div>
-            <p>Zone</p>
-              <select
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-                onChange={handleZoneChange}
-              >
-                {zone.map((data) => {
-                  return (
-                    <option key={data.id} value={data.id}>
-                      {data.name}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>{" "}
             <div className="flex justify-start">
               <button
                 className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                onClick={() => createParking(name, desc, amount, zoneId)}
+                onClick={() => createUser(email, password, firstName, lastName)}
               >
                 Add
               </button>
@@ -111,7 +99,7 @@ const Parking = () => {
       </Modal>
       <div className="w-72 sm:w-full">
         <div>
-          <h1 className="text-xl font-bold">ที่จอดรถ</h1>
+          <h1 className="text-xl font-bold">ผู้ดูแลระบบ</h1>
         </div>
         <div className="flex justify-between my-4 align-middle">
           <div className="w-10/12 flex align-middle">
@@ -131,7 +119,7 @@ const Parking = () => {
             เพิ่ม
           </button>
         </div>
-        <ResponsiveParkingTable data={parking} />
+        <ResponsiveUserTable data={users} />
         <div className="mt-8 flex align-middle gap-4">
           <button
             className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
@@ -145,13 +133,13 @@ const Parking = () => {
           </button>
           <div>
             <p className="text-center mt-2">
-              {page} / {pageAll || 1}
+              {page} / {allPage}
             </p>
           </div>
           <button
             className="flex items-center space-x-2 border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
             onClick={handleNextPage}
-            disabled={page === pageAll}
+            disabled={page == allPage}
           >
             <img
               src={getPublicBasePath("/svg/next-button.svg")}
@@ -164,4 +152,4 @@ const Parking = () => {
   );
 };
 
-export default Parking;
+export default User;

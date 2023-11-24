@@ -90,6 +90,9 @@ const Login = () => {
                         <TextInput
                             type="password"
                             placeHolder="Password"
+                            onEnterPress={(e) => {
+                                login(e);
+                            }}
                             onChange={(e) => {
                                 setPassword(e.target.value as any);
                             }}

@@ -19,8 +19,8 @@ const Device = () => {
   const [brand, setBrand] = useState("");
   const [zone, setZone] = useState<ZoneRowData[]>([]);
   const [zoneId, setZoneId] = useState(0);
-  const [page, setPage] = useState(0);
-  const [allPage, setAllPage] = useState(0);
+  const [page, setPage] = useState(1);
+  const [allPage, setAllPage] = useState(1);
   const [deviceShow, setDeviceShow] = useState<DeviceRowData[]>([]);
 
   const onOpenModal = () => setOpen(true);
@@ -31,8 +31,14 @@ const Device = () => {
     fetchDevice(setDeviceShow, setPage, setAllPage);
   }, []);
 
-  const handleNextPage = () => {
-    window.location.href = getPublicBasePath(`/dashboard/device/${page + 1}`);
+  const handlePrevPage = async () => {
+    await fetchDevice(setDeviceShow, setPage, setAllPage, page - 1);
+    setPage(page - 1);
+  };
+
+  const handleNextPage = async () => {
+    await fetchDevice(setDeviceShow, setPage, setAllPage, page + 1);
+    setPage(page + 1);
   };
 
   const filterData: FilterMenuProps[] = [
@@ -127,7 +133,7 @@ const Device = () => {
       </Modal>
 
       <div className="w-72 sm:w-full">
-        <h1 className="text-xl font-bold">Device</h1>
+        <h1 className="text-xl font-bold">อุปกรณ์</h1>
       </div>
       <div className="flex justify-between my-4 align-middle">
         <div className="w-10/12 flex align-middle">
@@ -151,9 +157,13 @@ const Device = () => {
       <div className="mt-8 flex align-middle gap-4">
         <button
           className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-          disabled
+          disabled={page === 1}
+          onClick={handlePrevPage}
         >
-          <img src={getPublicBasePath('/svg/back-button.svg')} className="w-5 h-5" />
+          <img
+            src={getPublicBasePath("/svg/back-button.svg")}
+            className="w-5 h-5"
+          />
         </button>
         <div>
           <p className="text-center mt-2">
@@ -165,7 +175,10 @@ const Device = () => {
           onClick={handleNextPage}
           disabled={page == allPage}
         >
-          <img src={getPublicBasePath('/svg/next-button.svg')} className="w-5 h-5" />
+          <img
+            src={getPublicBasePath("/svg/next-button.svg")}
+            className="w-5 h-5"
+          />
         </button>
       </div>
     </>

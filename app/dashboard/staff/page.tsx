@@ -24,8 +24,8 @@ const Staff = () => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [page, setPage] = useState(0);
-  const [allPage, setAllPage] = useState(0);
+  const [page, setPage] = useState(1);
+  const [allPage, setAllPage] = useState(1);
 
   const filterData: FilterMenuProps[] = [
     {
@@ -47,12 +47,16 @@ const Staff = () => {
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
 
-  const handleNextPage = () => {
-    window.location.href = getPublicBasePath(`/dashboard/staff/${page + 1}`);
+  const handleNextPage = async () => {
+    await fetchStaff(setStaff, setPage, setAllPage, page + 1);
+    // window.location.href = getPublicBasePath(`/dashboard/staff/${page + 1}`);
+    setPage(page + 1);
   };
 
-  const handlePrevPage = () => {
-    window.location.href = getPublicBasePath(`/dashboard/staff/${page - 1}`);
+  const handlePrevPage = async () => {
+    await fetchStaff(setStaff, setPage, setAllPage, page - 1);
+    // window.location.href = getPublicBasePath(`/dashboard/staff/${page - 1}`);
+    setPage(page - 1);
   };
   return (
     <>
@@ -102,7 +106,7 @@ const Staff = () => {
       </Modal>
       <div className="w-72 sm:w-full">
         <div>
-          <h1 className="text-xl font-bold">Staff</h1>
+          <h1 className="text-xl font-bold">เจ้าหน้าที่</h1>
         </div>
         <div className="flex justify-between my-4 align-middle">
           <div className="w-10/12 flex align-middle">
@@ -126,7 +130,7 @@ const Staff = () => {
         <div className="mt-8 flex align-middle gap-4">
           <button
             className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-            onClick={handleNextPage}
+            onClick={handlePrevPage}
             disabled={page == 1}
           >
             <img src={getPublicBasePath('/svg/back-button.svg')} className="w-5 h-5" />
@@ -138,7 +142,7 @@ const Staff = () => {
           </div>
           <button
             className="flex items-center space-x-2 border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-            onClick={handlePrevPage}
+            onClick={handleNextPage}
             disabled={page == allPage}
           >
             <img src={getPublicBasePath('/svg/next-button.svg')} className="w-5 h-5" />

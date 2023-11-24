@@ -29,8 +29,14 @@ const Zone = () => {
   const [allPage, setAllPage] = useState(0);
   const pathname = usePathname();
 
-  const handleNextPage = () => {
-    window.location.href = getPublicBasePath(`/dashboard/zone/${page + 1}`);
+  const handlePrevPage = async () => {
+    await fetchZone(setDataShow, setPage, setAllPage, (page - 1).toString());
+    setPage(page - 1);
+  };
+
+  const handleNextPage = async () => {
+    await fetchZone(setDataShow, setPage, setAllPage, (page + 1).toString());
+    setPage(page + 1);
   };
 
   const getPage = () => {
@@ -66,6 +72,17 @@ const Zone = () => {
     });
   };
 
+  const zone = () => {
+    return {
+      name: name,
+      description: description,
+      maxCapacity: maxCapacity,
+      address: address,
+      latitude: selectedLatLng.lat,
+      longitude: selectedLatLng.lng,
+    };
+  };
+
   const handleCreateZone = async () => {
     await createZone(
       name,
@@ -86,8 +103,6 @@ const Zone = () => {
   const handleMapClick = (e: any) => {
     const lat = e.latLng.lat();
     const lng = e.latLng.lng();
-    console.log("Clicked Latitude:", lat);
-    console.log("Clicked Longitude:", lng);
     setSelectedLatLng({ lat, lng });
   };
 
@@ -190,7 +205,7 @@ const Zone = () => {
       </Modal>
       <div className="w-72 sm:w-full">
         <div>
-          <h1 className="text-xl font-bold">Zone</h1>
+          <h1 className="text-xl font-bold">โซนจอดรถ</h1>
         </div>
         <div className="flex justify-between my-4 align-middle">
           <div className="w-10/12 flex align-middle">
@@ -215,8 +230,12 @@ const Zone = () => {
           <button
             className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
             disabled={page == 1}
+            onClick={handlePrevPage}
           >
-            <img src={getPublicBasePath('/svg/back-button.svg')} className="w-5 h-5" />
+            <img
+              src={getPublicBasePath("/svg/back-button.svg")}
+              className="w-5 h-5"
+            />
           </button>
           <div>
             <p className="text-center mt-2">
@@ -228,7 +247,10 @@ const Zone = () => {
             onClick={handleNextPage}
             disabled={page == allPage}
           >
-            <img src={getPublicBasePath('/svg/next-button.svg')} className="w-5 h-5" />
+            <img
+              src={getPublicBasePath("/svg/next-button.svg")}
+              className="w-5 h-5"
+            />
           </button>
         </div>
       </div>
