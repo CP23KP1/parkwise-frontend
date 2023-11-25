@@ -37,19 +37,19 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
   const columns: Column<ParkingRowData>[] = React.useMemo(
     () => [
       {
-        Header: "Name",
+        Header: "ชื่อ",
         accessor: "name",
       },
       {
-        Header: "Description",
+        Header: "คำอธิบาย",
         accessor: "description",
       },
       {
-        Header: "Amount",
+        Header: "จำนวน",
         accessor: "amount",
       },
       {
-        Header: "Zone",
+        Header: "โซน",
         accessor: "zone",
         Cell: ({ row }) => {
           console.log("row jaa", row);
@@ -57,7 +57,7 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
         },
       },
       {
-        Header: "Actions",
+        Header: "",
         accessor: "actions",
         Cell: ({ row }) => {
           return (
@@ -66,13 +66,13 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
                 onClick={() => handleEdit(row.original)}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
-                Edit
+                แก้ไข
               </button>
               <button
                 onClick={() => handleDelete(row.original.id)}
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               >
-                Delete
+                ลบ
               </button>
             </div>
           );
@@ -115,31 +115,31 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
     <>
       <Modal open={open} onClose={onCloseModal}>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">Edit Parking</h2>
+          <h2 className="font-bold text-xl">แก้ไขที่จอดรถ</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>Name</p>
+              <p>ชื่อ</p>
               <TextInput
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div>
-              <p>Description</p>
+              <p>คำอธิบาย</p>
               <TextInput
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
             </div>
             <div>
-              <p>Amount</p>
+              <p>จำนวน</p>
               <TextInput
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
               />
             </div>
             <div>
-              <p>Zone</p>
+              <p>โซน</p>
               <div>
                 <select
                   className="border-2 border-solid border-gray-600 w-80 h-10"

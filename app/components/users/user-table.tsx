@@ -26,19 +26,19 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
   const columns: Column<UserRowData>[] = React.useMemo(
     () => [
       {
-        Header: "First Name",
+        Header: "ชื่อ",
         accessor: "firstname",
       },
       {
-        Header: "Last Name",
+        Header: "นามสกุล",
         accessor: "lastname",
       },
       {
-        Header: "Email",
+        Header: "อีเมล",
         accessor: "email",
       },
       {
-        Header: "Actions",
+        Header: "",
         accessor: "actions",
         Cell: ({ row }) => {
           return (
@@ -47,13 +47,13 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
                 onClick={() => handleEdit(row.original)}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
-                Edit
+                แก้ไข
               </button>
               <button
                 onClick={() => handleDelete(row.original.id)}
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               >
-                Delete
+                ลบ
               </button>
             </div>
           );
@@ -67,7 +67,7 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
     useTable({ columns, data });
 
   const handleEdit = (data: any) => {
-    setId(data.id)
+    setId(data.id);
     setFirstName(data.firstname);
     setLastName(data.lastname);
     setEmail(data.email);
@@ -98,28 +98,28 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
           <h2 className="font-bold text-xl">Edit Staff</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>First Name</p>
+              <p>ชื่อ</p>
               <TextInput
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
               />
             </div>
             <div className="pt-4">
-              <p>Last Name</p>
+              <p>นามสกุล</p>
               <TextInput
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
               />
             </div>
             <div>
-              <p>Email</p>
+              <p>อีเมล</p>
               <TextInput
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div>
-              <p>Password</p>
+              <p>รหัสผ่าน</p>
               <TextInput
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -128,7 +128,9 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
             <div className="flex justify-start">
               <button
                 className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                onClick={() => editAdmin(parseInt(id), firstName, lastName, email, password)}
+                onClick={() =>
+                  editAdmin(parseInt(id), firstName, lastName, email, password)
+                }
               >
                 แก้ไข
               </button>

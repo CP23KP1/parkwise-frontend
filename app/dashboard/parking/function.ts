@@ -6,7 +6,10 @@ export const fetchParking = (
   setParking: any,
   setPage: any,
   setPageAll: any,
-  page: string
+  page: string,
+  search?: string,
+  field?: string,
+  order: string = "asc"
 ) => {
   if (page === undefined) {
     page = "1";
@@ -14,9 +17,15 @@ export const fetchParking = (
   if (checkAuth()) {
     const token = localStorage.getItem("access_token");
     axios
-      .get(process.env.NEXT_PUBLIC_API_HOST + `/parking?page=${page}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(
+        process.env.NEXT_PUBLIC_API_HOST +
+          `/parking?page=${page}&&limit=10${search ? `&search=${search}` : ""}${
+            field ? `&orderField=${field}` : ""
+          }${order ? `&orderDirection=${order}` : ""}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((response) => {
         const data = response.data.data;
         setPage(response.data.meta.page);

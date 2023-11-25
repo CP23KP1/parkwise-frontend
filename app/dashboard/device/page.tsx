@@ -22,13 +22,16 @@ const Device = () => {
   const [page, setPage] = useState(1);
   const [allPage, setAllPage] = useState(1);
   const [deviceShow, setDeviceShow] = useState<DeviceRowData[]>([]);
+  const [search, setSearch] = useState("");
+  const [field, setField] = useState("createdAt");
+  const [order, setOrder] = useState("desc");
 
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
 
   useEffect(() => {
     fetchZone(setZone, setZoneId);
-    fetchDevice(setDeviceShow, setPage, setAllPage);
+    fetchDevice(setDeviceShow, setPage, setAllPage, 1, search, field, order);
   }, []);
 
   const handlePrevPage = async () => {
@@ -43,18 +46,83 @@ const Device = () => {
 
   const filterData: FilterMenuProps[] = [
     {
-      title: "ทั้งหมด",
-      func: () => console.log("ทั้งหมด"),
+      title: "ใหม่ - เก่า",
+      func: async () => {
+        await fetchDevice(
+          setDeviceShow,
+          setPage,
+          setAllPage,
+          page,
+          search,
+          "createdAt",
+          "desc"
+        );
+        setField("createdAt");
+        setOrder("desc");
+      },
     },
     {
-      title: "ทั้งหมด",
-      func: () => console.log("ทั้งหมด"),
+      title: "เก่า - ใหม่",
+      func: async () => {
+        await fetchDevice(
+          setDeviceShow,
+          setPage,
+          setAllPage,
+          page,
+          search,
+          "createdAt",
+          "asc"
+        );
+        setField("createdAt");
+        setOrder("asc");
+      },
     },
     {
-      title: "ทั้งหมด",
-      func: () => console.log("ทั้งหมด"),
+      title: "ราคาถูก - แพง",
+      func: async () => {
+        await fetchDevice(
+          setDeviceShow,
+          setPage,
+          setAllPage,
+          page,
+          search,
+          "price",
+          "asc"
+        );
+        setField("price");
+        setOrder("asc");
+      },
+    },
+    {
+      title: "ราคาแพง - ถูก",
+      func: async () => {
+        await fetchDevice(
+          setDeviceShow,
+          setPage,
+          setAllPage,
+          page,
+          search,
+          "price",
+          "desc"
+        );
+        setField("price");
+        setOrder("desc");
+      },
     },
   ];
+
+  const handleSearch = async (e: any) => {
+    setSearch(e.target.value);
+    await fetchDevice(
+      setDeviceShow,
+      setPage,
+      setAllPage,
+      page,
+      e.target.value,
+      field,
+      order
+    );
+  };
 
   const handleZoneChange = (event: any) => {
     const selectedZoneId = parseInt(event.target.value, 10);
@@ -65,31 +133,31 @@ const Device = () => {
     <>
       <Modal open={open} onClose={onCloseModal}>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">Create Device</h2>
+          <h2 className="font-bold text-xl">สร้างอุปกรณ์</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>Name</p>
+              <p>ชื่อ</p>
               <TextInput
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div>
-              <p>Description</p>
+              <p>คำอธิบาย</p>
               <TextInput
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
             </div>
             <div>
-              <p>Brand</p>
+              <p>แบรนด์</p>
               <TextInput
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
               />
             </div>
             <div>
-              <p>Price</p>
+              <p>ราคา</p>
               <TextInput
                 type="number"
                 value={price}
@@ -97,7 +165,7 @@ const Device = () => {
               />
             </div>
             <div>
-              <p>Zone</p>
+              <p>โซน</p>
               <select
                 className="border-2 border-solid border-gray-600 w-80 h-10"
                 onChange={handleZoneChange}
@@ -124,7 +192,7 @@ const Device = () => {
                   )
                 }
               >
-                Add
+                เพิ่ม
               </button>
             </div>
           </div>
@@ -141,6 +209,7 @@ const Device = () => {
             type="text"
             className="border-2 border-solid border-gray-600 w-8/12 md:w-4/12 h-10 pl-3"
             placeholder="ค้นหา"
+            onChange={(e) => handleSearch(e)}
           />
           <div className="mt-2 ml-2">
             <FilterButton data={filterData as never} />

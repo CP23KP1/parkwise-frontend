@@ -44,35 +44,35 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
   const columns: Column<ZoneRowData>[] = React.useMemo(
     () => [
       {
-        Header: "Zone Name",
+        Header: "ชื่อโซน",
         accessor: "name",
       },
       {
-        Header: "Description",
+        Header: "คำอธิบาย",
         accessor: "description",
       },
       {
-        Header: "Max Capacity",
+        Header: "รองรับการใช้งาน",
         accessor: "maximumCapacity",
       },
       {
-        Header: "Occupancy",
+        Header: "ใช้งานอยู่",
         accessor: "occupancy",
       },
       {
-        Header: "Address",
+        Header: "ที่อยู่",
         accessor: "address",
       },
       {
-        Header: "Latitude",
+        Header: "ละติจูด",
         accessor: "latitude",
       },
       {
-        Header: "Longitude",
+        Header: "ลองติจูด",
         accessor: "longitude",
       },
       {
-        Header: "Actions",
+        Header: "",
         accessor: "actions",
         Cell: ({ row }) => {
           return (
@@ -81,13 +81,13 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                 onClick={() => handleEdit(row.original)}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
-                Edit
+                แก้ไข
               </button>
               <button
                 onClick={() => handleDelete(row.original.id)}
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               >
-                Delete
+                ลบ
               </button>
             </div>
           );

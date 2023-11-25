@@ -26,35 +26,35 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
   const columns: Column<StaffRowData>[] = React.useMemo(
     () => [
       {
-        Header: "First Name",
+        Header: "ชื่อ",
         accessor: "firstname",
       },
       {
-        Header: "Last Name",
+        Header: "นามสกุล",
         accessor: "lastname",
       },
       {
-        Header: "Email",
+        Header: "อีเมล",
         accessor: "email",
       },
       {
-        Header: "Mobile No",
+        Header: "เบอร์โทรศัพท์มือถือ",
         accessor: "phoneNumber",
       },
       {
-        Header: "Service",
+        Header: "สถานะ",
         accessor: "service",
         Cell: ({ cell }) => {
           const service = cell.value;
           return (
             <div className={cell.value ? "text-green-400" : "text-red-500"}>
-              {service ? "Active" : "Inactive"}
+              {service ? "ใช้อยู่" : "ไม่ได้ใช้"}
             </div>
           );
         },
       },
       {
-        Header: "Actions",
+        Header: "",
         accessor: "actions",
         Cell: ({ row }) => {
           return (
@@ -63,13 +63,13 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                 onClick={() => handleEdit(row.original)}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
-                Edit
+                แก้ไข
               </button>
               <button
                 onClick={() => handleDelete(row.original.id)}
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               >
-                Delete
+                ลบ
               </button>
             </div>
           );
@@ -111,31 +111,31 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
     <>
       <Modal open={open} onClose={onCloseModal}>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">Edit Staff</h2>
+          <h2 className="font-bold text-xl">แก้ไขเจ้าหน้าที่</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>First Name</p>
+              <p>ชื่อ</p>
               <TextInput
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
               />
             </div>
             <div className="pt-4">
-              <p>Last Name</p>
+              <p>นามสกุล</p>
               <TextInput
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
               />
             </div>
             <div>
-              <p>Email</p>
+              <p>อีเมล</p>
               <TextInput
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div>
-              <p>Mobile No</p>
+              <p>เบอร์มือถือ</p>
               <TextInput
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}

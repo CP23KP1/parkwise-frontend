@@ -6,17 +6,30 @@ export const fetchStaff = async (
   setStaff: any,
   setPage: any,
   setAllPage: any,
-  page?: number
+  page?: number,
+  status?: string,
+  search?: string
 ) => {
   if (page === undefined) {
     page = 1;
   }
+
+  if (status === undefined) {
+    status = "all";
+  }
+
   if (checkAuth()) {
     const token = localStorage.getItem("access_token");
     await axios
-      .get(process.env.NEXT_PUBLIC_API_HOST + `/staffs?page=${page}&limit=10`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(
+        process.env.NEXT_PUBLIC_API_HOST +
+          `/staffs?page=${page}&limit=10&status=${status}${
+            search ? `&search=${search}` : ""
+          }`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((data) => {
         setPage(data.data.meta.page);
         setAllPage(data.data.meta.pageCount);

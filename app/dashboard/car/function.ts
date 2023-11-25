@@ -45,27 +45,51 @@ export const createCar = async (
   }
 };
 
-export const fetchCar = (
+export const fetchCar = async (
   setCar: any,
   setPage: any,
   setAllPage: any,
-  page?: string
+  page?: string,
+  search?: string,
+  field?: string,
+  order?: string
 ) => {
   let url = process.env.NEXT_PUBLIC_API_HOST + "/cars";
   if (page) {
     url += `?page=${page}`;
   }
+  if (search) {
+    url += `&search=${search}`;
+  }
+  if (field) {
+    url += `&orderBy=${field}`;
+  }
+  if (order) {
+    url += `&orderDirection=${order}`;
+  }
   if (checkAuth()) {
     const token = localStorage.getItem("access_token");
-    axios
+    await axios
       .get(url, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        console.log(res.data);
         setCar(res.data.data);
         setPage(res.data.meta.page);
         setAllPage(res.data.meta.pageCount);
+      });
+  }
+};
+
+export const fetchStaff = (setStaff: any) => {
+  if (checkAuth()) {
+    const token = localStorage.getItem("access_token");
+    axios
+      .get(process.env.NEXT_PUBLIC_API_HOST + "/staffs?page=1&limit=1000", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        setStaff(res.data.data);
       });
   }
 };
