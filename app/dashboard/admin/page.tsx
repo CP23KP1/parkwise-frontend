@@ -22,22 +22,45 @@ const User = () => {
   const [users, setUsers] = useState<UserRowData[]>([]);
   const [page, setPage] = useState(1);
   const [allPage, setAllPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [orderField, setOrderField] = useState("createdAt");
+  const [order, setOrder] = useState("desc");
   useEffect(() => {
-    fetchUsers(setUsers, setPage, setAllPage, page);
+    fetchUsers(setUsers, setPage, setAllPage, page, search, orderField, order);
   }, []);
 
   const filterData: FilterMenuProps[] = [
     {
-      title: "ทั้งหมด",
-      func: () => console.log("ทั้งหมด"),
+      title: "ใหม่ - เก่า",
+      func: async () => {
+        await fetchUsers(
+          setUsers,
+          setPage,
+          setAllPage,
+          page,
+          search,
+          "createdAt",
+          "desc"
+        );
+        setOrderField("createdAt");
+        setOrder("desc");
+      }
     },
     {
-      title: "ทั้งหมด",
-      func: () => console.log("ทั้งหมด"),
-    },
-    {
-      title: "ทั้งหมด",
-      func: () => console.log("ทั้งหมด"),
+      title: "เก่า - ใหม่",
+      func: async () => {
+        await fetchUsers(
+          setUsers,
+          setPage,
+          setAllPage,
+          page,
+          search,
+          "createdAt",
+          "asc"
+        );
+        setOrderField("createdAt");
+        setOrder("asc");
+      }
     },
   ];
 
@@ -60,26 +83,39 @@ const User = () => {
     );
     setPage(parseInt(page.toString()) - 1);
   };
+
+  const handleSearch = async (e:any) => {
+    setSearch(e.target.value);
+    await fetchUsers(
+      setUsers,
+      setPage,
+      setAllPage,
+      page,
+      e.target.value,
+      orderField,
+      order
+    );
+  };
   return (
     <>
       <Modal open={open} onClose={onCloseModal}>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">Create User</h2>
+          <h2 className="font-bold text-xl">สร้างผู้ดูแลระบบ</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>First Name</p>
+              <p>ชื่อ</p>
               <TextInput onChange={(e) => setFirstName(e.target.value)} />
             </div>
             <div className="pt-4">
-              <p>Last Name</p>
+              <p>นามสกุล</p>
               <TextInput onChange={(e) => setLastName(e.target.value)} />
             </div>
             <div>
-              <p>Email</p>
+              <p>อีเมล</p>
               <TextInput onChange={(e) => setEmail(e.target.value)} />
             </div>
             <div className="pt-4">
-              <p>Password</p>
+              <p>รหัสผ่าน</p>
               <TextInput
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
@@ -90,7 +126,7 @@ const User = () => {
                 className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
                 onClick={() => createUser(email, password, firstName, lastName)}
               >
-                Add
+                เพิ่ม
               </button>
             </div>
           </div>
@@ -107,6 +143,7 @@ const User = () => {
               type="text"
               className="border-2 border-solid border-gray-600 w-8/12 md:w-4/12 h-10 pl-3"
               placeholder="ค้นหา"
+              onChange={(e) => handleSearch(e)}
             />
             <div className="mt-2 ml-2">
               <FilterButton data={filterData as never} />

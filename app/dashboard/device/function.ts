@@ -47,13 +47,26 @@ export const fetchDevice = (
   setDevice: any,
   setPage: any,
   setAllPage: any,
-  page?: any
+  page?: any,
+  search?: string,
+  field?: string,
+  order?: string
 ) => {
   if (checkAuth()) {
     let url = process.env.NEXT_PUBLIC_API_HOST + "/devices";
     if (page) {
       url += `?page=${page}`;
     }
+    if (search) {
+      url += `&search=${search}`;
+    }
+    if (field) {
+      url += `&orderBy=${field}`;
+    }
+    if (order) {
+      url += `&orderDirection=${order}`;
+    }
+
     const token = localStorage.getItem("access_token");
     axios
       .get(url, {

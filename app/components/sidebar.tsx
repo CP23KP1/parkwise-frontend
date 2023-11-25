@@ -27,7 +27,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                             className="cursor-pointer block text-center bg-red-500 text-white mx-6 p-3 rounded-md hover:bg-red-700"
                             onClick={logout}
                         >
-                            <button>Logout</button>
+                            <button>ออกจากระบบ</button>
                         </div>
                     </>
                 ) : (

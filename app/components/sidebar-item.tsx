@@ -20,7 +20,7 @@ const SidebarItem: React.FC<SidebarItemRenderProps> = ({
     return (
         <Link href={link}>
             <div
-                className={`transform hover:translate-x-1 grid grid-cols-3 w-auto align-middle justify-center my-2 mx-3 rounded-xl pt-3 hover:bg-slate-200 ${
+                className={`transform hover:translate-x-1 grid grid-cols-3 w-auto align-middle justify-center my-2 mx-2 rounded-xl pt-3 hover:bg-slate-200 ${
                     path() && "bg-slate-300"
                 } hover:cursor-pointer`}
             >

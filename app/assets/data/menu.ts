@@ -1,31 +1,31 @@
 export const menuType = [
   {
-    name: "Home",
+    name: "หน้าหลัก",
     icon: "/menu/icons-dashboard.png",
     link: "/dashboard",
   },
   {
-    name: "Parking",
+    name: "ที่จอดรถ",
     icon: "/menu/parking.png",
     link: "/dashboard/parking",
   },
   {
-    name: "Staff",
+    name: "เจ้าหน้าที่",
     icon: "/menu/staff.png",
     link: "/dashboard/staff",
   },
   {
-    name: "Device",
+    name: "อุปกรณ์",
     icon: "/menu/device.png",
     link: "/dashboard/device",
   },
   {
-    name: "Carbon",
+    name: "คาร์บอน",
     icon: "/menu/low-carbon.png",
     link: "/dashboard/carbon",
   },
   {
-    name: "Zone",
+    name: "โซน",
     icon: "/menu/zone.png",
     link: "/dashboard/zone",
   },
@@ -35,12 +35,12 @@ export const menuType = [
     link: "/dashboard/logs",
   },
   {
-    name: "Cars",
+    name: "รถยนต์",
     icon: "/menu/car.png",
     link: "/dashboard/car",
   },
   {
-    name: "Admin",
+    name: "ผู้ดูแล",
     icon: "/menu/users.png",
     link: "/dashboard/admin",
   },

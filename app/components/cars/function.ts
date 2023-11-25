@@ -22,7 +22,7 @@ export const editCar = async (
           brand: brand,
           model: model,
           year: year,
-          staffId: staffId,
+          staffId: parseInt(staffId),
         },
         {
           headers: { Authorization: `Bearer ${token}` },

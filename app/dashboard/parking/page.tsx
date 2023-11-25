@@ -27,10 +27,19 @@ const Parking = () => {
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
   const [amount, setAmount] = useState(0);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetchZone(setZone, setZoneId);
-    fetchParking(setParking, setPage, setPageAll, page);
+    fetchParking(
+      setParking,
+      setPage,
+      setPageAll,
+      page,
+      search,
+      "createdAt",
+      "desc"
+    );
   }, []);
 
   const handleZoneChange = (e) => {
@@ -47,43 +56,88 @@ const Parking = () => {
     setPage(page + 1);
   };
 
+  const handleSearch = async (e) => {
+    setSearch(e.target.value);
+    await fetchParking(setParking, setPage, setPageAll, page, e.target.value);
+  };
+
   const filterData: FilterButtonProps = [
     {
-      title: "ทั้งหมด",
-      func: () => console.log("ทั้งหมด"),
+      title: "ใหม่ - เก่า",
+      func: async () =>
+        await fetchParking(
+          setParking,
+          setPage,
+          setPageAll,
+          page,
+          search,
+          "createdAt",
+          "desc"
+        ),
     },
     {
-      title: "ทั้งหมด",
-      func: () => console.log("ทั้งหมด"),
+      title: "เก่า - ใหม่",
+      func: async () =>
+        await fetchParking(
+          setParking,
+          setPage,
+          setPageAll,
+          page,
+          search,
+          "createdAt",
+          "asc"
+        ),
     },
     {
-      title: "ทั้งหมด",
-      func: () => console.log("ทั้งหมด"),
+      title: "จำนวนมาก - น้อย",
+      func: async () =>
+        await fetchParking(
+          setParking,
+          setPage,
+          setPageAll,
+          page,
+          search,
+          "amount",
+          "desc"
+        ),
+    },
+    {
+      title: "จำนวนน้อย - มาก",
+      func: async () =>
+        await fetchParking(
+          setParking,
+          setPage,
+          setPageAll,
+          page,
+          search,
+          "amount",
+          "asc"
+        ),
     },
   ];
   return (
     <>
       <Modal open={open} onClose={onCloseModal}>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">Create Parking</h2>
+          <h2 className="font-bold text-xl">สร้างที่จอดรถ</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>Name</p>
+              <p>ชื่อ</p>
               <TextInput onChange={(e) => setName(e.target.value)} />
             </div>
             <div>
-              <p>Description</p>
+              <p>คำอธิบาย</p>
               <TextInput onChange={(e) => setDesc(e.target.value)} />
             </div>
             <div>
-              <p>Amount</p>
+              <p>จำนวน</p>
               <TextInput
                 type="number"
                 onChange={(e) => setAmount(e.target.value)}
               />
             </div>
             <div>
-            <p>Zone</p>
+              <p>โซน</p>
               <select
                 className="border-2 border-solid border-gray-600 w-80 h-10"
                 onChange={handleZoneChange}
@@ -102,7 +156,7 @@ const Parking = () => {
                 className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
                 onClick={() => createParking(name, desc, amount, zoneId)}
               >
-                Add
+                เพิ่ม
               </button>
             </div>
           </div>
@@ -119,6 +173,7 @@ const Parking = () => {
               type="text"
               className="border-2 border-solid border-gray-600 w-8/12 md:w-4/12 h-10 pl-3"
               placeholder="ค้นหา"
+              onChange={handleSearch}
             />
             <div className="mt-2 ml-2">
               <FilterButton data={filterData as never} />

@@ -1,13 +1,14 @@
 // ResponsiveTable.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Column, useTable } from "react-table";
 import { CarRowData } from "@/app/assets/data/car";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
-import { createCar } from "@/app/dashboard/car/function";
+import { createCar, fetchStaff } from "@/app/dashboard/car/function";
 import { deleteCar, editCar } from "./function";
+import { StaffRowData } from "@/app/assets/data/staff";
 
 interface Props {
   data: CarRowData[];
@@ -26,38 +27,52 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
   const [model, setModel] = useState("");
   const [year, setYear] = useState("");
   const [ownerId, setOwnerId] = useState("");
+  const [staff, setStaff] = useState<StaffRowData[]>([]);
+
+  useEffect(() => {
+    fetchStaff(setStaff);
+  }, []);
+
+  const handleStaffChange = (event: any) => {
+    const selectedStaffId = parseInt(event.target.value, 10);
+    setOwnerId(selectedStaffId.toString());
+  };
 
   const columns: Column<CarRowData>[] = React.useMemo(
     () => [
       {
-        Header: "License Plate",
+        Header: "ทะเบียน",
         accessor: "licensePlate",
       },
       {
-        Header: "Color",
+        Header: "สี",
         accessor: "color",
       },
       {
-        Header: "Brand",
+        Header: "แบรนด์",
         accessor: "brand",
       },
       {
-        Header: "Model",
+        Header: "รุ่น",
         accessor: "model",
       },
       {
-        Header: "Year",
+        Header: "ปี",
         accessor: "year",
       },
       {
-        Header: "Owner",
+        Header: "เจ้าของ",
         accessor: "staff",
         Cell: ({ row }) => {
-          return <p>{row.original.staff.firstname} {row.original.staff.lastname}</p>;
+          return (
+            <p>
+              {row.original.staff.firstname} {row.original.staff.lastname}
+            </p>
+          );
         },
       },
       {
-        Header: "Actions",
+        Header: "",
         accessor: "actions",
         Cell: ({ row }) => {
           return (
@@ -66,13 +81,13 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                 onClick={() => handleEdit(row.original)}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
-                Edit
+                แก้ไข
               </button>
               <button
                 onClick={() => handleDelete(row.original.id)}
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               >
-                Delete
+                ลบ
               </button>
             </div>
           );
@@ -116,38 +131,38 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
     <>
       <Modal open={open} onClose={onCloseModal}>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">Create Car</h2>
+          <h2 className="font-bold text-xl">สร้างรถ</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>License Plate</p>
+              <p>ป้ายทะเบียน</p>
               <TextInput
                 value={licensePlate}
                 onChange={(e) => setLicensePlate(e.target.value)}
               />
             </div>
             <div className="pt-4">
-              <p>Color</p>
+              <p>สี</p>
               <TextInput
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
               />
             </div>
             <div className="pt-4">
-              <p>Brand</p>
+              <p>แบรนด์</p>
               <TextInput
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
               />
             </div>
             <div className="pt-4">
-              <p>Model</p>
+              <p>รุ่น</p>
               <TextInput
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
               />
             </div>
             <div className="pt-4">
-              <p>Year</p>
+              <p>ปี</p>
               <TextInput
                 type="number"
                 value={year}
@@ -155,11 +170,19 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div>
-              <p>Owner</p>
-              <TextInput
-                value={ownerId}
-                onChange={(e) => setOwnerId(e.target.value)}
-              />
+              <p>เจ้าของ</p>
+              <select
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+                onChange={handleStaffChange}
+              >
+                {staff.map((data) => {
+                  return (
+                    <option key={data.id} value={data.id}>
+                      {data.firstname + " " + data.lastname}
+                    </option>
+                  );
+                })}
+              </select>
             </div>
             <div className="flex justify-start">
               <button
@@ -176,7 +199,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                   )
                 }
               >
-                Create
+                แก้ไข
               </button>
             </div>
           </div>

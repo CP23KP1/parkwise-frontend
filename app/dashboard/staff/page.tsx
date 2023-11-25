@@ -14,7 +14,6 @@ import { getPublicBasePath } from "@/app/helper/basePath";
 const Staff = () => {
   const pathname = usePathname();
 
-
   const [staff, setStaff] = useState<StaffRowData[]>([]);
   useEffect(() => {
     fetchStaff(setStaff, setPage, setAllPage);
@@ -26,19 +25,32 @@ const Staff = () => {
   const [phone, setPhone] = useState("");
   const [page, setPage] = useState(1);
   const [allPage, setAllPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("all");
+
+  const handleSelectActive = async () => {
+    await fetchStaff(setStaff, setPage, setAllPage, page, "active", search);
+    setStatus("active");
+  };
+
+  const handleSelectInactive = async () => {
+    await fetchStaff(setStaff, setPage, setAllPage, page, "inactive", search);
+    setStatus("inactive");
+  };
 
   const filterData: FilterMenuProps[] = [
     {
       title: "ทั้งหมด",
-      func: () => console.log("ทั้งหมด"),
+      func: async () =>
+        await fetchStaff(setStaff, setPage, setAllPage, page, status, search),
     },
     {
-      title: "ทั้งหมด",
-      func: () => console.log("ทั้งหมด"),
+      title: "เฉพาะที่ใช้งาน",
+      func: async () => await handleSelectActive(),
     },
     {
-      title: "ทั้งหมด",
-      func: () => console.log("ทั้งหมด"),
+      title: "เฉพาะที่ไม่ได้ใช้งาน",
+      func: async () => await handleSelectInactive(),
     },
   ];
 
@@ -58,6 +70,19 @@ const Staff = () => {
     // window.location.href = getPublicBasePath(`/dashboard/staff/${page - 1}`);
     setPage(page - 1);
   };
+
+  const handleSearch = async (e: any) => {
+    setSearch(e.target.value);
+    await fetchStaff(
+      setStaff,
+      setPage,
+      setAllPage,
+      page,
+      status,
+      e.target.value
+    );
+  };
+
   return (
     <>
       <Modal open={open} onClose={onCloseModal}>
@@ -114,6 +139,7 @@ const Staff = () => {
               type="text"
               className="border-2 border-solid border-gray-600 w-8/12 md:w-4/12 h-10 pl-3"
               placeholder="ค้นหา"
+              onChange={(e) => handleSearch(e)}
             />
             <div className="mt-2 ml-2">
               <FilterButton data={filterData as never} />
@@ -133,7 +159,10 @@ const Staff = () => {
             onClick={handlePrevPage}
             disabled={page == 1}
           >
-            <img src={getPublicBasePath('/svg/back-button.svg')} className="w-5 h-5" />
+            <img
+              src={getPublicBasePath("/svg/back-button.svg")}
+              className="w-5 h-5"
+            />
           </button>
           <div>
             <p className="text-center mt-2">
@@ -145,7 +174,10 @@ const Staff = () => {
             onClick={handleNextPage}
             disabled={page == allPage}
           >
-            <img src={getPublicBasePath('/svg/next-button.svg')} className="w-5 h-5" />
+            <img
+              src={getPublicBasePath("/svg/next-button.svg")}
+              className="w-5 h-5"
+            />
           </button>
         </div>
       </div>

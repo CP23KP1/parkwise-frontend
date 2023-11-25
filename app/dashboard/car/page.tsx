@@ -7,9 +7,10 @@ import { Modal } from "react-responsive-modal";
 import FilterButton from "@/app/components/button/filter";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import TextInput from "@/app/components/input/input";
-import { createCar, fetchCar } from "./function";
+import { createCar, fetchCar, fetchStaff } from "./function";
 import { usePathname } from "next/navigation";
 import { getPublicBasePath } from "@/app/helper/basePath";
+import { StaffRowData } from "@/app/assets/data/staff";
 
 const Car = () => {
   const [licensePlate, setLicensePlate] = useState("");
@@ -20,11 +21,15 @@ const Car = () => {
   const [ownerId, setOwnerId] = useState("");
   const [page, setPage] = useState(0);
   const [allPage, setAllPage] = useState(0);
-  const pathname = usePathname();
+  const [staff, setStaff] = useState<StaffRowData[]>([]);
+  const [search, setSearch] = useState("");
+  const [orderBy, setOrderBy] = useState("createdAt");
+  const [order, setOrder] = useState("desc");
 
   const [car, setCar] = useState<CarRowData[]>([]);
   useEffect(() => {
-    fetchCar(setCar, setPage, setAllPage);
+    fetchCar(setCar, setPage, setAllPage, "1", search, orderBy, order);
+    fetchStaff(setStaff);
   }, []);
 
   const handlePrevPage = async () => {
@@ -37,57 +42,112 @@ const Car = () => {
     setPage(page + 1);
   };
 
+  const handleSearch = async (e: any) => {
+    setSearch(e.target.value);
+    fetchCar(
+      setCar,
+      setPage,
+      setAllPage,
+      page.toString(),
+      e.target.value,
+      orderBy,
+      order
+    );
+  };
+
   const filterData: FilterMenuProps[] = [
     {
-      title: "ทั้งหมด",
-      func: () => console.log("ทั้งหมด"),
+      title: "ใหม่ - เก่า",
+      func: async () => {
+        await fetchCar(
+          setCar,
+          setPage,
+          setAllPage,
+          page.toString(),
+          search,
+          "createdAt",
+          "desc"
+        );
+        setOrderBy("createdAt");
+        setOrder("desc");
+      },
     },
     {
-      title: "ทั้งหมด",
-      func: () => console.log("ทั้งหมด"),
-    },
-    {
-      title: "ทั้งหมด",
-      func: () => console.log("ทั้งหมด"),
+      title: "เก่า - ใหม่",
+      func: async () => {
+        await fetchCar(
+          setCar,
+          setPage,
+          setAllPage,
+          page.toString(),
+          search,
+          "createdAt",
+          "asc"
+        );
+        setOrderBy("createdAt");
+        setOrder("asc");
+      },
     },
   ];
 
   const [open, setOpen] = useState(false);
 
-  const onOpenModal = () => setOpen(true);
+  const onOpenModal = () => {
+    setOpen(true);
+    setOwnerId(staff[0].id.toString());
+  };
   const onCloseModal = () => setOpen(false);
+
+  const handleStaffChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setOwnerId(e.target.value);
+  };
+
   return (
     <>
       <Modal open={open} onClose={onCloseModal}>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">Create Car</h2>
+          <h2 className="font-bold text-xl">สร้างรถยนต์</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>License Plate</p>
+              <p>ป้ายทะเบียน</p>
               <TextInput
                 value={licensePlate}
                 onChange={(e) => setLicensePlate(e.target.value)}
               />
             </div>
             <div className="pt-4">
-              <p>Color</p>
+              <p>สี</p>
               <TextInput onChange={(e) => setColor(e.target.value)} />
             </div>
             <div className="pt-4">
-              <p>Brand</p>
+              <p>แบรนด์</p>
               <TextInput onChange={(e) => setBrand(e.target.value)} />
             </div>
             <div className="pt-4">
-              <p>Model</p>
+              <p>รุ่น</p>
               <TextInput onChange={(e) => setModel(e.target.value)} />
             </div>
             <div className="pt-4">
-              <p>Year</p>
-              <TextInput onChange={(e) => setYear(e.target.value)} />
+              <p>ปี</p>
+              <TextInput
+                type="number"
+                onChange={(e) => setYear(e.target.value)}
+              />
             </div>
-            <div>
-              <p>Owner</p>
-              <TextInput onChange={(e) => setOwnerId(e.target.value)} />
+            <div className="pt-4">
+              <p>เจ้าของ</p>
+              <select
+                className="border-2 border-solid border-gray-600 w-80 h-10"
+                onChange={handleStaffChange}
+              >
+                {staff.map((data) => {
+                  return (
+                    <option key={data.id} value={data.id}>
+                      {data.firstname + " " + data.lastname}
+                    </option>
+                  );
+                })}
+              </select>
             </div>
             <div className="flex justify-start">
               <button
@@ -96,7 +156,7 @@ const Car = () => {
                   createCar(licensePlate, color, brand, model, year, ownerId)
                 }
               >
-                Create
+                สร้าง
               </button>
             </div>
           </div>
@@ -112,6 +172,7 @@ const Car = () => {
             type="text"
             className="border-2 border-solid border-gray-600 w-8/12 md:w-4/12 h-10 pl-3"
             placeholder="ค้นหา"
+            onChange={(e) => handleSearch(e)}
           />
           <div className="mt-2 ml-2">
             <FilterButton data={filterData as never} />

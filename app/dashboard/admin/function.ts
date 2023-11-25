@@ -38,15 +38,24 @@ export const fetchUsers = async (
   setUsers: any,
   setPage: any,
   setAllPage: any,
-  page: any
+  page: any,
+  search?: string,
+  orderField?: string,
+  order?: string
 ) => {
   if (checkAuth()) {
     const token = localStorage.getItem("access_token");
-    if (page === undefined) page = 1; 
+    if (page === undefined) page = 1;
     await axios
-      .get(process.env.NEXT_PUBLIC_API_HOST + `/admin?page=${page}&limit=10`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(
+        process.env.NEXT_PUBLIC_API_HOST +
+          `/admin?page=${page}&limit=10${search ? `&search=${search}` : ""}${
+            orderField ? `&orderBy=${orderField}` : ""
+          }${order ? `&orderDirection=${order}` : ""}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((data) => {
         setUsers(data.data.data);
         setPage(data.data.meta.page);

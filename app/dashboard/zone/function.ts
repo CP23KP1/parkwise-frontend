@@ -7,11 +7,23 @@ export const fetchZone = (
   setDataShow: any,
   setPage: any,
   setAllPage: any,
-  page?: string
+  page?: string,
+  search?: string,
+  field?: string,
+  order?: string
 ) => {
   let url = process.env.NEXT_PUBLIC_API_HOST + "/zones";
   if (page) {
     url += `?page=${page}`;
+  }
+  if (search) {
+    url += `&search=${search}`;
+  }
+  if (field) {
+    url += `&orderBy=${field}`;
+  }
+  if (order) {
+    url += `&orderDirection=${order}`;
   }
   if (checkAuth()) {
     const token = localStorage.getItem("access_token");
