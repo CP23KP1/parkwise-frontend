@@ -4,26 +4,12 @@ import FilterButton from "@/app/components/button/filter";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import ResponsiveLogsTable from "@/app/components/logs/logs-table";
 import { getPublicBasePath } from "@/app/helper/basePath";
+import { useEffect, useState } from "react";
+import { getLogs } from "./function";
 
 const Logs = () => {
-  const data: LogsRowData[] = [
-    {
-      id: 1,
-      owner: "นายใจดี มั่งมี",
-      carPlate: "กข-452 ตาก",
-      details: "Toyaota สีขาว",
-      datetime: "จันทร์ 13 กันยายน 2566 เวลา 10:21",
-      position: "อาจารย์",
-    },
-    {
-      id: 2,
-      owner: "นายเจริญ สุขใจ",
-      carPlate: "จภ-3214 กรุงเทพ",
-      details: "Honda สีดำ",
-      datetime: "จันทร์ 13 กันยายน 2566 เวลา 9:20",
-      position: "พนักงานมหาวิทยาลัย",
-    },
-  ];
+
+  const [data, setData] = useState<LogsRowData[]>([]);
 
   const filterData: FilterMenuProps[] = [
     {
@@ -39,6 +25,10 @@ const Logs = () => {
       func: () => console.log("ทั้งหมด"),
     },
   ];
+
+  useEffect(() => {
+    getLogs(setData);
+  }, [])
 
 
   return (

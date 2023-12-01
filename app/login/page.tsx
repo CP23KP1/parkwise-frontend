@@ -126,7 +126,7 @@ const Login = () => {
                             className="w-72 h-12 bg-blue-500 text-white font-bold rounded hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-500"
                             onClick={(e) => login(e)}
                         >
-                            Login
+                            เข้าสู่ระบบ
                         </button>
                     </div>
                 </div>

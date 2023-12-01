@@ -42,23 +42,23 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
   const columns: Column<DeviceRowData>[] = React.useMemo(
     () => [
       {
-        Header: "Name",
+        Header: "ชื่อ",
         accessor: "name",
       },
       {
-        Header: "Description",
+        Header: "คำอธิบาย",
         accessor: "description",
       },
       {
-        Header: "Price",
+        Header: "ราคา",
         accessor: "price",
       },
       {
-        Header: "Brand",
+        Header: "แบรนด์",
         accessor: "brand",
       },
       {
-        Header: "Zone",
+        Header: "โซน",
         accessor: "zone",
         Cell: ({ row }) => {
           return (
@@ -67,7 +67,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
         },
       },
       {
-        Header: "Actions",
+        Header: "",
         accessor: "actions",
         Cell: ({ row }) => {
           return (
@@ -76,13 +76,13 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                 onClick={() => handleEdit(row.original)}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
-                Edit
+                แก้ไข
               </button>
               <button
                 onClick={() => handleDelete(row.original.id)}
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               >
-                Delete
+                ลบ
               </button>
             </div>
           );
@@ -126,24 +126,24 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
     <div className="table-container w-72 sm:w-full">
       <Modal open={open} onClose={onCloseModal} center>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">Edit Device</h2>
+          <h2 className="font-bold text-xl">แก้ไขอุปกรณ์</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>Name</p>
+              <p>ชื่อ</p>
               <TextInput
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div>
-              <p>Description</p>
+              <p>คำอธิบาย</p>
               <TextInput
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
             </div>
             <div>
-              <p>Price</p>
+              <p>ราคา</p>
               <TextInput
                 type="number"
                 value={price}
@@ -151,14 +151,14 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
               />
             </div>
             <div>
-              <p>Brand</p>
+              <p>แบรนด์</p>
               <TextInput
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
               />
             </div>
             <div>
-              <p>Zone</p>
+              <p>โซน</p>
               <select
                 className="border-2 border-solid border-gray-600 w-80 h-10"
                 onChange={handleZoneChange}
