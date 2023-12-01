@@ -1,9 +1,8 @@
 export interface LogsRowData {
     id: number;
-    carPlate: string;
-    details: string;
-    owner: string;
-    position: string;
-    datetime: string
+    staff: any;
+    car: any;
+    zone: any;
+    datetime: any
     actions?: any
 }

@@ -12,28 +12,31 @@ const ResponsiveLogsTable: React.FC<Props> = ({ data }) => {
   const columns: Column<LogsRowData>[] = React.useMemo(
     () => [
       {
-        Header: "Car Plate",
-        accessor: "carPlate",
-      },
-      {
-        Header: "Details",
-        accessor: "details",
+        Header: "License Plate",
+        accessor: "car",
+        Cell: ({ row }) => {
+          return (
+            <div className="flex">
+              <div>{row.original.car?.licensePlate}</div>
+            </div>
+          );
+        },
       },
       {
         Header: "Owner",
-        accessor: "owner",
-      },
-      {
-        Header: "Position",
-        accessor: "position",
-      },
-      {
-        Header: "Datetime",
-        accessor: "datetime",
+        accessor: "staff",
+        Cell: ({ row }) => {
+          return (
+            <div className="flex">
+              <div>{row.original.staff?.firstname} {row.original.staff?.lastname}</div>
+            </div>
+          );
+        },
       },
     ],
     []
   );
+  
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
