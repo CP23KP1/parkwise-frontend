@@ -3,7 +3,7 @@ const nextConfig = {
     images: {
         formats: ["image/webp"],
     },
-    assetPrefix: process.env.NODE_ENV === "production" ? "/kp1/" : "",
+    assetPrefix: process.env.NEXT_PUBLIC_BASEPATH,
     publicRuntimeConfig: {
         basePath: process.env.NEXT_PUBLIC_BASEPATH,
     },
