@@ -5,10 +5,14 @@ import { StaffRowData } from "@/app/assets/data/staff";
 import { LogsRowData } from "@/app/assets/data/logs";
 
 interface Props {
-  data: LogsRowData[];
+  data: LogsRowData[] | any[];
 }
 
 const ResponsiveLogsTable: React.FC<Props> = ({ data }) => {
+  if (!Array.isArray(data)) {
+    console.error("Invalid data type. Expected an array.");
+    return null; // or handle it appropriately
+  }
   const columns: Column<LogsRowData>[] = React.useMemo(
     () => [
       {

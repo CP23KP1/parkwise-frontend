@@ -180,3 +180,30 @@ export const countDevice = async (setData: any) => {
       });
   }
 };
+
+export const countCar = async (setData: any) => {
+  if (checkAuth()) {
+    const token = localStorage.getItem("access_token");
+    axios
+      .get(process.env.NEXT_PUBLIC_API_HOST + "/cars", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        setData(res.data.meta.itemCount);
+      });
+  }
+};
+
+
+export const countStaff = async (setData: any) => {
+  if (checkAuth()) {
+    const token = localStorage.getItem("access_token");
+    axios
+      .get(process.env.NEXT_PUBLIC_API_HOST + "/staffs?page=1&limit=10", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        setData(res.data.meta.itemCount);
+      });
+  }
+};

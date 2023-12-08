@@ -3,6 +3,8 @@ export interface LogsRowData {
     staff: any;
     car: any;
     zone: any;
+    timestamp: any;
+    licenseUrl: any;
     datetime: any
     actions?: any
 }

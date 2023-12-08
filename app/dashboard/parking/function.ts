@@ -19,7 +19,7 @@ export const fetchParking = (
     axios
       .get(
         process.env.NEXT_PUBLIC_API_HOST +
-          `/parking?page=${page}&&limit=10${search ? `&search=${search}` : ""}${
+          `/parking?page=${page}&limit=10${search ? `&search=${search}` : ""}${
             field ? `&orderField=${field}` : ""
           }${order ? `&orderDirection=${order}` : ""}`,
         {
