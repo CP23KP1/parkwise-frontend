@@ -19,11 +19,11 @@ export const menuType = [
     icon: "/menu/device.png",
     link: "/dashboard/device",
   },
-  {
-    name: "คาร์บอน",
-    icon: "/menu/low-carbon.png",
-    link: "/dashboard/carbon",
-  },
+  // {
+  //   name: "คาร์บอน",
+  //   icon: "/menu/low-carbon.png",
+  //   link: "/dashboard/carbon",
+  // },
   {
     name: "โซน",
     icon: "/menu/zone.png",
