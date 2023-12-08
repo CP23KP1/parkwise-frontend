@@ -41,6 +41,12 @@ const Login = () => {
             localStorage.setItem("refresh_token", response.data.refresh_token);
             console.log(response.data);
             window.location.href = getPublicBasePath("/dashboard");
+        }).catch((error) => {
+            Swal.fire({
+                icon: "error",
+                title: "เกิดข้อผิดพลาด",
+                text: "อีเมล์หรือรหัสผ่านไม่ถูกต้อง",
+            });
         });
     };
     return (
