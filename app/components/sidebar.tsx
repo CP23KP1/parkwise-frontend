@@ -62,13 +62,13 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                     </div>
                     {openSidebar && (
                         <>
-                            <div className="w-10">
+                            {/* <div className="w-10">
                                 <img
                                     src={getPublicBasePath('/logo/kmutt_logo.jpg')}
                                     alt="KMUTT Logo"
                                 />
-                            </div>
-                            <div>
+                            </div> */}
+                            <div className="pr-12">
                                 <h1>ParkWise</h1>
                             </div>
                         </>

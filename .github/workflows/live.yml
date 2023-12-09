@@ -1,0 +1,26 @@
+name: LIVE
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    LIVE:
+        runs-on: self-hosted
+
+        steps:
+            - name: Checkout 🛎
+              uses: actions/checkout@master
+              with:
+                  path: "parkwise-frontend/"
+
+            - name: Setup env 🛠
+              env:
+                  PROD_ENV: ${{ secrets.PROD_ENV }}
+              run: |
+                  touch parkwise-frontend/.env
+                  echo "$PROD_ENV" >> parkwise-frontend/.env
+
+            - name: Docker compose 🐳
+              run: docker-compose -f parkwise-frontend/docker-compose.yml up -d --build parkwise-frontend

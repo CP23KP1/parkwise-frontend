@@ -2,7 +2,16 @@ version: "3.7"
 services:
     qa-parkwise-frontend:
         container_name: qa-parkwise-frontend
-        image: cp23kp1/node-qa-parkwise-frontend
+        image: cp23kp1/node-parkwise-frontend
+        build: .
+        restart: always
+        networks:
+            - backend
+        ports:
+            - "3030:3000"
+    parkwise-frontend:
+        container_name: parkwise-frontend
+        image: cp23kp1/node-parkwise-frontend
         build: .
         restart: always
         networks:
