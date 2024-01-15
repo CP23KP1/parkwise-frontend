@@ -10,6 +10,8 @@ import TextInput from "@/app/components/input/input";
 import { createDevice, fetchDevice, fetchZone } from "./function";
 import { ZoneRowData } from "@/app/assets/data/zone";
 import { getPublicBasePath } from "@/app/helper/basePath";
+import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
+import { validateLength } from "@/app/helper/validate";
 
 const Device = () => {
   const [open, setOpen] = useState(false);
@@ -25,6 +27,7 @@ const Device = () => {
   const [search, setSearch] = useState("");
   const [field, setField] = useState("createdAt");
   const [order, setOrder] = useState("desc");
+  const [checked, setChecked] = useState(false);
 
   const onOpenModal = () => setOpen(true);
   const onCloseModal = () => setOpen(false);
@@ -42,6 +45,13 @@ const Device = () => {
   const handleNextPage = async () => {
     await fetchDevice(setDeviceShow, setPage, setAllPage, page + 1);
     setPage(page + 1);
+  };
+
+  const createDeviceWithValidate = () => {
+    setChecked(true);
+    if (name && checked && price && brand) {
+      createDevice(name, description, price, brand, zoneId.toString());
+    }
   };
 
   const filterData: FilterMenuProps[] = [
@@ -140,6 +150,8 @@ const Device = () => {
               <TextInput
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                error={validateLength(name, 1, checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
               />
             </div>
             <div>
@@ -147,6 +159,8 @@ const Device = () => {
               <TextInput
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                error={validateLength(description, 1, checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
               />
             </div>
             <div>
@@ -154,6 +168,8 @@ const Device = () => {
               <TextInput
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
+                error={validateLength(brand, 1, checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
               />
             </div>
             <div>
@@ -162,6 +178,8 @@ const Device = () => {
                 type="number"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
+                error={validateLength(price, 1, checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
               />
             </div>
             <div>
@@ -182,15 +200,7 @@ const Device = () => {
             <div className="flex justify-start">
               <button
                 className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                onClick={() =>
-                  createDevice(
-                    name,
-                    description,
-                    price,
-                    brand,
-                    zoneId.toString()
-                  )
-                }
+                onClick={() => createDeviceWithValidate()}
               >
                 เพิ่ม
               </button>

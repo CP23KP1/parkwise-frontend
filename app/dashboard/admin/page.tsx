@@ -9,6 +9,8 @@ import FilterButton from "@/app/components/button/filter";
 import TextInput from "@/app/components/input/input";
 import { createUser, fetchUsers } from "./function";
 import { getPublicBasePath } from "@/app/helper/basePath";
+import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
+import { validateEmail, validateEmailWording, validateLength, validatePassword } from "@/app/helper/validate";
 
 const User = () => {
   const [open, setOpen] = useState(false);
@@ -25,6 +27,7 @@ const User = () => {
   const [search, setSearch] = useState("");
   const [orderField, setOrderField] = useState("createdAt");
   const [order, setOrder] = useState("desc");
+  const [checked, setChecked] = useState(false);
   useEffect(() => {
     fetchUsers(setUsers, setPage, setAllPage, page, search, orderField, order);
   }, []);
@@ -44,7 +47,7 @@ const User = () => {
         );
         setOrderField("createdAt");
         setOrder("desc");
-      }
+      },
     },
     {
       title: "เก่า - ใหม่",
@@ -60,7 +63,7 @@ const User = () => {
         );
         setOrderField("createdAt");
         setOrder("asc");
-      }
+      },
     },
   ];
 
@@ -84,7 +87,7 @@ const User = () => {
     setPage(parseInt(page.toString()) - 1);
   };
 
-  const handleSearch = async (e:any) => {
+  const handleSearch = async (e: any) => {
     setSearch(e.target.value);
     await fetchUsers(
       setUsers,
@@ -96,6 +99,13 @@ const User = () => {
       order
     );
   };
+
+  const validateAndCreate = () => {
+    setChecked(true);
+    if (email && password && firstName && lastName) {
+      createUser(email, password, firstName, lastName);
+    }
+  }
   return (
     <>
       <Modal open={open} onClose={onCloseModal}>
@@ -104,27 +114,40 @@ const User = () => {
           <div className="flex flex-col gap-6">
             <div className="pt-4">
               <p>ชื่อ</p>
-              <TextInput onChange={(e) => setFirstName(e.target.value)} />
+              <TextInput onChange={(e) => setFirstName(e.target.value)} 
+              error={validateLength(firstName, 1, checked)}
+              errorMessage={CAN_NOT_BE_EMPTY}
+              />
             </div>
             <div className="pt-4">
               <p>นามสกุล</p>
-              <TextInput onChange={(e) => setLastName(e.target.value)} />
+              <TextInput
+                onChange={(e) => setLastName(e.target.value)}
+                error={validateLength(lastName, 1, checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+              />
             </div>
             <div>
               <p>อีเมล</p>
-              <TextInput onChange={(e) => setEmail(e.target.value)} />
+              <TextInput
+                onChange={(e) => setEmail(e.target.value)}
+                errorMessage={validateEmailWording(email)}
+                error={validateEmail(email, checked)}
+              />
             </div>
             <div className="pt-4">
               <p>รหัสผ่าน</p>
               <TextInput
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validatePassword(password, checked)}
               />
             </div>
             <div className="flex justify-start">
               <button
                 className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                onClick={() => createUser(email, password, firstName, lastName)}
+                onClick={() => validateAndCreate()}
               >
                 เพิ่ม
               </button>

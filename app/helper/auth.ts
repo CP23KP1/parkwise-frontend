@@ -8,7 +8,13 @@ export const checkAuth = () => {
     localStorage.getItem("refresh_token")
   ) {
     const token = localStorage.getItem("refresh_token");
+    if (!token) {
+      logout();
+      window.location.href = getPublicBasePath("/login");
+      return false;
+    }
     try {
+      try{
       const res =  axios.get(
         process.env.NEXT_PUBLIC_API_HOST + "/auth/refresh",
         {
@@ -19,6 +25,12 @@ export const checkAuth = () => {
       ).then((res) => {
         localStorage.setItem("access_token", res.data.access_token);
       })
+    }
+    catch(err){
+      logout();
+      window.location.href = getPublicBasePath("/login");
+      return false;
+    }
 
       return true;
     } catch (err) {

@@ -10,6 +10,8 @@ import TextInput from "@/app/components/input/input";
 import { createStaff, fetchStaff } from "./function";
 import { usePathname } from "next/navigation";
 import { getPublicBasePath } from "@/app/helper/basePath";
+import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
+import { validateEmail, validateEmailWording, validateLength, validatePhone, validatePhoneWording } from "@/app/helper/validate";
 
 const Staff = () => {
   const pathname = usePathname();
@@ -27,6 +29,7 @@ const Staff = () => {
   const [allPage, setAllPage] = useState(1);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
+  const [checked, setChecked] = useState(false);
 
   const handleSelectActive = async () => {
     await fetchStaff(setStaff, setPage, setAllPage, page, "active", search);
@@ -71,6 +74,12 @@ const Staff = () => {
     setPage(page - 1);
   };
 
+  const handleClickCheck = () => {
+    setChecked(true);
+    if (firstName && lastName && email && phone) {
+      createStaff(firstName, lastName, email, phone);
+    }
+  };
   const handleSearch = async (e: any) => {
     setSearch(e.target.value);
     await fetchStaff(
@@ -87,42 +96,50 @@ const Staff = () => {
     <>
       <Modal open={open} onClose={onCloseModal}>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">Create Staff</h2>
+          <h2 className="font-bold text-xl">สร้างเจ้าหน้าที่</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>First Name</p>
+              <p>ชื่อจริง</p>
               <TextInput
                 type="text"
                 onChange={(e) => setFirstName(e.target.value)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validateLength(firstName, 1, checked)}
               />
             </div>
             <div className="pt-4">
-              <p>Last Name</p>
+              <p>นามสกุล</p>
               <TextInput
                 type="text"
                 onChange={(e) => setLastName(e.target.value)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validateLength(lastName, 1, checked)}
               />
             </div>
             <div>
-              <p>Email</p>
+              <p>อีเมล</p>
               <TextInput
                 type="text"
                 onChange={(e) => setEmail(e.target.value)}
+                errorMessage={validateEmailWording(email)}
+                error={validateEmail(email, checked)}
               />
             </div>
             <div>
-              <p>Mobile No</p>
+              <p>เบอร์โทรศัพท์</p>
               <TextInput
-                type="text"
+                type="number"
                 onChange={(e) => setPhone(e.target.value)}
+                error={validatePhone(phone, checked)}
+                errorMessage={validatePhoneWording(phone)}
               />
             </div>{" "}
             <div className="flex justify-start">
               <button
                 className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                onClick={() => createStaff(firstName, lastName, email, phone)}
+                onClick={() => handleClickCheck()}
               >
-                Add
+                เพิ่ม
               </button>
             </div>
           </div>

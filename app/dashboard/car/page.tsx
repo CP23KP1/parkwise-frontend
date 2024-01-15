@@ -11,6 +11,8 @@ import { createCar, fetchCar, fetchStaff } from "./function";
 import { usePathname } from "next/navigation";
 import { getPublicBasePath } from "@/app/helper/basePath";
 import { StaffRowData } from "@/app/assets/data/staff";
+import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
+import { validateLength } from "@/app/helper/validate";
 
 const Car = () => {
   const [licensePlate, setLicensePlate] = useState("");
@@ -25,6 +27,7 @@ const Car = () => {
   const [search, setSearch] = useState("");
   const [orderBy, setOrderBy] = useState("createdAt");
   const [order, setOrder] = useState("desc");
+  const [checked, setChecked] = useState(false);
 
   const [car, setCar] = useState<CarRowData[]>([]);
   useEffect(() => {
@@ -40,6 +43,13 @@ const Car = () => {
   const handleNextPage = async () => {
     await fetchCar(setCar, setPage, setAllPage, (page + 1).toString());
     setPage(page + 1);
+  };
+
+  const validateAndCreate = () => {
+    setChecked(true);
+    if (licensePlate && color && brand && model && year && ownerId) {
+      createCar(licensePlate, color, brand, model, year, ownerId);
+    }
   };
 
   const handleSearch = async (e: any) => {
@@ -113,25 +123,41 @@ const Car = () => {
               <TextInput
                 value={licensePlate}
                 onChange={(e) => setLicensePlate(e.target.value)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validateLength(licensePlate, 1, checked)}
               />
             </div>
             <div className="pt-4">
               <p>สี</p>
-              <TextInput onChange={(e) => setColor(e.target.value)} />
+              <TextInput
+                onChange={(e) => setColor(e.target.value)}
+                error={validateLength(color, 1, checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+              />
             </div>
             <div className="pt-4">
               <p>แบรนด์</p>
-              <TextInput onChange={(e) => setBrand(e.target.value)} />
+              <TextInput
+                onChange={(e) => setBrand(e.target.value)}
+                error={validateLength(brand, 1, checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+              />
             </div>
             <div className="pt-4">
               <p>รุ่น</p>
-              <TextInput onChange={(e) => setModel(e.target.value)} />
+              <TextInput
+                onChange={(e) => setModel(e.target.value)}
+                error={validateLength(model, 1, checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+              />
             </div>
             <div className="pt-4">
               <p>ปี</p>
               <TextInput
                 type="number"
                 onChange={(e) => setYear(e.target.value)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validateLength(year, 1, checked)}
               />
             </div>
             <div className="pt-4">
@@ -152,9 +178,7 @@ const Car = () => {
             <div className="flex justify-start">
               <button
                 className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                onClick={() =>
-                  createCar(licensePlate, color, brand, model, year, ownerId)
-                }
+                onClick={() => validateAndCreate()}
               >
                 สร้าง
               </button>

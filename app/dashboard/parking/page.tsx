@@ -14,6 +14,9 @@ import TextInput from "@/app/components/input/input";
 import { getPublicBasePath } from "@/app/helper/basePath";
 import { createParking, fetchParking } from "./function";
 import { fetchZone } from "../device/function";
+import { validateLength } from "@/app/helper/validate";
+import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
+import { Select } from "@/app/components/select/select";
 
 const Parking = () => {
   const [open, setOpen] = useState(false);
@@ -28,6 +31,7 @@ const Parking = () => {
   const [desc, setDesc] = useState("");
   const [amount, setAmount] = useState(0);
   const [search, setSearch] = useState("");
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     fetchZone(setZone, setZoneId);
@@ -43,7 +47,8 @@ const Parking = () => {
   }, []);
 
   const handleZoneChange = (e) => {
-    setZoneId(e.target.value);
+    console.log('zone id jaa', e)
+    setZoneId(e);
   };
 
   const handleNextPage = async () => {
@@ -59,6 +64,14 @@ const Parking = () => {
   const handleSearch = async (e) => {
     setSearch(e.target.value);
     await fetchParking(setParking, setPage, setPageAll, page, e.target.value);
+  };
+
+  const checkAndCreate = async () => {
+    setChecked(true);
+    if (name && desc && amount && zoneId) {
+      console.log("เข้ามา");
+      createParking(name, desc, amount, zoneId);
+    }
   };
 
   const filterData: FilterButtonProps = [
@@ -123,22 +136,32 @@ const Parking = () => {
           <div className="flex flex-col gap-6">
             <div className="pt-4">
               <p>ชื่อ</p>
-              <TextInput onChange={(e) => setName(e.target.value)} />
+              <TextInput
+                onChange={(e) => setName(e.target.value)}
+                error={validateLength(name, 1, checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+              />
             </div>
             <div>
               <p>คำอธิบาย</p>
-              <TextInput onChange={(e) => setDesc(e.target.value)} />
+              <TextInput
+                onChange={(e) => setDesc(e.target.value)}
+                error={validateLength(desc, 1, checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+              />
             </div>
             <div>
               <p>จำนวน</p>
               <TextInput
                 type="number"
                 onChange={(e) => setAmount(e.target.value)}
+                error={validateLength(amount, 1, checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
               />
             </div>
             <div>
               <p>โซน</p>
-              <select
+              {/* <select
                 className="border-2 border-solid border-gray-600 w-80 h-10"
                 onChange={handleZoneChange}
               >
@@ -149,12 +172,13 @@ const Parking = () => {
                     </option>
                   );
                 })}
-              </select>
+              </select> */}
+              <Select data={zone} valueShow="name" onChange={handleZoneChange} value={zoneId}/>
             </div>{" "}
             <div className="flex justify-start">
               <button
                 className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                onClick={() => createParking(name, desc, amount, zoneId)}
+                onClick={() => checkAndCreate()}
               >
                 เพิ่ม
               </button>

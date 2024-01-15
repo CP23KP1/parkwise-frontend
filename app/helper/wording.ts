@@ -1,0 +1,1 @@
+export const CAN_NOT_BE_EMPTY = 'ไม่สามารถเป็นค่าว่างได้';

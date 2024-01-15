@@ -17,6 +17,8 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import { createZone, fetchZone } from "./function";
 import { getPublicBasePath } from "@/app/helper/basePath";
+import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
+import { validateLength } from "@/app/helper/validate";
 
 const Zone = () => {
   const [dataShow, setDataShow] = useState<ZoneRowData[]>([]);
@@ -30,6 +32,7 @@ const Zone = () => {
   const [search, setSearch] = useState("");
   const [order, setOrder] = useState("desc");
   const [orderBy, setOrderBy] = useState("createdAt");
+  const [checked, setChecked] = useState(false);
   const pathname = usePathname();
 
   const handlePrevPage = async () => {
@@ -41,6 +44,13 @@ const Zone = () => {
     await fetchZone(setDataShow, setPage, setAllPage, (page + 1).toString());
     setPage(page + 1);
   };
+
+  const validateAndCreate = () => {
+    setChecked(true);
+    if (name && description && maxCapacity && address) {
+      handleCreateZone();
+    }
+  }
 
   const getPage = () => {
     var parts = pathname.split("/");
@@ -229,28 +239,43 @@ const Zone = () => {
           <div className="flex flex-col gap-6">
             <div className="pt-4">
               <p>ชื่อ</p>
-              <TextInput onChange={(e) => setName(e.target.value)} />
+              <TextInput
+                onChange={(e) => setName(e.target.value)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validateLength(name, 1, checked)}
+              />
             </div>
             <div className="pt-4">
               <p>คำอธิบาย</p>
-              <TextInput onChange={(e) => setDescription(e.target.value)} />
+              <TextInput
+                onChange={(e) => setDescription(e.target.value)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validateLength(description, 1, checked)}
+              />
             </div>
             <div>
               <p>รองรับได้</p>
               <TextInput
                 type="number"
                 onChange={(e) => setMaxCapacity(e.target.value)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validateLength(maxCapacity, 1, checked)}
               />
             </div>
             <div>
               <p>ที่อยู่</p>
-              <TextInput onChange={(e) => setAddress(e.target.value)} />
+              <TextInput
+                onChange={(e) => setAddress(e.target.value)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validateLength(address, 1, checked)}
+              />
             </div>
             <div>
               <p>ละติจูด</p>
               <TextInput
                 value={selectedLatLng.lat}
                 onChange={(e) => handleLatChange(e.target.value)}
+                disabled
               />
             </div>
             <div>
@@ -258,6 +283,7 @@ const Zone = () => {
               <TextInput
                 value={selectedLatLng.lng}
                 onChange={(e) => handleLngChange(e.target.value)}
+                disabled
               />
             </div>
             {isLoaded ? (
@@ -294,7 +320,7 @@ const Zone = () => {
             <div className="flex justify-start">
               <button
                 className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                onClick={handleCreateZone}
+                onClick={validateAndCreate}
               >
                 เพิ่ม
               </button>

@@ -71,19 +71,18 @@ const Login = () => {
                     <div className="relative">
                         <TextInput
                             type="email"
-                            placeHolder="Email"
+                            placeholder="Email"
                             onChange={(e) => {
                                 setEmail(e.target.value as any);
                             }}
                         />
                         <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400">
-                            {/* ... (unchanged) */}
                         </span>
                     </div>
                     <div className="relative">
                         <TextInput
                             type="password"
-                            placeHolder="Password"
+                            placeholder="Password"
                             onEnterPress={(e) => {
                                 login(e);
                             }}
