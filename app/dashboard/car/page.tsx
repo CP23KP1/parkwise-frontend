@@ -13,6 +13,7 @@ import { getPublicBasePath } from "@/app/helper/basePath";
 import { StaffRowData } from "@/app/assets/data/staff";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
+import { Select } from "@/app/components/select/select";
 
 const Car = () => {
   const [licensePlate, setLicensePlate] = useState("");
@@ -108,8 +109,8 @@ const Car = () => {
   };
   const onCloseModal = () => setOpen(false);
 
-  const handleStaffChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setOwnerId(e.target.value);
+  const handleStaffChange = (e: any) => {
+    setOwnerId(e);
   };
 
   return (
@@ -162,7 +163,8 @@ const Car = () => {
             </div>
             <div className="pt-4">
               <p>เจ้าของ</p>
-              <select
+              <Select onChange={handleStaffChange} key='id' data={staff} value={ownerId} valueShow={['firstname', 'lastname']}/>
+              {/* <select
                 className="border-2 border-solid border-gray-600 w-80 h-10"
                 onChange={handleStaffChange}
               >
@@ -173,7 +175,7 @@ const Car = () => {
                     </option>
                   );
                 })}
-              </select>
+              </select> */}
             </div>
             <div className="flex justify-start">
               <button

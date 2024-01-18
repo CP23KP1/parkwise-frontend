@@ -9,6 +9,7 @@ import TextInput from "../input/input";
 import { createCar, fetchStaff } from "@/app/dashboard/car/function";
 import { deleteCar, editCar } from "./function";
 import { StaffRowData } from "@/app/assets/data/staff";
+import { Select } from "../select/select";
 
 interface Props {
   data: CarRowData[];
@@ -34,7 +35,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
   }, []);
 
   const handleStaffChange = (event: any) => {
-    const selectedStaffId = parseInt(event.target.value, 10);
+    const selectedStaffId = parseInt(event, 10);
     setOwnerId(selectedStaffId.toString());
   };
 
@@ -131,7 +132,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
     <>
       <Modal open={open} onClose={onCloseModal}>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">สร้างรถ</h2>
+          <h2 className="font-bold text-xl">แก้ไขรถยนต์</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
               <p>ป้ายทะเบียน</p>
@@ -171,18 +172,13 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
             </div>
             <div>
               <p>เจ้าของ</p>
-              <select
-                className="border-2 border-solid border-gray-600 w-80 h-10"
+              <Select
+                valueShow={["firstname", "lastname"]}
+                key="id"
                 onChange={handleStaffChange}
-              >
-                {staff.map((data) => {
-                  return (
-                    <option key={data.id} value={data.id}>
-                      {data.firstname + " " + data.lastname}
-                    </option>
-                  );
-                })}
-              </select>
+                data={staff}
+                value={ownerId}
+              />
             </div>
             <div className="flex justify-start">
               <button

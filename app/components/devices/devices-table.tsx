@@ -12,6 +12,9 @@ import {
   editDevice,
   fetchZone,
 } from "@/app/dashboard/device/function";
+import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
+import { validateLength } from "@/app/helper/validate";
+import { Select } from "../select/select";
 
 interface Props {
   data: DeviceRowData[];
@@ -29,15 +32,30 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
   const [brand, setBrand] = useState("");
   const [zoneId, setZoneId] = useState(0);
   const [zone, setZone] = useState<ZoneRowData[]>([]);
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     fetchZone(setZone);
   }, []);
 
   const handleZoneChange = (event: any) => {
-    const selectedZoneId = parseInt(event.target.value, 10);
+    const selectedZoneId = parseInt(event, 10);
     setZoneId(selectedZoneId);
   };
+
+  const validateAndEdit = () => {
+    setChecked(true);
+    if (name && checked && price && brand) {
+      editDevice(
+        deviceId.toString(),
+        name,
+        description,
+        price,
+        brand,
+        zoneId.toString()
+      );
+    }
+  } 
 
   const columns: Column<DeviceRowData>[] = React.useMemo(
     () => [
@@ -133,6 +151,8 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
               <TextInput
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                error={validateLength(name, 1, checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
               />
             </div>
             <div>
@@ -140,6 +160,8 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
               <TextInput
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validateLength(description, 1, checked)}
               />
             </div>
             <div>
@@ -148,6 +170,8 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                 type="number"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validateLength(price, 1, checked)}
               />
             </div>
             <div>
@@ -155,11 +179,14 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
               <TextInput
                 value={brand}
                 onChange={(e) => setBrand(e.target.value)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validateLength(brand, 1, checked)}
               />
             </div>
             <div>
               <p>โซน</p>
-              <select
+              <Select valueShow="name" key='id' onChange={handleZoneChange} value={zoneId} data={zone}/>
+              {/* <select
                 className="border-2 border-solid border-gray-600 w-80 h-10"
                 onChange={handleZoneChange}
               >
@@ -170,20 +197,13 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                     </option>
                   );
                 })}
-              </select>
+              </select> */}
             </div>
             <div className="flex justify-start">
               <button
                 className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
                 onClick={() =>
-                  editDevice(
-                    deviceId.toString(),
-                    name,
-                    description,
-                    price,
-                    brand,
-                    zoneId.toString()
-                  )
+                  validateAndEdit()
                 }
               >
                 แก้ไข

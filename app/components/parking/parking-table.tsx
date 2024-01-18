@@ -8,6 +8,9 @@ import TextInput from "../input/input";
 import { deleteParking, editParking } from "./function";
 import { ZoneRowData } from "@/app/assets/data/zone";
 import { fetchZone } from "@/app/dashboard/device/function";
+import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
+import { validateLength } from "@/app/helper/validate";
+import { Select } from "../select/select";
 
 interface Props {
   data: ParkingRowData[];
@@ -25,13 +28,21 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
   const [amount, setAmount] = useState("");
   const [zone, setZone] = useState<ZoneRowData[]>([]);
   const [zoneId, setZoneId] = useState("");
+  const [checked, setChecked] = useState(false);
+
+  const validateAndEdit = () => {
+    setChecked(true);
+    if (name && checked && amount) {
+      editParking(id, name, description, amount, parseInt(zoneId));
+    }
+  };
 
   useEffect(() => {
     fetchZone(setZone);
   }, []);
 
   const handleZoneChange = (e: any) => {
-    setZoneId(e.target.value);
+    setZoneId(e);
   };
 
   const columns: Column<ParkingRowData>[] = React.useMemo(
@@ -86,7 +97,7 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
     useTable({ columns, data });
 
   const handleEdit = (data: ParkingRowData) => {
-    console.log('data', data)
+    console.log("data", data);
     setId(data.id.toString());
     setName(data.name);
     setDescription(data.description);
@@ -122,6 +133,8 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
               <TextInput
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validateLength(name, 1, checked)}
               />
             </div>
             <div>
@@ -129,11 +142,16 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
               <TextInput
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validateLength(description, 1, checked)}
               />
             </div>
             <div>
               <p>จำนวน</p>
               <TextInput
+                type="number"
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validateLength(amount, 1, checked)}
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
               />
@@ -141,26 +159,19 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
             <div>
               <p>โซน</p>
               <div>
-                <select
-                  className="border-2 border-solid border-gray-600 w-80 h-10"
+                <Select
                   onChange={handleZoneChange}
-                >
-                  {zone.map((data) => {
-                    return (
-                      <option key={data.id} value={data.id}>
-                        {data.name}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>{" "}
-            </div>{" "}
+                  key="id"
+                  valueShow="name"
+                  data={zone}
+                  value={zoneId}
+                />
+              </div>
+            </div>
             <div className="flex justify-start">
               <button
                 className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                onClick={() =>
-                  editParking(id, name, description, amount, parseInt(zoneId))
-                }
+                onClick={() => validateAndEdit()}
               >
                 แก้ไข
               </button>

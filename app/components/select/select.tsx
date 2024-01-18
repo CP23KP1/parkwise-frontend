@@ -1,10 +1,9 @@
-"use client"
 import React, { useState, FC, useEffect } from "react";
 
 interface SelectProps {
   onChange?: (value: any) => void;
   data?: any[];
-  valueShow?: string;
+  valueShow?: string | string[];
   value: number | string;
 }
 
@@ -15,12 +14,24 @@ export const Select: FC<SelectProps> = ({
   value,
 }) => {
   const [open, setOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState<string | null>(null);
+  const [selectedValues, setSelectedValues] = useState<string[]>([]);
 
   useEffect(() => {
     if (value && data && valueShow) {
-      const selectedItem = data.find((item) => item.id === value);
-      setSelectedValue(selectedItem ? selectedItem[valueShow] : "บางอย่างผิดพลาด");
+      const selectedItem = data.find((item) => item.id == value);
+      if (selectedItem) {
+        if (Array.isArray(valueShow)) {
+          const values = valueShow.map((key) => selectedItem[key]);
+          if(values === undefined || values === null || (values.length === 1 && values[0])) {
+            setSelectedValues(data[0][valueShow[0]]);
+          }
+          setSelectedValues(values);
+        } else {
+          setSelectedValues([selectedItem[valueShow]]);
+        }
+      } else {
+        setSelectedValues(["บางอย่างผิดพลาด"]);
+      }
     }
   }, [value, data, valueShow]);
 
@@ -41,7 +52,7 @@ export const Select: FC<SelectProps> = ({
             aria-haspopup="true"
             aria-expanded="true"
           >
-            <span className="truncate">{selectedValue}</span>
+            <span className="truncate">{selectedValues.join(' ')}</span>
             <svg
               className="-mr-1 ml-2 h-5 w-5"
               xmlns="http://www.w3.org/2000/svg"
@@ -70,7 +81,9 @@ export const Select: FC<SelectProps> = ({
                   onClick={() => handleOptionClick(item)}
                   role="menuitem"
                 >
-                  {item[valueShow]}
+                  {Array.isArray(valueShow)
+                    ? valueShow.map((key) => item[key]).join(' ')
+                    : item[valueShow]}
                 </div>
               ))}
           </div>

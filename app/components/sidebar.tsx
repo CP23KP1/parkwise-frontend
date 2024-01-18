@@ -35,6 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                         <img
                             src={getPublicBasePath('/menu/logout.png')}
                             alt="Logout"
+                            onClick={logout}
                         />
                     </div>
                 )}

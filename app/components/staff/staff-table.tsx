@@ -7,6 +7,8 @@ import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
 import { deleteStaff, editStaff } from "./function";
+import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
+import { validateEmail, validateEmailWording, validateLength, validatePhone, validatePhoneWording } from "@/app/helper/validate";
 
 interface Props {
   data: StaffRowData[];
@@ -23,6 +25,8 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [id, setId] = useState(0);
+  const [checked, setChecked] = useState(false)
+
   const columns: Column<StaffRowData>[] = React.useMemo(
     () => [
       {
@@ -91,6 +95,13 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
     setOpen(true);
   };
 
+  const validateAndEdit = () => {
+    setChecked(true)
+    if(id && firstName && lastName && email && phone){
+      editStaff(id, firstName, lastName, email, phone);
+    }
+  }
+
   const handleDelete = (id: number) => {
     Swal.fire({
       title: "คุณต้องการที่จะลบหรือไม่?",
@@ -118,6 +129,8 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
               <TextInput
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validateLength(firstName, 1, checked)}
               />
             </div>
             <div className="pt-4">
@@ -125,6 +138,8 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
               <TextInput
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
+                errorMessage={CAN_NOT_BE_EMPTY}
+                error={validateLength(lastName, 1, checked)}
               />
             </div>
             <div>
@@ -132,6 +147,8 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
               <TextInput
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                error={validateEmail(email, checked)}
+                errorMessage={validateEmailWording(email)}
               />
             </div>
             <div>
@@ -139,12 +156,15 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
               <TextInput
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+                error={validatePhone(phone, checked)}
+                errorMessage={validatePhoneWording(phone)}
+                
               />
             </div>
             <div className="flex justify-start">
               <button
                 className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                onClick={() => editStaff(id, firstName, lastName, email, phone)}
+                onClick={() => validateAndEdit()}
               >
                 แก้ไข
               </button>
