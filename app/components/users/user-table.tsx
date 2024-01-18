@@ -7,6 +7,8 @@ import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
 import { deleteAdmin, editAdmin } from "./function";
+import { validateLength } from "@/app/helper/validate";
+import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 
 interface Props {
   data: UserRowData[];
@@ -22,6 +24,7 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [checked, setChecked] = useState(false);
 
   const columns: Column<UserRowData>[] = React.useMemo(
     () => [
@@ -74,6 +77,13 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
     onOpenModal();
   };
 
+  const validateAndEdit = () => {
+    setChecked(true);
+    if (firstName !== "" && lastName !== "" && email !== "") {
+      editAdmin(parseInt(id), firstName, lastName, email, password);
+    }
+  };
+
   const handleDelete = (id: number) => {
     Swal.fire({
       title: "คุณต้องการที่จะลบหรือไม่?",
@@ -95,12 +105,14 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
       {" "}
       <Modal open={open} onClose={onCloseModal}>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">Edit Staff</h2>
+          <h2 className="font-bold text-xl">แก้ไขผู้ดูแล</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
               <p>ชื่อ</p>
               <TextInput
                 value={firstName}
+                error={validateLength(firstName, 2,checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
                 onChange={(e) => setFirstName(e.target.value)}
               />
             </div>
@@ -109,6 +121,8 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
               <TextInput
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
+                error={validateLength(lastName, 2,checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
               />
             </div>
             <div>
@@ -116,6 +130,8 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
               <TextInput
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                error={validateLength(email, 2,checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
               />
             </div>
             <div>
@@ -128,9 +144,7 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
             <div className="flex justify-start">
               <button
                 className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                onClick={() =>
-                  editAdmin(parseInt(id), firstName, lastName, email, password)
-                }
+                onClick={() => validateAndEdit()}
               >
                 แก้ไข
               </button>

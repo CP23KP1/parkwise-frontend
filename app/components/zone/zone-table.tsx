@@ -1,7 +1,6 @@
 // ResponsiveTable.tsx
 import React, { useState } from "react";
 import { Column, useTable } from "react-table";
-import { UserRowData } from "@/app/assets/data/user";
 import "react-responsive-modal/styles.css";
 import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
@@ -9,6 +8,8 @@ import { ZoneRowData } from "@/app/assets/data/zone";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import TextInput from "../input/input";
 import { deleteZone, editZone } from "./function";
+import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
+import { validateLength } from "@/app/helper/validate";
 
 interface Props {
   data: ZoneRowData[];
@@ -26,6 +27,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
   const [address, setAddress] = useState("");
   const [lat, setLat] = useState("");
   const [long, setLong] = useState("");
+  const [checked, setChecked] = useState(false)
 
   const handleLatChange = (event: any) => {
     setSelectedLatLng({
@@ -40,6 +42,20 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
       lng: parseFloat(event.target.value) || 0,
     });
   };
+
+  const validateAndEdit = () => {
+    setChecked(true);
+    if (zoneName && checked && maxCapacity && address) {
+      editZone(
+        id,
+        zoneName,
+        description,
+        maxCapacity,
+        address,
+        selectedLatLng
+      );
+    }
+  }
 
   const columns: Column<ZoneRowData>[] = React.useMemo(
     () => [
@@ -162,48 +178,58 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
       {" "}
       <Modal open={open} onClose={onCloseModal}>
         <div className="mx-10 my-4">
-          <h2 className="font-bold text-xl">Create Zone</h2>
+          <h2 className="font-bold text-xl">แก้ไขโซน</h2>
           <div className="flex flex-col gap-6">
             <div className="pt-4">
-              <p>Name</p>
+              <p>ชื่อโซน</p>
               <TextInput
                 value={zoneName}
                 onChange={(e) => setZoneName(e.target.value)}
+                error={validateLength(zoneName, 1, checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
               />
             </div>
             <div className="pt-4">
-              <p>Description</p>
+              <p>คำอธิบาย</p>
               <TextInput
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
+                error={validateLength(description, 1, checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
               />
             </div>
             <div>
-              <p>Max Capacity</p>
+              <p>รองรับได้สูงสุด</p>
               <TextInput
                 value={maxCapacity}
                 onChange={(e) => setMaxCapacity(e.target.value)}
+                error={validateLength(maxCapacity, 1, checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
               />
             </div>
             <div>
-              <p>Address</p>
+              <p>ที่อยู่</p>
               <TextInput
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
+                error={validateLength(address, 1, checked)}
+                errorMessage={CAN_NOT_BE_EMPTY}
               />
             </div>
             <div>
-              <p>Latitude</p>
+              <p>ละติจูด</p>
               <TextInput
                 value={selectedLatLng.lat}
                 onChange={(e) => handleLatChange(e.target.value)}
+                disabled
               />
             </div>
             <div>
-              <p>Longtitude</p>
+              <p>ลองติจูด</p>
               <TextInput
                 value={selectedLatLng.lng}
                 onChange={(e) => handleLngChange(e.target.value)}
+                disabled
               />
             </div>
             {isLoaded ? (
@@ -239,7 +265,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
               {/* TODO */}
               <button
                 className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                onClick={handleEditZone}
+                onClick={validateAndEdit}
               >
                 แก้ไข
               </button>
