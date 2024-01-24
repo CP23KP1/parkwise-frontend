@@ -1,86 +1,108 @@
 // ResponsiveTable.tsx
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { Column, useTable } from "react-table";
 import { StaffRowData } from "@/app/assets/data/staff";
 import { LogsRowData } from "@/app/assets/data/logs";
+import {
+    SortDescriptor,
+    Table,
+    TableBody,
+    TableCell,
+    TableColumn,
+    TableHeader,
+    TableRow,
+} from "@nextui-org/react";
+import { logColumns } from "@/app/utils/constants";
 
 interface Props {
-  data: LogsRowData[] | any[];
+    data: LogsRowData[] | any[];
 }
 
 const ResponsiveLogsTable: React.FC<Props> = ({ data }) => {
-  if (!Array.isArray(data)) {
-    console.error("Invalid data type. Expected an array.");
-    return null; // or handle it appropriately
-  }
-  const columns: Column<LogsRowData>[] = React.useMemo(
-    () => [
-      {
-        Header: "License Plate",
-        accessor: "car",
-        Cell: ({ row }) => {
-          return (
-            <div className="flex">
-              <div>{row.original.car?.licensePlate}</div>
-            </div>
-          );
-        },
-      },
-      {
-        Header: "Owner",
-        accessor: "staff",
-        Cell: ({ row }) => {
-          return (
-            <div className="flex">
-              <div>{row.original.staff?.firstname} {row.original.staff?.lastname}</div>
-            </div>
-          );
-        },
-      },
-    ],
-    []
-  );
-  
+    const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+        column: "name",
+        direction: "ascending",
+    });
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data });
+    if (!Array.isArray(data)) {
+        console.error("Invalid data type. Expected an array.");
+        return null; // or handle it appropriately
+    }
 
-  return (
-    <div className="table-container w-72 sm:w-full">
-      <div
-        className="table-wrapper"
-        style={{ maxHeight: "400px", overflowY: "auto" }}
-      >
-        <table {...getTableProps()} className="responsive-table">
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
+    const sortedItems = useMemo(() => {
+        return [...data].sort((a: any, b: any) => {
+            const first = a[sortDescriptor.column!];
+            const second = b[sortDescriptor.column!];
+            const cmp = first! < second! ? -1 : first! > second! ? 1 : 0;
+
+            return sortDescriptor.direction === "descending" ? -cmp : cmp;
+        });
+    }, [sortDescriptor, data]);
+
+    const renderCell = (item: LogsRowData, columnKey: keyof LogsRowData) => {
+        console.log(item);
+
+        const cellValue = item[columnKey];
+
+        switch (columnKey) {
+            case "car":
+                return <>{item.car.licensePlate}</>;
+            case "staff":
+                return (
+                    <>
+                        {item.staff.firstname} {item.staff.lastname}
+                    </>
+                );
+            default:
+                return cellValue;
+        }
+    };
+
+    return (
+        <div className="table-container w-72 sm:w-full">
+            <Table
+                aria-label="Example table with custom cells, pagination and sorting"
+                isHeaderSticky
+                classNames={{
+                    wrapper: "max-h-[382px]",
+                }}
+                sortDescriptor={sortDescriptor}
+                topContentPlacement="outside"
+                onSortChange={setSortDescriptor}
+            >
+                <TableHeader columns={logColumns}>
+                    {(column) => (
+                        <TableColumn
+                            key={column.uid}
+                            align={
+                                column.uid === "actions" ? "center" : "start"
+                            }
+                            allowsSorting={column.sortable}
+                        >
+                            {column.name}
+                        </TableColumn>
+                    )}
+                </TableHeader>
+                <TableBody
+                    emptyContent={"ไม่มีข้อมูลรถยนต์"}
+                    items={sortedItems}
+                >
+                    {(item) => (
+                        <TableRow key={item.id}>
+                            {(columnKey) => (
+                                <TableCell>
+                                    {renderCell(
+                                        item,
+                                        columnKey as keyof LogsRowData
+                                    )}
+                                </TableCell>
+                            )}
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
+        </div>
+    );
 };
 
 export default ResponsiveLogsTable;

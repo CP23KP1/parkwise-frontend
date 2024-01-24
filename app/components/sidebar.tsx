@@ -4,6 +4,7 @@ import { menuType } from "../assets/data/menu";
 import SidebarItem from "./sidebar-item";
 import { logout } from "../helper/auth";
 import { getPublicBasePath } from "../helper/basePath";
+import { Button } from "@nextui-org/react";
 
 interface SidebarProps {
     open?: boolean;
@@ -23,17 +24,21 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
             <div className="pt-4">
                 {openSidebar ? (
                     <>
-                        <div
-                            className="cursor-pointer block text-center bg-red-500 text-white mx-6 p-3 rounded-md hover:bg-red-700"
-                            onClick={logout}
-                        >
-                            <button>ออกจากระบบ</button>
+                        <div className="flex justify-center">
+                            <Button
+                                size="md"
+                                color="danger"
+                                className="text-white"
+                                onClick={logout}
+                            >
+                                ออกจากระบบ
+                            </Button>
                         </div>
                     </>
                 ) : (
                     <div className="w-12 h-12 pl-4 hover:cursor-pointer">
                         <img
-                            src={getPublicBasePath('/menu/logout.png')}
+                            src={getPublicBasePath("/menu/logout.png")}
                             alt="Logout"
                             onClick={logout}
                         />
@@ -46,7 +51,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
     return (
         <>
             <div
-                className={`fixed h-screen transition-all duration-300 ${width} bg-zinc-100 rounded-r-3xl`}
+                className={`fixed h-screen transition-all duration-300 ${width} bg-white`}
                 style={{ top: 0, left: 0 }}
             >
                 <div className="p-4 flex items-center justify-between">
@@ -56,7 +61,9 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                             onClick={handleClickOpenSidebar}
                         >
                             <img
-                                src={getPublicBasePath('/menu/hamburger_menu.png')}
+                                src={getPublicBasePath(
+                                    "/menu/hamburger_menu.png"
+                                )}
                                 alt="Hamburger Menu"
                             />
                         </div>
@@ -70,7 +77,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                                 />
                             </div> */}
                             <div className="pr-12">
-                                <h1>ParkWise</h1>
+                                <h1 className="font-bold">ParkWise</h1>
                             </div>
                         </>
                     )}

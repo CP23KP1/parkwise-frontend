@@ -7,6 +7,6 @@ export interface StaffRowData {
     position: string;
     email: string;
     phoneNumber: string;
-    service: boolean
-    actions?: any
+    status: boolean;
+    actions?: any;
 }
