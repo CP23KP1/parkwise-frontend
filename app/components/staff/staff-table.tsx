@@ -3,7 +3,6 @@ import React, { useCallback, useMemo, useState } from "react";
 import { Column, useTable } from "react-table";
 import { StaffRowData } from "@/app/assets/data/staff";
 import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
 import { deleteStaff, editStaff } from "./function";
@@ -29,6 +28,11 @@ import {
     DropdownTrigger,
     SortDescriptor,
     user,
+    Modal,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
 } from "@nextui-org/react";
 import { FaTrashCan, FaPencil } from "react-icons/fa6";
 import { staffColumns } from "@/app/utils/constants";
@@ -141,57 +145,93 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
 
     return (
         <>
-            <Modal open={open} onClose={onCloseModal}>
-                <div className="mx-10 my-4">
-                    <h2 className="font-bold text-xl">แก้ไขเจ้าหน้าที่</h2>
-                    <div className="flex flex-col gap-6">
-                        <div className="pt-4">
-                            <p>ชื่อ</p>
-                            <TextInput
-                                value={firstName}
-                                onChange={(e) => setFirstName(e.target.value)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(firstName, 1, checked)}
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <p>นามสกุล</p>
-                            <TextInput
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(lastName, 1, checked)}
-                            />
-                        </div>
-                        <div>
-                            <p>อีเมล</p>
-                            <TextInput
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                error={validateEmail(email, checked)}
-                                errorMessage={validateEmailWording(email)}
-                            />
-                        </div>
-                        <div>
-                            <p>เบอร์มือถือ</p>
-                            <TextInput
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                                error={validatePhone(phone, checked)}
-                                errorMessage={validatePhoneWording(phone)}
-                            />
-                        </div>
-                        <div className="flex justify-start">
-                            <button
-                                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                                onClick={() => validateAndEdit()}
-                            >
-                                แก้ไข
-                            </button>
-                        </div>
-                    </div>
-                    <div></div>
-                </div>
+            <Modal isOpen={open} onClose={onCloseModal} size="xl">
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <span className="text-xl">
+                                    แก้ไขเจ้าหน้าที่
+                                </span>
+                            </ModalHeader>
+                            <ModalBody>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="ชื่อจริง"
+                                            key="firstname"
+                                            onChange={(e) =>
+                                                setEmail(e.target.value)
+                                            }
+                                            error={false}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={firstName}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="นามสกุล"
+                                            key="lastname"
+                                            onChange={(e) =>
+                                                setLastName(e.target.value)
+                                            }
+                                            error={false}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={lastName}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="อีเมลล์"
+                                            key="email"
+                                            type="email"
+                                            onChange={(e) =>
+                                                setEmail(e.target.value)
+                                            }
+                                            error={false}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={email}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="เบอร์โทรศัพท์"
+                                            key="phone"
+                                            type="text"
+                                            onChange={(e) =>
+                                                setPhone(e.target.value)
+                                            }
+                                            error={false}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={phone}
+                                            isRequired
+                                        />
+                                    </div>
+                                </div>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    onPress={onClose}
+                                >
+                                    ปิด
+                                </Button>
+                                <Button
+                                    variant="shadow"
+                                    color="primary"
+                                    onPress={() => validateAndEdit()}
+                                    isLoading={checked}
+                                >
+                                    แก้ไข
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
             </Modal>
             <div className="table-container w-72 sm:w-full">
                 <Table

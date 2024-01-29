@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Column, useTable } from "react-table";
 import { DeviceRowData } from "@/app/assets/data/devices";
 import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
 import { ZoneRowData } from "@/app/assets/data/zone";
@@ -14,9 +13,13 @@ import {
 } from "@/app/dashboard/device/function";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
-import { Select } from "../select/select";
 import {
+    Select,
     Button,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalHeader,
     SortDescriptor,
     Table,
     TableBody,
@@ -24,6 +27,8 @@ import {
     TableColumn,
     TableHeader,
     TableRow,
+    SelectItem,
+    ModalFooter,
 } from "@nextui-org/react";
 import { deviceColumns } from "@/app/utils/constants";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
@@ -43,7 +48,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
     const [price, setPrice] = useState("");
     const [brand, setBrand] = useState("");
     const [zoneId, setZoneId] = useState(0);
-    const [zone, setZone] = useState<ZoneRowData[]>([]);
+    const [zones, setZone] = useState<ZoneRowData[]>([]);
     const [checked, setChecked] = useState(false);
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "name",
@@ -61,7 +66,9 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
 
     const validateAndEdit = () => {
         setChecked(true);
-        if (name && checked && price && brand) {
+        console.log(checked);
+
+        if (name && price && brand) {
             editDevice(
                 deviceId.toString(),
                 name,
@@ -71,6 +78,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                 zoneId.toString()
             );
         }
+        setChecked(false);
     };
 
     const sortedItems = useMemo(() => {
@@ -147,80 +155,112 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
 
     return (
         <div className="table-container w-72 sm:w-full">
-            <Modal open={open} onClose={onCloseModal} center>
-                <div className="mx-10 my-4">
-                    <h2 className="font-bold text-xl">แก้ไขอุปกรณ์</h2>
-                    <div className="flex flex-col gap-6">
-                        <div className="pt-4">
-                            <p>ชื่อ</p>
-                            <TextInput
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                error={validateLength(name, 1, checked)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                            />
-                        </div>
-                        <div>
-                            <p>คำอธิบาย</p>
-                            <TextInput
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(description, 1, checked)}
-                            />
-                        </div>
-                        <div>
-                            <p>ราคา</p>
-                            <TextInput
-                                type="number"
-                                value={price}
-                                onChange={(e) => setPrice(e.target.value)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(price, 1, checked)}
-                            />
-                        </div>
-                        <div>
-                            <p>แบรนด์</p>
-                            <TextInput
-                                value={brand}
-                                onChange={(e) => setBrand(e.target.value)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(brand, 1, checked)}
-                            />
-                        </div>
-                        <div>
-                            <p>โซน</p>
-                            <Select
-                                valueShow="name"
-                                key="id"
-                                onChange={handleZoneChange}
-                                value={zoneId}
-                                data={zone}
-                            />
-                            {/* <select
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-                onChange={handleZoneChange}
-              >
-                {zone.map((data) => {
-                  return (
-                    <option key={data.id} value={data.id}>
-                      {data.name}
-                    </option>
-                  );
-                })}
-              </select> */}
-                        </div>
-                        <div className="flex justify-start">
-                            <button
-                                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                                onClick={() => validateAndEdit()}
-                            >
-                                แก้ไข
-                            </button>
-                        </div>
-                    </div>
-                    <div></div>
-                </div>
+            <Modal isOpen={open} onClose={onCloseModal} size="xl">
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <span className="text-xl">แก้ไขอุปกรณ์</span>
+                            </ModalHeader>
+                            <ModalBody>
+                                <div className="grid grid-cols-2 gap-y-6 gap-x-4">
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="ชื่อ"
+                                            key="name"
+                                            onChange={(e) =>
+                                                setName(e.target.value)
+                                            }
+                                            error={false}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={name}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="คำอธิบาย"
+                                            key="description"
+                                            onChange={(e) =>
+                                                setDescription(e.target.value)
+                                            }
+                                            error={false}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={description}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="แบรนด์"
+                                            key="brand"
+                                            type="brand"
+                                            onChange={(e) =>
+                                                setBrand(e.target.value)
+                                            }
+                                            error={false}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={brand}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="ราคา"
+                                            key="price"
+                                            type="number"
+                                            onChange={(e) =>
+                                                setPrice(e.target.value)
+                                            }
+                                            error={false}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={price}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <Select
+                                            label="โซน"
+                                            isRequired
+                                            key="zone"
+                                            onChange={handleZoneChange}
+                                            value={zoneId}
+                                            defaultSelectedKeys={[
+                                                zoneId ? zoneId.toString() : "",
+                                            ]}
+                                        >
+                                            {zones.map((zone) => (
+                                                <SelectItem
+                                                    key={zone.id}
+                                                    value={zone.id}
+                                                >
+                                                    {zone.name}
+                                                </SelectItem>
+                                            ))}
+                                        </Select>
+                                    </div>
+                                </div>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    onPress={onClose}
+                                >
+                                    ปิด
+                                </Button>
+                                <Button
+                                    variant="shadow"
+                                    color="primary"
+                                    onPress={() => validateAndEdit()}
+                                    isLoading={checked}
+                                >
+                                    แก้ไข
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
             </Modal>
 
             <Table

@@ -2,7 +2,6 @@
 import { DeviceRowData } from "@/app/assets/data/devices";
 import ResponsiveDeviceTable from "@/app/components/devices/devices-table";
 import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
 import React, { useEffect, useState } from "react";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import FilterButton from "@/app/components/button/filter";
@@ -12,7 +11,17 @@ import { ZoneRowData } from "@/app/assets/data/zone";
 import { getPublicBasePath } from "@/app/helper/basePath";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
-import { Button, Input } from "@nextui-org/react";
+import {
+    Button,
+    Input,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    Select,
+    SelectItem,
+} from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
 
 const Device = () => {
@@ -21,7 +30,7 @@ const Device = () => {
     const [description, setDescription] = useState("");
     const [price, setPrice] = useState("");
     const [brand, setBrand] = useState("");
-    const [zone, setZone] = useState<ZoneRowData[]>([]);
+    const [zones, setZone] = useState<ZoneRowData[]>([]);
     const [zoneId, setZoneId] = useState(0);
     const [page, setPage] = useState(1);
     const [allPage, setAllPage] = useState(1);
@@ -61,6 +70,7 @@ const Device = () => {
         setChecked(true);
         if (name && checked && price && brand) {
             createDevice(name, description, price, brand, zoneId.toString());
+            setChecked(false);
         }
     };
 
@@ -151,7 +161,119 @@ const Device = () => {
 
     return (
         <>
-            <Modal open={open} onClose={onCloseModal}>
+            <Modal isOpen={open} onClose={onCloseModal} size="xl">
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <span className="text-xl">เพิ่มอุปกรณ์</span>
+                            </ModalHeader>
+                            <ModalBody>
+                                <div className="grid grid-cols-2 gap-y-6 gap-x-4">
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="ชื่อ"
+                                            key="name"
+                                            onChange={(e) => {
+                                                setName(e.target.value);
+                                            }}
+                                            error={validateLength(
+                                                name,
+                                                1,
+                                                checked
+                                            )}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={name}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="คำอธิบาย"
+                                            key="description"
+                                            onChange={(e) =>
+                                                setDescription(e.target.value)
+                                            }
+                                            error={validateLength(
+                                                description,
+                                                1,
+                                                checked
+                                            )}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={description}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="แบรนด์"
+                                            key="brand"
+                                            type="brand"
+                                            onChange={(e) =>
+                                                setBrand(e.target.value)
+                                            }
+                                            error={checked}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={brand}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="ราคา"
+                                            key="price"
+                                            type="number"
+                                            onChange={(e) =>
+                                                setPrice(e.target.value)
+                                            }
+                                            error={checked}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={price}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <Select
+                                            label="โซน"
+                                            isRequired
+                                            key="zone"
+                                            onChange={handleZoneChange}
+                                            value={zoneId}
+                                        >
+                                            {zones.map((zone) => (
+                                                <SelectItem
+                                                    key={zone.id}
+                                                    value={zone.id}
+                                                >
+                                                    {zone.name}
+                                                </SelectItem>
+                                            ))}
+                                        </Select>
+                                    </div>
+                                </div>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    onPress={onClose}
+                                >
+                                    ปิด
+                                </Button>
+                                <Button
+                                    variant="shadow"
+                                    color="primary"
+                                    onPress={() => createDeviceWithValidate()}
+                                    isLoading={checked}
+                                >
+                                    เพิ่ม
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
+            {/* <Modal open={open} onClose={onCloseModal}>
                 <div className="mx-10 my-4">
                     <h2 className="font-bold text-xl">สร้างอุปกรณ์</h2>
                     <div className="flex flex-col gap-6">
@@ -218,7 +340,7 @@ const Device = () => {
                     </div>
                     <div></div>
                 </div>
-            </Modal>
+            </Modal> */}
 
             <div className="w-72 sm:w-full">
                 <h1 className="text-xl font-bold">อุปกรณ์</h1>

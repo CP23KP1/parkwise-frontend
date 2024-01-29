@@ -2,8 +2,8 @@ import { Input } from "@nextui-org/react";
 import React from "react";
 
 interface TextInputProps {
-    key?: string;
     type?: string;
+    label?: string;
     placeholder?: string;
     onChange?: React.ChangeEventHandler<HTMLInputElement>;
     onEnterPress?: (e: any) => void;
@@ -12,11 +12,13 @@ interface TextInputProps {
     error?: boolean;
     errorMessage?: string;
     disabled?: boolean;
+    isRequired?: boolean;
+    startContent?: React.ReactNode;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
-    key,
     type = "text",
+    label,
     placeholder,
     onChange,
     onEnterPress,
@@ -25,6 +27,8 @@ const TextInput: React.FC<TextInputProps> = ({
     error,
     value,
     disabled = false,
+    isRequired = false,
+    startContent,
 }) => {
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter" && onEnterPress) {
@@ -35,33 +39,19 @@ const TextInput: React.FC<TextInputProps> = ({
     return (
         <div className="">
             <Input
-                key={key}
                 radius="sm"
                 type={type}
+                label={label}
                 placeholder={placeholder}
                 className="max-w-full"
                 value={value}
                 onChange={onChange}
-                errorMessage={errorMessage}
+                errorMessage={error ? errorMessage : undefined}
                 isInvalid={error}
                 disabled={disabled}
+                isRequired={isRequired}
+                startContent={startContent}
             />
-            {/* <input
-                value={value}
-                type={type}
-                placeholder={placeholder}
-                onChange={onChange}
-                onKeyDown={handleKeyDown}
-                disabled={disabled}
-                className={`w-full h-10 px-4 border rounded-md focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-500 ${
-                    error ? "border-red-500" : ""
-                } ${className}`}
-            />
-            <div className="mt-1 h-4">
-                {error && (
-                    <p className="text-sm text-red-500">{errorMessage}</p>
-                )}
-            </div> */}
         </div>
     );
 };

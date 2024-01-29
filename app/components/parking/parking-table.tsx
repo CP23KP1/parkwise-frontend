@@ -1,6 +1,5 @@
 // ResponsiveTable.tsx
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import Modal from "react-responsive-modal";
 import { Column, useTable } from "react-table";
 import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
@@ -10,9 +9,14 @@ import { ZoneRowData } from "@/app/assets/data/zone";
 import { fetchZone } from "@/app/dashboard/device/function";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
-import { Select } from "../select/select";
 import {
+    Select,
+    Modal,
     Button,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
     SortDescriptor,
     Table,
     TableBody,
@@ -20,6 +24,7 @@ import {
     TableColumn,
     TableHeader,
     TableRow,
+    SelectItem,
 } from "@nextui-org/react";
 import { parkingColumns } from "@/app/utils/constants";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
@@ -38,7 +43,7 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [amount, setAmount] = useState("");
-    const [zone, setZone] = useState<ZoneRowData[]>([]);
+    const [zones, setZone] = useState<ZoneRowData[]>([]);
     const [zoneId, setZoneId] = useState("");
     const [checked, setChecked] = useState(false);
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
@@ -133,61 +138,106 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
 
     return (
         <>
-            <Modal open={open} onClose={onCloseModal}>
-                <div className="mx-10 my-4">
-                    <h2 className="font-bold text-xl">แก้ไขที่จอดรถ</h2>
-                    <div className="flex flex-col gap-6">
-                        <div className="pt-4">
-                            <p>ชื่อ</p>
-                            <TextInput
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(name, 1, checked)}
-                            />
-                        </div>
-                        <div>
-                            <p>คำอธิบาย</p>
-                            <TextInput
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(description, 1, checked)}
-                            />
-                        </div>
-                        <div>
-                            <p>จำนวน</p>
-                            <TextInput
-                                type="number"
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(amount, 1, checked)}
-                                value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <p>โซน</p>
-                            <div>
-                                <Select
-                                    onChange={handleZoneChange}
-                                    key="id"
-                                    valueShow="name"
-                                    data={zone}
-                                    value={zoneId}
-                                />
-                            </div>
-                        </div>
-                        <div className="flex justify-start">
-                            <button
-                                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                                onClick={() => validateAndEdit()}
-                            >
-                                แก้ไข
-                            </button>
-                        </div>
-                    </div>
-                    <div></div>
-                </div>
+            <Modal isOpen={open} onClose={onCloseModal} size="xl">
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <span className="text-xl">เพิ่มที่จอดรถ</span>
+                            </ModalHeader>
+                            <ModalBody>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="ชื่อ"
+                                            key="name"
+                                            onChange={(e) =>
+                                                setName(e.target.value)
+                                            }
+                                            error={false}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={name}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="คำอธิบาย"
+                                            key="desc"
+                                            onChange={(e) =>
+                                                setDescription(e.target.value)
+                                            }
+                                            error={validateLength(
+                                                description,
+                                                1,
+                                                checked
+                                            )}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={description}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div>
+                                        <TextInput
+                                            label="จำนวน"
+                                            key="amount"
+                                            type="number"
+                                            onChange={(e) =>
+                                                setAmount(e.target.value)
+                                            }
+                                            error={validateLength(
+                                                amount,
+                                                1,
+                                                checked
+                                            )}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={amount}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div>
+                                        <Select
+                                            label="โซน"
+                                            isRequired
+                                            key="zone"
+                                            onChange={handleZoneChange}
+                                            value={zoneId}
+                                            defaultSelectedKeys={[
+                                                zoneId ? zoneId.toString() : "",
+                                            ]}
+                                        >
+                                            {zones.map((zone) => (
+                                                <SelectItem
+                                                    key={zone.id}
+                                                    value={zone.id}
+                                                >
+                                                    {zone.name}
+                                                </SelectItem>
+                                            ))}
+                                        </Select>
+                                    </div>
+                                </div>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    onPress={onClose}
+                                >
+                                    ปิด
+                                </Button>
+                                <Button
+                                    variant="shadow"
+                                    color="primary"
+                                    onPress={() => validateAndEdit()}
+                                    isLoading={checked}
+                                >
+                                    แก้ไข
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
             </Modal>
             <div className="table-container w-72 sm:w-full">
                 <Table

@@ -2,7 +2,6 @@
 import { ZoneRowData } from "@/app/assets/data/zone";
 import ResponsiveTable from "@/app/components/zone/zone-table";
 import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
 import React, { useState, useEffect } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import "@reach/combobox/styles.css";
@@ -19,7 +18,15 @@ import { createZone, fetchZone } from "./function";
 import { getPublicBasePath } from "@/app/helper/basePath";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
-import { Button, Input } from "@nextui-org/react";
+import {
+    Button,
+    Input,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+} from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
 
 const Zone = () => {
@@ -245,8 +252,204 @@ const Zone = () => {
 
     return (
         <>
-            <Modal open={open} onClose={onCloseModal}>
-                <div className="mx-10 my-4">
+            <Modal isOpen={open} onClose={onCloseModal} size="4xl">
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <span className="text-xl">เพิ่มโซน</span>
+                            </ModalHeader>
+                            <ModalBody>
+                                <div className="grid grid-cols-2 gap-y-6 gap-x-4">
+                                    <div className="col-span-1">
+                                        <div className="col-span-2">
+                                            {isLoaded ? (
+                                                <>
+                                                    <div className="places-container"></div>
+                                                    <GoogleMap
+                                                        zoom={16}
+                                                        center={selectedLatLng}
+                                                        mapContainerStyle={{
+                                                            width: "100%",
+                                                            height: "350px",
+                                                        }}
+                                                        onClick={handleMapClick}
+                                                    >
+                                                        <Marker
+                                                            position={
+                                                                selectedLatLng
+                                                            }
+                                                            onLoad={(
+                                                                marker
+                                                            ) => {
+                                                                const position =
+                                                                    marker.getPosition();
+                                                                if (position) {
+                                                                    const lat =
+                                                                        position.lat();
+                                                                    const lng =
+                                                                        position.lng();
+                                                                    console.log(
+                                                                        "Selected Latitude:",
+                                                                        lat
+                                                                    );
+                                                                    console.log(
+                                                                        "Selected Longitude:",
+                                                                        lng
+                                                                    );
+                                                                    setSelectedLatLng(
+                                                                        (
+                                                                            prevState
+                                                                        ) => ({
+                                                                            ...prevState,
+                                                                            lat,
+                                                                            lng,
+                                                                        })
+                                                                    );
+                                                                }
+                                                            }}
+                                                        />
+                                                    </GoogleMap>
+                                                </>
+                                            ) : (
+                                                <></>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <div className="col-span-1">
+                                        <div className="grid grid-cols-2 gap-y-6 gap-x-4">
+                                            <div className="col-span-2">
+                                                <TextInput
+                                                    label="ชื่อ"
+                                                    key="name"
+                                                    onChange={(e) =>
+                                                        setName(e.target.value)
+                                                    }
+                                                    error={false}
+                                                    errorMessage={
+                                                        CAN_NOT_BE_EMPTY
+                                                    }
+                                                    value={name}
+                                                    isRequired
+                                                />
+                                            </div>
+                                            <div className="col-span-2">
+                                                <TextInput
+                                                    label="คำอธิบาย"
+                                                    key="description"
+                                                    onChange={(e) =>
+                                                        setDescription(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    error={false}
+                                                    errorMessage={
+                                                        CAN_NOT_BE_EMPTY
+                                                    }
+                                                    value={description}
+                                                    isRequired
+                                                />
+                                            </div>
+                                            <div className="col-span-2">
+                                                <TextInput
+                                                    label="ที่อยู่"
+                                                    key="address"
+                                                    type="text"
+                                                    onChange={(e) =>
+                                                        setAddress(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    error={false}
+                                                    errorMessage={
+                                                        CAN_NOT_BE_EMPTY
+                                                    }
+                                                    value={address}
+                                                    isRequired
+                                                />
+                                            </div>
+                                            <div className="col-span-2">
+                                                <TextInput
+                                                    label="รองรับได้"
+                                                    key="maxCapacity"
+                                                    type="number"
+                                                    onChange={(e) =>
+                                                        setMaxCapacity(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    error={false}
+                                                    errorMessage={
+                                                        CAN_NOT_BE_EMPTY
+                                                    }
+                                                    value={maxCapacity}
+                                                    isRequired
+                                                />
+                                            </div>
+                                            <div className="col-span-1">
+                                                <TextInput
+                                                    label="ละติจูด"
+                                                    key="latitude"
+                                                    type="number"
+                                                    onChange={(e) =>
+                                                        handleLatChange(e)
+                                                    }
+                                                    error={false}
+                                                    errorMessage={
+                                                        CAN_NOT_BE_EMPTY
+                                                    }
+                                                    value={
+                                                        selectedLatLng.lat?.toString() ||
+                                                        ""
+                                                    }
+                                                    isRequired
+                                                />
+                                            </div>
+                                            <div className="col-span-1">
+                                                <TextInput
+                                                    label="ลองติจูด"
+                                                    key="longitude"
+                                                    type="number"
+                                                    onChange={(e) =>
+                                                        handleLngChange(e)
+                                                    }
+                                                    error={false}
+                                                    errorMessage={
+                                                        CAN_NOT_BE_EMPTY
+                                                    }
+                                                    value={
+                                                        selectedLatLng.lng?.toString() ||
+                                                        ""
+                                                    }
+                                                    isRequired
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    onPress={onClose}
+                                >
+                                    ปิด
+                                </Button>
+                                <Button
+                                    variant="shadow"
+                                    color="primary"
+                                    onPress={() => validateAndCreate()}
+                                    isLoading={checked}
+                                >
+                                    แก้ไข
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
+                {/* <div className="mx-10 my-4">
                     <h2 className="font-bold text-xl">สร้างโซน</h2>
                     <div className="flex flex-col gap-6">
                         <div className="pt-4">
@@ -355,7 +558,7 @@ const Zone = () => {
                         </div>
                     </div>
                     <div></div>
-                </div>
+                </div> */}
             </Modal>
             <div className="w-72 sm:w-full">
                 <div>

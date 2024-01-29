@@ -1,11 +1,9 @@
-// @ts-nocheck
 "use client";
 import DeleteModal from "@/app/components/modal/delete-modal";
 import ResponsiveParkingTable from "@/app/components/parking/parking-table";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import { useEffect, useState } from "react";
-import Modal from "react-responsive-modal";
+import { use, useCallback, useEffect, useMemo, useState } from "react";
 import FilterButton, {
     FilterButtonProps,
 } from "@/app/components/button/filter";
@@ -16,9 +14,19 @@ import { createParking, fetchParking } from "./function";
 import { fetchZone } from "../device/function";
 import { validateLength } from "@/app/helper/validate";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
-import { Select } from "@/app/components/select/select";
 import { IoIosSearch } from "react-icons/io";
-import { Button, Input } from "@nextui-org/react";
+import {
+    Modal,
+    Button,
+    Input,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    Select,
+    SelectItem,
+} from "@nextui-org/react";
+import { ZoneRowData } from "@/app/assets/data/zone";
 
 const Parking = () => {
     const [open, setOpen] = useState(false);
@@ -27,11 +35,11 @@ const Parking = () => {
     const [parking, setParking] = useState<ParkingRowData[]>([]);
     const [page, setPage] = useState(1);
     const [pageAll, setPageAll] = useState(1);
-    const [zone, setZone] = useState<ZoneRowData[]>([]);
-    const [zoneId, setZoneId] = useState<ZoneRowData[]>([]);
+    const [zones, setZone] = useState<ZoneRowData[]>([]);
+    const [zoneId, setZoneId] = useState("");
     const [name, setName] = useState("");
     const [desc, setDesc] = useState("");
-    const [amount, setAmount] = useState(0);
+    const [amount, setAmount] = useState("0");
     const [search, setSearch] = useState("");
     const [checked, setChecked] = useState(false);
 
@@ -49,17 +57,26 @@ const Parking = () => {
     }, []);
 
     const handleZoneChange = (e) => {
-        console.log("zone id jaa", e);
-        setZoneId(e);
+        setZoneId(e.target.value);
     };
 
     const handleNextPage = async () => {
-        await fetchParking(setParking, setPage, setPageAll, page + 1);
+        await fetchParking(
+            setParking,
+            setPage,
+            setPageAll,
+            (page + 1).toString()
+        );
         setPage(page + 1);
     };
 
     const handlePrevPage = async () => {
-        await fetchParking(setParking, setPage, setPageAll, page - 1);
+        await fetchParking(
+            setParking,
+            setPage,
+            setPageAll,
+            (page - 1).toString()
+        );
         setPage(page + 1);
     };
 
@@ -69,136 +86,179 @@ const Parking = () => {
             setParking,
             setPage,
             setPageAll,
-            page,
+            page.toString(),
             e.target.value
         );
     };
 
     const checkAndCreate = async () => {
         setChecked(true);
-        if (name && desc && amount && zoneId) {
-            console.log("เข้ามา");
-            createParking(name, desc, amount, zoneId);
+        if (name && desc && amount && +zoneId) {
+            await createParking(name, desc, +amount, +zoneId);
+            setOpen(false);
         }
+        setChecked(false);
     };
 
-    const filterData: FilterButtonProps = [
-        {
-            title: "ใหม่ - เก่า",
-            func: async () =>
-                await fetchParking(
-                    setParking,
-                    setPage,
-                    setPageAll,
-                    page,
-                    search,
-                    "createdAt",
-                    "desc"
-                ),
-        },
-        {
-            title: "เก่า - ใหม่",
-            func: async () =>
-                await fetchParking(
-                    setParking,
-                    setPage,
-                    setPageAll,
-                    page,
-                    search,
-                    "createdAt",
-                    "asc"
-                ),
-        },
-        {
-            title: "จำนวนมาก - น้อย",
-            func: async () =>
-                await fetchParking(
-                    setParking,
-                    setPage,
-                    setPageAll,
-                    page,
-                    search,
-                    "amount",
-                    "desc"
-                ),
-        },
-        {
-            title: "จำนวนน้อย - มาก",
-            func: async () =>
-                await fetchParking(
-                    setParking,
-                    setPage,
-                    setPageAll,
-                    page,
-                    search,
-                    "amount",
-                    "asc"
-                ),
-        },
-    ];
+    const filterData: FilterButtonProps = {
+        data: [
+            {
+                title: "ใหม่ - เก่า",
+                func: async () =>
+                    await fetchParking(
+                        setParking,
+                        setPage,
+                        setPageAll,
+                        page,
+                        search,
+                        "createdAt",
+                        "desc"
+                    ),
+            },
+            {
+                title: "เก่า - ใหม่",
+                func: async () =>
+                    await fetchParking(
+                        setParking,
+                        setPage,
+                        setPageAll,
+                        page,
+                        search,
+                        "createdAt",
+                        "asc"
+                    ),
+            },
+            {
+                title: "จำนวนมาก - น้อย",
+                func: async () =>
+                    await fetchParking(
+                        setParking,
+                        setPage,
+                        setPageAll,
+                        page,
+                        search,
+                        "amount",
+                        "desc"
+                    ),
+            },
+            {
+                title: "จำนวนน้อย - มาก",
+                func: async () =>
+                    await fetchParking(
+                        setParking,
+                        setPage,
+                        setPageAll,
+                        page,
+                        search,
+                        "amount",
+                        "asc"
+                    ),
+            },
+        ],
+    };
+
+    const isInValid = useMemo(() => {
+        return validateLength(name, 1, checked);
+    }, [checked]);
     return (
         <>
-            <Modal open={open} onClose={onCloseModal}>
-                <div className="mx-10 my-4">
-                    <h2 className="font-bold text-xl">สร้างที่จอดรถ</h2>
-                    <div className="flex flex-col gap-6">
-                        <div className="pt-4">
-                            <p>ชื่อ</p>
-                            <TextInput
-                                onChange={(e) => setName(e.target.value)}
-                                error={validateLength(name, 1, checked)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                            />
-                        </div>
-                        <div>
-                            <p>คำอธิบาย</p>
-                            <TextInput
-                                onChange={(e) => setDesc(e.target.value)}
-                                error={validateLength(desc, 1, checked)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                            />
-                        </div>
-                        <div>
-                            <p>จำนวน</p>
-                            <TextInput
-                                type="number"
-                                onChange={(e) => setAmount(e.target.value)}
-                                error={validateLength(amount, 1, checked)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                            />
-                        </div>
-                        <div>
-                            <p>โซน</p>
-                            {/* <select
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-                onChange={handleZoneChange}
-              >
-                {zone.map((data) => {
-                  return (
-                    <option key={data.id} value={data.id}>
-                      {data.name}
-                    </option>
-                  );
-                })}
-              </select> */}
-                            <Select
-                                data={zone}
-                                valueShow="name"
-                                onChange={handleZoneChange}
-                                value={zoneId}
-                            />
-                        </div>{" "}
-                        <div className="flex justify-start">
-                            <button
-                                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                                onClick={() => checkAndCreate()}
-                            >
-                                เพิ่ม
-                            </button>
-                        </div>
-                    </div>
-                    <div></div>
-                </div>
+            <Modal isOpen={open} onClose={onCloseModal} size="xl">
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <span className="text-xl">เพิ่มที่จอดรถ</span>
+                            </ModalHeader>
+                            <ModalBody>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="ชื่อ"
+                                            key="name"
+                                            onChange={(e) =>
+                                                setName(e.target.value)
+                                            }
+                                            error={isInValid}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={name}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="คำอธิบาย"
+                                            key="desc"
+                                            onChange={(e) =>
+                                                setDesc(e.target.value)
+                                            }
+                                            error={validateLength(
+                                                desc,
+                                                1,
+                                                checked
+                                            )}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={desc}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div>
+                                        <TextInput
+                                            label="จำนวน"
+                                            key="amount"
+                                            type="number"
+                                            onChange={(e) =>
+                                                setAmount(e.target.value)
+                                            }
+                                            error={validateLength(
+                                                desc,
+                                                1,
+                                                checked
+                                            )}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={amount}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div>
+                                        <Select
+                                            label="โซน"
+                                            isRequired
+                                            key="zone"
+                                            onChange={handleZoneChange}
+                                            value={zoneId}
+                                        >
+                                            {zones.map((zone) => (
+                                                <SelectItem
+                                                    key={zone.id}
+                                                    value={zone.id}
+                                                >
+                                                    {zone.name}
+                                                </SelectItem>
+                                            ))}
+                                        </Select>
+                                    </div>
+                                </div>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    onPress={onClose}
+                                >
+                                    ปิด
+                                </Button>
+                                <Button
+                                    variant="shadow"
+                                    color="primary"
+                                    onPress={() => checkAndCreate()}
+                                    isLoading={checked}
+                                >
+                                    เพิ่ม
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
             </Modal>
             <div className="w-72 sm:w-full">
                 <div>
@@ -208,7 +268,6 @@ const Parking = () => {
                     <div className="w-10/12 flex align-middle">
                         <Input
                             className="w-8/12 md:w-4/12 h-10"
-                            startContent
                             type="text"
                             placeholder="ค้นหา"
                             labelPlacement="outside"
@@ -218,7 +277,7 @@ const Parking = () => {
                             onChange={handleSearch}
                         />
                         <div className="mt-2 ml-2">
-                            <FilterButton data={filterData as never} />
+                            <FilterButton data={filterData.data} />
                         </div>
                     </div>
                     <Button

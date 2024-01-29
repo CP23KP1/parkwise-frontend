@@ -3,10 +3,8 @@ import { StaffRowData } from "@/app/assets/data/staff";
 import ResponsiveStaffTable from "@/app/components/staff/staff-table";
 import React, { useEffect, useState } from "react";
 import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
 import FilterButton from "@/app/components/button/filter";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
-import TextInput from "@/app/components/input/input";
 import { createStaff, fetchStaff } from "./function";
 import { usePathname } from "next/navigation";
 import { getPublicBasePath } from "@/app/helper/basePath";
@@ -18,8 +16,18 @@ import {
     validatePhone,
     validatePhoneWording,
 } from "@/app/helper/validate";
-import { Button, Input } from "@nextui-org/react";
+import {
+    Button,
+    Input,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+} from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
+import TextInput from "@/app/components/input/input";
+import { FaAirbnb, FaPerson } from "react-icons/fa6";
 
 const Staff = () => {
     const pathname = usePathname();
@@ -116,57 +124,93 @@ const Staff = () => {
 
     return (
         <>
-            <Modal open={open} onClose={onCloseModal}>
-                <div className="mx-10 my-4">
-                    <h2 className="font-bold text-xl">สร้างเจ้าหน้าที่</h2>
-                    <div className="flex flex-col gap-6">
-                        <div className="pt-4">
-                            <p>ชื่อจริง</p>
-                            <TextInput
-                                type="text"
-                                onChange={(e) => setFirstName(e.target.value)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(firstName, 1, checked)}
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <p>นามสกุล</p>
-                            <TextInput
-                                type="text"
-                                onChange={(e) => setLastName(e.target.value)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(lastName, 1, checked)}
-                            />
-                        </div>
-                        <div>
-                            <p>อีเมล</p>
-                            <TextInput
-                                type="text"
-                                onChange={(e) => setEmail(e.target.value)}
-                                errorMessage={validateEmailWording(email)}
-                                error={validateEmail(email, checked)}
-                            />
-                        </div>
-                        <div>
-                            <p>เบอร์โทรศัพท์</p>
-                            <TextInput
-                                type="number"
-                                onChange={(e) => setPhone(e.target.value)}
-                                error={validatePhone(phone, checked)}
-                                errorMessage={validatePhoneWording(phone)}
-                            />
-                        </div>{" "}
-                        <div className="flex justify-start">
-                            <button
-                                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                                onClick={() => handleClickCheck()}
-                            >
-                                เพิ่ม
-                            </button>
-                        </div>
-                    </div>
-                    <div></div>
-                </div>
+            <Modal isOpen={open} onClose={onCloseModal} size="xl">
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <span className="text-xl">
+                                    เพิ่มเจ้าหน้าที่
+                                </span>
+                            </ModalHeader>
+                            <ModalBody>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="ชื่อจริง"
+                                            key="firstname"
+                                            onChange={(e) =>
+                                                setEmail(e.target.value)
+                                            }
+                                            error={false}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={firstName}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="นามสกุล"
+                                            key="lastname"
+                                            onChange={(e) =>
+                                                setLastName(e.target.value)
+                                            }
+                                            error={false}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={lastName}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="อีเมลล์"
+                                            key="email"
+                                            type="email"
+                                            onChange={(e) =>
+                                                setEmail(e.target.value)
+                                            }
+                                            error={false}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={email}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="เบอร์โทรศัพท์"
+                                            key="phone"
+                                            type="text"
+                                            onChange={(e) =>
+                                                setPhone(e.target.value)
+                                            }
+                                            error={false}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={phone}
+                                            isRequired
+                                        />
+                                    </div>
+                                </div>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    onPress={onClose}
+                                >
+                                    ปิด
+                                </Button>
+                                <Button
+                                    variant="shadow"
+                                    color="primary"
+                                    onPress={() => handleClickCheck()}
+                                    isLoading={checked}
+                                >
+                                    เพิ่ม
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
             </Modal>
             <div className="w-72 sm:w-full">
                 <div>
