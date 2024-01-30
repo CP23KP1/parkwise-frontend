@@ -1,7 +1,6 @@
 export const BASE_PATH = process.env.NEXT_PUBLIC_BASEPATH;
 
 export const parkingColumns = [
-    { name: "ID", uid: "id", sortable: true },
     { name: "ชื่อ", uid: "name", sortable: true },
     { name: "คำอธิบาย", uid: "description", sortable: true },
     { name: "จำนวน", uid: "amount", sortable: true },
@@ -168,4 +167,15 @@ export const logColumns = [
         uid: "staff",
         sortable: true,
     },
+    {
+        name: "เวลา",
+        uid: "timestamp",
+        sortable: true,
+    },
+    {
+        name: "เข้า/ออก",
+        uid: "arrowDirection",
+        sortable: true,
+    },
+
 ];
