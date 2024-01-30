@@ -6,5 +6,6 @@ export interface LogsRowData {
     timestamp: any;
     licenseUrl: any;
     datetime: any
+    arrowDirection: any
     actions?: any
 }
