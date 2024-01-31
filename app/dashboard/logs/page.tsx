@@ -11,6 +11,7 @@ import {
     Autocomplete,
     AutocompleteItem,
     Input,
+    Pagination,
     Select,
 } from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
@@ -182,32 +183,14 @@ const Logs = () => {
                     </div>
                 </div>
                 <ResponsiveLogsTable data={data as any[]} />
-                <div className="mt-8 flex align-middle gap-4">
-                    <button
-                        className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-                        onClick={() => setPage(page - 1)}
-                        disabled={page === 1}
-                    >
-                        <img
-                            src={getPublicBasePath("/svg/back-button.svg")}
-                            className="w-5 h-5"
-                        />
-                    </button>
-                    <div>
-                        <p className="text-center mt-2">
-                            {page} / {allPage}
-                        </p>
-                    </div>
-                    <button
-                        className="flex items-center space-x-2 border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-                        onClick={() => setPage(page + 1)}
-                        disabled={page === allPage}
-                    >
-                        <img
-                            src={getPublicBasePath("/svg/next-button.svg")}
-                            className="w-5 h-5"
-                        />
-                    </button>
+                <div className="mt-8 flex justify-end align-middle gap-4">
+                    <Pagination
+                        isCompact
+                        showControls
+                        total={allPage}
+                        initialPage={page}
+                        onChange={(page) => setPage(page)}
+                    />
                 </div>
             </div>
         </div>
