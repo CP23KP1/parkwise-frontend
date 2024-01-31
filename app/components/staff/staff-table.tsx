@@ -1,7 +1,7 @@
 // ResponsiveTable.tsx
 import React, { useCallback, useMemo, useState } from "react";
 import { Column, useTable } from "react-table";
-import { StaffRowData } from "@/app/assets/data/staff";
+import { StaffRowData } from "@/app/types/data/staff";
 import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
@@ -57,6 +57,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
         column: "name",
         direction: "ascending",
     });
+    const [loading, setLoading] = useState(false);
 
     const handleEdit = (data: StaffRowData) => {
         setId(data.id);
@@ -224,9 +225,9 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                     variant="shadow"
                                     color="primary"
                                     onPress={() => validateAndEdit()}
-                                    isLoading={checked}
+                                    isLoading={loading}
                                 >
-                                    แก้ไข
+                                    บันทึก
                                 </Button>
                             </ModalFooter>
                         </>

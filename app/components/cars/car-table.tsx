@@ -1,17 +1,21 @@
 // ResponsiveTable.tsx
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Column, useTable } from "react-table";
-import { CarRowData } from "@/app/assets/data/car";
+import { CarRowData } from "@/app/types/data/car";
 import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
 import { createCar, fetchStaff } from "@/app/dashboard/car/function";
 import { deleteCar, editCar } from "./function";
-import { StaffRowData } from "@/app/assets/data/staff";
+import { StaffRowData } from "@/app/types/data/staff";
 import { Select } from "../select/select";
 import {
     Button,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
     SortDescriptor,
     Table,
     TableBody,
@@ -22,6 +26,8 @@ import {
 } from "@nextui-org/react";
 import { carColumns } from "@/app/utils/constants";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
+import { validateLength } from "@/app/helper/validate";
+import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 
 interface Props {
     data: CarRowData[];
@@ -45,10 +51,34 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
         column: "name",
         direction: "ascending",
     });
+    const [loading, setLoading] = useState(false);
+    const [checked, setChecked] = useState(false);
 
     useEffect(() => {
         fetchStaff(setStaff);
     }, []);
+
+    const validateAndEdit = () => {
+        try {
+            setLoading(true);
+            setChecked(true);
+            if (licensePlate && color && brand && model && year && ownerId) {
+                editCar(
+                    carId,
+                    licensePlate,
+                    color,
+                    brand,
+                    model,
+                    +year,
+                    ownerId
+                );
+                setChecked(false);
+            }
+        } catch (error) {
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleStaffChange = (event: any) => {
         const selectedStaffId = parseInt(event, 10);
@@ -129,79 +159,111 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
 
     return (
         <>
-            <Modal open={open} onClose={onCloseModal}>
-                <div className="mx-10 my-4">
-                    <h2 className="font-bold text-xl">แก้ไขรถยนต์</h2>
-                    <div className="flex flex-col gap-6">
-                        <div className="pt-4">
-                            <p>ป้ายทะเบียน</p>
-                            <TextInput
-                                value={licensePlate}
-                                onChange={(e) =>
-                                    setLicensePlate(e.target.value)
-                                }
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <p>สี</p>
-                            <TextInput
-                                value={color}
-                                onChange={(e) => setColor(e.target.value)}
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <p>แบรนด์</p>
-                            <TextInput
-                                value={brand}
-                                onChange={(e) => setBrand(e.target.value)}
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <p>รุ่น</p>
-                            <TextInput
-                                value={model}
-                                onChange={(e) => setModel(e.target.value)}
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <p>ปี</p>
-                            <TextInput
-                                type="number"
-                                value={year}
-                                onChange={(e) => setYear(e.target.value)}
-                            />
-                        </div>
-                        <div>
-                            <p>เจ้าของ</p>
-                            <Select
-                                valueShow={["firstname", "lastname"]}
-                                key="id"
-                                onChange={handleStaffChange}
-                                data={staff}
-                                value={ownerId}
-                            />
-                        </div>
-                        <div className="flex justify-start">
-                            <button
-                                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                                onClick={() =>
-                                    editCar(
-                                        carId,
-                                        licensePlate,
-                                        color,
-                                        brand,
-                                        model,
-                                        parseInt(year),
-                                        ownerId
-                                    )
-                                }
-                            >
-                                แก้ไข
-                            </button>
-                        </div>
-                    </div>
-                    <div></div>
-                </div>
+            <Modal isOpen={open} onClose={onCloseModal} size="xl">
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <span className="text-xl">แก้ไขรถยนต์</span>
+                            </ModalHeader>
+                            <ModalBody>
+                                <div className="grid grid-cols-2 gap-y-6 gap-x-4">
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="ป้ายทะเบียน"
+                                            key="licensePlate"
+                                            onChange={(e) => {
+                                                setLicensePlate(e.target.value);
+                                            }}
+                                            error={validateLength(
+                                                licensePlate,
+                                                1,
+                                                checked
+                                            )}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={licensePlate}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="สี"
+                                            key="color"
+                                            onChange={(e) =>
+                                                setColor(e.target.value)
+                                            }
+                                            error={validateLength(
+                                                color,
+                                                1,
+                                                checked
+                                            )}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={color}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="แบรนด์"
+                                            key="brand"
+                                            onChange={(e) =>
+                                                setBrand(e.target.value)
+                                            }
+                                            error={checked}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={brand}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="รุ่น"
+                                            key="model"
+                                            onChange={(e) =>
+                                                setModel(e.target.value)
+                                            }
+                                            error={checked}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={model}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="ปีที่ผลิต"
+                                            key="year"
+                                            type="number"
+                                            onChange={(e) =>
+                                                setYear(e.target.value)
+                                            }
+                                            error={checked}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={year}
+                                            isRequired
+                                        />
+                                    </div>
+                                </div>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    onPress={onClose}
+                                >
+                                    ปิด
+                                </Button>
+                                <Button
+                                    variant="shadow"
+                                    color="primary"
+                                    onPress={() => validateAndEdit()}
+                                    isLoading={loading}
+                                >
+                                    เพิ่ม
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
             </Modal>
             <div className="table-container w-72 sm:w-full">
                 <Table

@@ -1,8 +1,8 @@
 // ResponsiveTable.tsx
 import React, { useMemo, useState } from "react";
 import { Column, useTable } from "react-table";
-import { StaffRowData } from "@/app/assets/data/staff";
-import { LogsRowData } from "@/app/assets/data/logs";
+import { StaffRowData } from "@/app/types/data/staff";
+import { LogsRowData } from "@/app/types/data/logs";
 import {
     SortDescriptor,
     Table,

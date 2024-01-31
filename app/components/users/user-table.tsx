@@ -1,16 +1,20 @@
 // ResponsiveTable.tsx
 import React, { useCallback, useMemo, useState } from "react";
 import { Column, useTable } from "react-table";
-import { UserRowData } from "@/app/assets/data/user";
+import { UserRowData } from "@/app/types/data/user";
 import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
 import { deleteAdmin, editAdmin } from "./function";
-import { validateLength } from "@/app/helper/validate";
-import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
+import { validateEmail, validateLength } from "@/app/helper/validate";
+import { CAN_NOT_BE_EMPTY, EMAIL_INVALID } from "@/app/helper/wording";
 import {
     Button,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
     SortDescriptor,
     Table,
     TableBody,
@@ -41,6 +45,7 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
         column: "name",
         direction: "ascending",
     });
+    const [loading, setLoading] = useState(false);
 
     const handleEdit = (data: any) => {
         setId(data.id);
@@ -118,56 +123,73 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
 
     return (
         <>
-            {" "}
-            <Modal open={open} onClose={onCloseModal}>
-                <div className="mx-10 my-4">
-                    <h2 className="font-bold text-xl">แก้ไขผู้ดูแล</h2>
-                    <div className="flex flex-col gap-6">
-                        <div className="pt-4">
-                            <p>ชื่อ</p>
-                            <TextInput
-                                value={firstName}
-                                error={validateLength(firstName, 2, checked)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                onChange={(e) => setFirstName(e.target.value)}
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <p>นามสกุล</p>
-                            <TextInput
-                                value={lastName}
-                                onChange={(e) => setLastName(e.target.value)}
-                                error={validateLength(lastName, 2, checked)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                            />
-                        </div>
-                        <div>
-                            <p>อีเมล</p>
-                            <TextInput
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                error={validateLength(email, 2, checked)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                            />
-                        </div>
-                        <div>
-                            <p>รหัสผ่าน</p>
-                            <TextInput
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </div>
-                        <div className="flex justify-start">
-                            <button
-                                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                                onClick={() => validateAndEdit()}
-                            >
-                                แก้ไข
-                            </button>
-                        </div>
-                    </div>
-                    <div></div>
-                </div>
+            <Modal isOpen={open} onClose={onCloseModal} size="xl">
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <span className="text-xl">
+                                    แก้ไขผู้ดูแลระบบ
+                                </span>
+                            </ModalHeader>
+                            <ModalBody>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="ชื่อจริง"
+                                            key="firstname"
+                                            onChange={(e) =>
+                                                setFirstName(e.target.value)
+                                            }
+                                            error={validateLength(
+                                                firstName,
+                                                1,
+                                                checked
+                                            )}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={firstName}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="นามสกุล"
+                                            key="lastname"
+                                            onChange={(e) =>
+                                                setLastName(e.target.value)
+                                            }
+                                            error={validateLength(
+                                                lastName,
+                                                1,
+                                                checked
+                                            )}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={lastName}
+                                            isRequired
+                                        />
+                                    </div>
+                                </div>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    onPress={onClose}
+                                >
+                                    ปิด
+                                </Button>
+                                <Button
+                                    variant="shadow"
+                                    color="primary"
+                                    onPress={() => validateAndEdit()}
+                                    isLoading={loading}
+                                >
+                                    บันทึก
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
             </Modal>
             <div className="table-container w-72 sm:w-full">
                 <Table

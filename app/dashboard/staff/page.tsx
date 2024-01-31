@@ -1,5 +1,5 @@
 "use client";
-import { StaffRowData } from "@/app/assets/data/staff";
+import { StaffRowData } from "@/app/types/data/staff";
 import ResponsiveStaffTable from "@/app/components/staff/staff-table";
 import React, { useEffect, useState } from "react";
 import "react-responsive-modal/styles.css";
@@ -24,6 +24,7 @@ import {
     ModalContent,
     ModalFooter,
     ModalHeader,
+    Pagination,
 } from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
 import TextInput from "@/app/components/input/input";
@@ -33,10 +34,6 @@ const Staff = () => {
     const pathname = usePathname();
 
     const [staff, setStaff] = useState<StaffRowData[]>([]);
-    useEffect(() => {
-        fetchStaff(setStaff, setPage, setAllPage);
-    }, []);
-
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -46,6 +43,11 @@ const Staff = () => {
     const [search, setSearch] = useState("");
     const [status, setStatus] = useState("all");
     const [checked, setChecked] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        fetchStaff(setStaff, setPage, setAllPage, page, "all", undefined);
+    }, [page]);
 
     const handleSelectActive = async () => {
         await fetchStaff(setStaff, setPage, setAllPage, page, "active", search);
@@ -92,18 +94,6 @@ const Staff = () => {
     const onOpenModal = () => setOpen(true);
     const onCloseModal = () => setOpen(false);
 
-    const handleNextPage = async () => {
-        await fetchStaff(setStaff, setPage, setAllPage, page + 1);
-        // window.location.href = getPublicBasePath(`/dashboard/staff/${page + 1}`);
-        setPage(page + 1);
-    };
-
-    const handlePrevPage = async () => {
-        await fetchStaff(setStaff, setPage, setAllPage, page - 1);
-        // window.location.href = getPublicBasePath(`/dashboard/staff/${page - 1}`);
-        setPage(page - 1);
-    };
-
     const handleClickCheck = () => {
         setChecked(true);
         if (firstName && lastName && email && phone) {
@@ -140,7 +130,7 @@ const Staff = () => {
                                             label="ชื่อจริง"
                                             key="firstname"
                                             onChange={(e) =>
-                                                setEmail(e.target.value)
+                                                setFirstName(e.target.value)
                                             }
                                             error={false}
                                             errorMessage={CAN_NOT_BE_EMPTY}
@@ -203,7 +193,7 @@ const Staff = () => {
                                     variant="shadow"
                                     color="primary"
                                     onPress={() => handleClickCheck()}
-                                    isLoading={checked}
+                                    isLoading={loading}
                                 >
                                     เพิ่ม
                                 </Button>
@@ -242,32 +232,14 @@ const Staff = () => {
                     </Button>
                 </div>
                 <ResponsiveStaffTable data={staff} />
-                <div className="mt-8 flex align-middle gap-4">
-                    <button
-                        className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-                        onClick={handlePrevPage}
-                        disabled={page == 1}
-                    >
-                        <img
-                            src={getPublicBasePath("/svg/back-button.svg")}
-                            className="w-5 h-5"
-                        />
-                    </button>
-                    <div>
-                        <p className="text-center mt-2">
-                            {page} / {allPage}
-                        </p>
-                    </div>
-                    <button
-                        className="flex items-center space-x-2 border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-                        onClick={handleNextPage}
-                        disabled={page == allPage}
-                    >
-                        <img
-                            src={getPublicBasePath("/svg/next-button.svg")}
-                            className="w-5 h-5"
-                        />
-                    </button>
+                <div className="mt-8 flex justify-end align-middle gap-4">
+                    <Pagination
+                        isCompact
+                        showControls
+                        total={allPage}
+                        initialPage={page}
+                        onChange={(page) => setPage(page)}
+                    />
                 </div>
             </div>
         </>

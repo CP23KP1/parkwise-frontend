@@ -1,6 +1,8 @@
 "use client";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { ListboxItem } from "@nextui-org/react";
+import { FaCartPlus } from "react-icons/fa6";
 
 export interface SidebarItemRenderProps {
     name: string;
@@ -20,7 +22,14 @@ const SidebarItem: React.FC<SidebarItemRenderProps> = ({
     return (
         //* bg white and opacity 20% when path is true
         <Link href={link}>
-            <div
+            <ListboxItem
+                key={name}
+                startContent={<FaCartPlus />}
+                onClick={() => {}}
+            >
+                {name}
+            </ListboxItem>
+            {/* <div
                 className={`transform hover:translate-x-1 grid grid-cols-3 w-auto align-middle justify-center my-2 mx-2 rounded-lg pt-3 hover:bg-[#e9e9ff] ${
                     path() && "bg-[#5957ff]"
                 } hover:cursor-pointer`}
@@ -35,7 +44,7 @@ const SidebarItem: React.FC<SidebarItemRenderProps> = ({
                         </h1>
                     )}
                 </div>
-            </div>
+            </div> */}
         </Link>
     );
 };

@@ -1,20 +1,28 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { CarRowData } from "@/app/assets/data/car";
+import { CarRowData } from "@/app/types/data/car";
 import ResponsiveCarTable from "@/app/components/cars/car-table";
 import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
 import FilterButton from "@/app/components/button/filter";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import TextInput from "@/app/components/input/input";
 import { createCar, fetchCar, fetchStaff } from "./function";
 import { usePathname } from "next/navigation";
 import { getPublicBasePath } from "@/app/helper/basePath";
-import { StaffRowData } from "@/app/assets/data/staff";
+import { StaffRowData } from "@/app/types/data/staff";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
 import { Select } from "@/app/components/select/select";
-import { Button, Input } from "@nextui-org/react";
+import {
+    Button,
+    Input,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    Pagination,
+} from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
 
 const Car = () => {
@@ -24,19 +32,28 @@ const Car = () => {
     const [model, setModel] = useState("");
     const [year, setYear] = useState("");
     const [ownerId, setOwnerId] = useState("");
-    const [page, setPage] = useState(0);
-    const [allPage, setAllPage] = useState(0);
+    const [page, setPage] = useState(1);
+    const [allPage, setAllPage] = useState(1);
     const [staff, setStaff] = useState<StaffRowData[]>([]);
     const [search, setSearch] = useState("");
     const [orderBy, setOrderBy] = useState("createdAt");
     const [order, setOrder] = useState("desc");
     const [checked, setChecked] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const [car, setCar] = useState<CarRowData[]>([]);
     useEffect(() => {
-        fetchCar(setCar, setPage, setAllPage, "1", search, orderBy, order);
+        fetchCar(
+            setCar,
+            setPage,
+            setAllPage,
+            page.toString(),
+            search,
+            orderBy,
+            order
+        );
         fetchStaff(setStaff);
-    }, []);
+    }, [page]);
 
     const handlePrevPage = async () => {
         await fetchCar(setCar, setPage, setAllPage, (page - 1).toString());
@@ -49,9 +66,16 @@ const Car = () => {
     };
 
     const validateAndCreate = () => {
-        setChecked(true);
-        if (licensePlate && color && brand && model && year && ownerId) {
-            createCar(licensePlate, color, brand, model, year, ownerId);
+        try {
+            setLoading(true);
+            setChecked(true);
+            if (licensePlate && color && brand && model && year && ownerId) {
+                createCar(licensePlate, color, brand, model, year, ownerId);
+                setChecked(false);
+            }
+        } catch (error) {
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -117,87 +141,110 @@ const Car = () => {
 
     return (
         <>
-            <Modal open={open} onClose={onCloseModal}>
-                <div className="mx-10 my-4">
-                    <h2 className="font-bold text-xl">สร้างรถยนต์</h2>
-                    <div className="flex flex-col gap-6">
-                        <div className="pt-4">
-                            <p>ป้ายทะเบียน</p>
-                            <TextInput
-                                value={licensePlate}
-                                onChange={(e) =>
-                                    setLicensePlate(e.target.value)
-                                }
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(licensePlate, 1, checked)}
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <p>สี</p>
-                            <TextInput
-                                onChange={(e) => setColor(e.target.value)}
-                                error={validateLength(color, 1, checked)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <p>แบรนด์</p>
-                            <TextInput
-                                onChange={(e) => setBrand(e.target.value)}
-                                error={validateLength(brand, 1, checked)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <p>รุ่น</p>
-                            <TextInput
-                                onChange={(e) => setModel(e.target.value)}
-                                error={validateLength(model, 1, checked)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <p>ปี</p>
-                            <TextInput
-                                type="number"
-                                onChange={(e) => setYear(e.target.value)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(year, 1, checked)}
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <p>เจ้าของ</p>
-                            <Select
-                                onChange={handleStaffChange}
-                                key="id"
-                                data={staff}
-                                value={ownerId}
-                                valueShow={["firstname", "lastname"]}
-                            />
-                            {/* <select
-                className="border-2 border-solid border-gray-600 w-80 h-10"
-                onChange={handleStaffChange}
-              >
-                {staff.map((data) => {
-                  return (
-                    <option key={data.id} value={data.id}>
-                      {data.firstname + " " + data.lastname}
-                    </option>
-                  );
-                })}
-              </select> */}
-                        </div>
-                        <div className="flex justify-start">
-                            <button
-                                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                                onClick={() => validateAndCreate()}
-                            >
-                                สร้าง
-                            </button>
-                        </div>
-                    </div>
-                    <div></div>
-                </div>
+            <Modal isOpen={open} onClose={onCloseModal} size="xl">
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <span className="text-xl">เพิ่มรถยนต์</span>
+                            </ModalHeader>
+                            <ModalBody>
+                                <div className="grid grid-cols-2 gap-y-6 gap-x-4">
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="ป้ายทะเบียน"
+                                            key="licensePlate"
+                                            onChange={(e) => {
+                                                setLicensePlate(e.target.value);
+                                            }}
+                                            error={validateLength(
+                                                licensePlate,
+                                                1,
+                                                checked
+                                            )}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={licensePlate}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="สี"
+                                            key="color"
+                                            onChange={(e) =>
+                                                setColor(e.target.value)
+                                            }
+                                            error={validateLength(
+                                                color,
+                                                1,
+                                                checked
+                                            )}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={color}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="แบรนด์"
+                                            key="brand"
+                                            onChange={(e) =>
+                                                setBrand(e.target.value)
+                                            }
+                                            error={checked}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={brand}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="รุ่น"
+                                            key="model"
+                                            onChange={(e) =>
+                                                setModel(e.target.value)
+                                            }
+                                            error={checked}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={model}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="ปีที่ผลิต"
+                                            key="year"
+                                            onChange={(e) =>
+                                                setYear(e.target.value)
+                                            }
+                                            error={checked}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={year}
+                                            isRequired
+                                        />
+                                    </div>
+                                </div>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    onPress={onClose}
+                                >
+                                    ปิด
+                                </Button>
+                                <Button
+                                    variant="shadow"
+                                    color="primary"
+                                    onPress={() => validateAndCreate()}
+                                    isLoading={loading}
+                                >
+                                    เพิ่ม
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
             </Modal>
             <div className="w-72 sm:w-full">
                 <h1 className="text-xl font-bold">รถยนต์</h1>
@@ -224,32 +271,14 @@ const Car = () => {
                 </Button>
             </div>
             <ResponsiveCarTable data={car} />
-            <div className="mt-8 flex align-middle gap-4">
-                <button
-                    className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-                    disabled={page === 1}
-                    onClick={handlePrevPage}
-                >
-                    <img
-                        src={getPublicBasePath("/svg/back-button.svg")}
-                        className="w-5 h-5"
-                    />
-                </button>
-                <div>
-                    <p className="text-center mt-2">
-                        {page} / {allPage}
-                    </p>
-                </div>
-                <button
-                    className="flex items-center space-x-2 border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-                    onClick={handleNextPage}
-                    disabled={page == allPage}
-                >
-                    <img
-                        src={getPublicBasePath("/svg/next-button.svg")}
-                        className="w-5 h-5"
-                    />
-                </button>
+            <div className="mt-8 flex justify-end align-middle gap-4">
+                <Pagination
+                    isCompact
+                    showControls
+                    total={allPage}
+                    initialPage={page}
+                    onChange={(page) => setPage(page)}
+                />
             </div>
         </>
     );

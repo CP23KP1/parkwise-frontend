@@ -3,7 +3,7 @@ import React, { useCallback, useMemo, useState } from "react";
 import { Column, useTable } from "react-table";
 import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
-import { ZoneRowData } from "@/app/assets/data/zone";
+import { ZoneRowData } from "@/app/types/data/zone";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import TextInput from "../input/input";
 import { deleteZone, editZone } from "./function";
@@ -48,6 +48,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
         column: "name",
         direction: "ascending",
     });
+    const [loading, setLoading] = useState(false);
 
     const handleLatChange = (event: any) => {
         setSelectedLatLng({
@@ -371,7 +372,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                     variant="shadow"
                                     color="primary"
                                     onPress={() => validateAndEdit()}
-                                    isLoading={checked}
+                                    isLoading={loading}
                                 >
                                     แก้ไข
                                 </Button>

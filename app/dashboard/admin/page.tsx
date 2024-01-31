@@ -1,22 +1,30 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { UserRowData } from "@/app/assets/data/user";
+import { UserRowData } from "@/app/types/data/user";
 import ResponsiveUserTable from "@/app/components/users/user-table";
 import "react-responsive-modal/styles.css";
-import { Modal } from "react-responsive-modal";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import FilterButton from "@/app/components/button/filter";
 import TextInput from "@/app/components/input/input";
 import { createUser, fetchUsers } from "./function";
 import { getPublicBasePath } from "@/app/helper/basePath";
-import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
+import { CAN_NOT_BE_EMPTY, EMAIL_INVALID } from "@/app/helper/wording";
 import {
     validateEmail,
     validateEmailWording,
     validateLength,
     validatePassword,
 } from "@/app/helper/validate";
-import { Button, Input } from "@nextui-org/react";
+import {
+    Button,
+    Input,
+    Modal,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    Pagination,
+} from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
 
 const User = () => {
@@ -26,6 +34,7 @@ const User = () => {
     const onCloseModal = () => setOpen(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [users, setUsers] = useState<UserRowData[]>([]);
@@ -35,6 +44,8 @@ const User = () => {
     const [orderField, setOrderField] = useState("createdAt");
     const [order, setOrder] = useState("desc");
     const [checked, setChecked] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
         fetchUsers(
             setUsers,
@@ -45,7 +56,7 @@ const User = () => {
             orderField,
             order
         );
-    }, []);
+    }, [page]);
 
     const filterData: FilterMenuProps[] = [
         {
@@ -123,54 +134,120 @@ const User = () => {
     };
     return (
         <>
-            <Modal open={open} onClose={onCloseModal}>
-                <div className="mx-10 my-4">
-                    <h2 className="font-bold text-xl">สร้างผู้ดูแลระบบ</h2>
-                    <div className="flex flex-col gap-6">
-                        <div className="pt-4">
-                            <p>ชื่อ</p>
-                            <TextInput
-                                onChange={(e) => setFirstName(e.target.value)}
-                                error={validateLength(firstName, 1, checked)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <p>นามสกุล</p>
-                            <TextInput
-                                onChange={(e) => setLastName(e.target.value)}
-                                error={validateLength(lastName, 1, checked)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                            />
-                        </div>
-                        <div>
-                            <p>อีเมล</p>
-                            <TextInput
-                                onChange={(e) => setEmail(e.target.value)}
-                                errorMessage={validateEmailWording(email)}
-                                error={validateEmail(email, checked)}
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <p>รหัสผ่าน</p>
-                            <TextInput
-                                type="password"
-                                onChange={(e) => setPassword(e.target.value)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validatePassword(password, checked)}
-                            />
-                        </div>
-                        <div className="flex justify-start">
-                            <button
-                                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                                onClick={() => validateAndCreate()}
-                            >
-                                เพิ่ม
-                            </button>
-                        </div>
-                    </div>
-                    <div></div>
-                </div>
+            <Modal isOpen={open} onClose={onCloseModal} size="xl">
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalHeader className="flex flex-col gap-1">
+                                <span className="text-xl">
+                                    เพิ่มผู้ดูแลระบบ
+                                </span>
+                            </ModalHeader>
+                            <ModalBody>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="ชื่อจริง"
+                                            key="firstname"
+                                            onChange={(e) =>
+                                                setFirstName(e.target.value)
+                                            }
+                                            error={validateLength(
+                                                firstName,
+                                                1,
+                                                checked
+                                            )}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={firstName}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="นามสกุล"
+                                            key="lastname"
+                                            onChange={(e) =>
+                                                setLastName(e.target.value)
+                                            }
+                                            error={validateLength(
+                                                lastName,
+                                                1,
+                                                checked
+                                            )}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={lastName}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-2">
+                                        <TextInput
+                                            label="อีเมลล์"
+                                            key="email"
+                                            type="email"
+                                            onChange={(e) =>
+                                                setEmail(e.target.value)
+                                            }
+                                            error={validateEmail(
+                                                email,
+                                                checked
+                                            )}
+                                            errorMessage={EMAIL_INVALID}
+                                            value={email}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="รหัสผ่าน"
+                                            key="password"
+                                            type="password"
+                                            onChange={(e) =>
+                                                setPassword(e.target.value)
+                                            }
+                                            error={false}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={password}
+                                            isRequired
+                                        />
+                                    </div>
+                                    <div className="col-span-1">
+                                        <TextInput
+                                            label="ยืนยันรหัสผ่าน"
+                                            key="password"
+                                            type="password"
+                                            onChange={(e) =>
+                                                setConfirmPassword(
+                                                    e.target.value
+                                                )
+                                            }
+                                            error={false}
+                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            value={confirmPassword}
+                                            isRequired
+                                        />
+                                    </div>
+                                </div>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button
+                                    color="danger"
+                                    variant="light"
+                                    onPress={onClose}
+                                >
+                                    ปิด
+                                </Button>
+                                <Button
+                                    variant="shadow"
+                                    color="primary"
+                                    onPress={() => validateAndCreate()}
+                                    isLoading={loading}
+                                >
+                                    เพิ่ม
+                                </Button>
+                            </ModalFooter>
+                        </>
+                    )}
+                </ModalContent>
             </Modal>
             <div className="w-72 sm:w-full">
                 <div>
@@ -202,32 +279,14 @@ const User = () => {
                     </Button>
                 </div>
                 <ResponsiveUserTable data={users} />
-                <div className="mt-8 flex align-middle gap-4">
-                    <button
-                        className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-                        onClick={handlePrevPage}
-                        disabled={page === 1}
-                    >
-                        <img
-                            src={getPublicBasePath("/svg/back-button.svg")}
-                            className="w-5 h-5"
-                        />
-                    </button>
-                    <div>
-                        <p className="text-center mt-2">
-                            {page} / {allPage}
-                        </p>
-                    </div>
-                    <button
-                        className="flex items-center space-x-2 border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-                        onClick={handleNextPage}
-                        disabled={page == allPage}
-                    >
-                        <img
-                            src={getPublicBasePath("/svg/next-button.svg")}
-                            className="w-5 h-5"
-                        />
-                    </button>
+                <div className="mt-8 flex justify-end align-middle gap-4">
+                    <Pagination
+                        isCompact
+                        showControls
+                        total={allPage}
+                        initialPage={page}
+                        onChange={(page) => setPage(page)}
+                    />
                 </div>
             </div>
         </>

@@ -5,7 +5,7 @@ import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
 import { deleteParking, editParking } from "./function";
-import { ZoneRowData } from "@/app/assets/data/zone";
+import { ZoneRowData } from "@/app/types/data/zone";
 import { fetchZone } from "@/app/dashboard/device/function";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
@@ -25,6 +25,7 @@ import {
     TableHeader,
     TableRow,
     SelectItem,
+    Pagination,
 } from "@nextui-org/react";
 import { parkingColumns } from "@/app/utils/constants";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
@@ -50,6 +51,7 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
         column: "name",
         direction: "ascending",
     });
+    const [loading, setLoading] = useState(false);
 
     const validateAndEdit = () => {
         setChecked(true);
@@ -230,7 +232,7 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
                                     variant="shadow"
                                     color="primary"
                                     onPress={() => validateAndEdit()}
-                                    isLoading={checked}
+                                    isLoading={loading}
                                 >
                                     แก้ไข
                                 </Button>

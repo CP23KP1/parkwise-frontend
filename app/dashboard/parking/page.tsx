@@ -25,8 +25,9 @@ import {
     ModalFooter,
     Select,
     SelectItem,
+    Pagination,
 } from "@nextui-org/react";
-import { ZoneRowData } from "@/app/assets/data/zone";
+import { ZoneRowData } from "@/app/types/data/zone";
 
 const Parking = () => {
     const [open, setOpen] = useState(false);
@@ -34,7 +35,7 @@ const Parking = () => {
     const onCloseModal = () => setOpen(false);
     const [parking, setParking] = useState<ParkingRowData[]>([]);
     const [page, setPage] = useState(1);
-    const [pageAll, setPageAll] = useState(1);
+    const [allPage, setAllPage] = useState(1);
     const [zones, setZone] = useState<ZoneRowData[]>([]);
     const [zoneId, setZoneId] = useState("");
     const [name, setName] = useState("");
@@ -42,19 +43,20 @@ const Parking = () => {
     const [amount, setAmount] = useState("0");
     const [search, setSearch] = useState("");
     const [checked, setChecked] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetchZone(setZone, setZoneId);
         fetchParking(
             setParking,
             setPage,
-            setPageAll,
-            page,
+            setAllPage,
+            page.toString(),
             search,
             "createdAt",
             "desc"
         );
-    }, []);
+    }, [page]);
 
     const handleZoneChange = (e) => {
         setZoneId(e.target.value);
@@ -64,7 +66,7 @@ const Parking = () => {
         await fetchParking(
             setParking,
             setPage,
-            setPageAll,
+            setAllPage,
             (page + 1).toString()
         );
         setPage(page + 1);
@@ -74,7 +76,7 @@ const Parking = () => {
         await fetchParking(
             setParking,
             setPage,
-            setPageAll,
+            setAllPage,
             (page - 1).toString()
         );
         setPage(page + 1);
@@ -85,7 +87,7 @@ const Parking = () => {
         await fetchParking(
             setParking,
             setPage,
-            setPageAll,
+            setAllPage,
             page.toString(),
             e.target.value
         );
@@ -108,7 +110,7 @@ const Parking = () => {
                     await fetchParking(
                         setParking,
                         setPage,
-                        setPageAll,
+                        setAllPage,
                         page,
                         search,
                         "createdAt",
@@ -121,7 +123,7 @@ const Parking = () => {
                     await fetchParking(
                         setParking,
                         setPage,
-                        setPageAll,
+                        setAllPage,
                         page,
                         search,
                         "createdAt",
@@ -134,7 +136,7 @@ const Parking = () => {
                     await fetchParking(
                         setParking,
                         setPage,
-                        setPageAll,
+                        setAllPage,
                         page,
                         search,
                         "amount",
@@ -147,7 +149,7 @@ const Parking = () => {
                     await fetchParking(
                         setParking,
                         setPage,
-                        setPageAll,
+                        setAllPage,
                         page,
                         search,
                         "amount",
@@ -251,7 +253,7 @@ const Parking = () => {
                                     variant="shadow"
                                     color="primary"
                                     onPress={() => checkAndCreate()}
-                                    isLoading={checked}
+                                    isLoading={loading}
                                 >
                                     เพิ่ม
                                 </Button>
@@ -289,32 +291,14 @@ const Parking = () => {
                     </Button>
                 </div>
                 <ResponsiveParkingTable data={parking} />
-                <div className="mt-8 flex align-middle gap-4">
-                    <button
-                        className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-                        onClick={handlePrevPage}
-                        disabled={page === 1}
-                    >
-                        <img
-                            src={getPublicBasePath("/svg/back-button.svg")}
-                            className="w-5 h-5"
-                        />
-                    </button>
-                    <div>
-                        <p className="text-center mt-2">
-                            {page} / {pageAll || 1}
-                        </p>
-                    </div>
-                    <button
-                        className="flex items-center space-x-2 border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-                        onClick={handleNextPage}
-                        disabled={page === pageAll}
-                    >
-                        <img
-                            src={getPublicBasePath("/svg/next-button.svg")}
-                            className="w-5 h-5"
-                        />
-                    </button>
+                <div className="mt-8 flex justify-end align-middle gap-4">
+                    <Pagination
+                        isCompact
+                        showControls
+                        total={allPage}
+                        initialPage={page}
+                        onChange={(page) => setPage(page)}
+                    />
                 </div>
             </div>
         </>

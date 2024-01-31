@@ -1,5 +1,5 @@
 "use client";
-import { ZoneRowData } from "@/app/assets/data/zone";
+import { ZoneRowData } from "@/app/types/data/zone";
 import ResponsiveTable from "@/app/components/zone/zone-table";
 import "react-responsive-modal/styles.css";
 import React, { useState, useEffect } from "react";
@@ -26,6 +26,7 @@ import {
     ModalContent,
     ModalFooter,
     ModalHeader,
+    Pagination,
 } from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
 
@@ -36,33 +37,14 @@ const Zone = () => {
     const [maxCapacity, setMaxCapacity] = useState("");
     const [address, setAddress] = useState("");
     const [createStatus, setCreateStatus] = useState(false);
-    const [page, setPage] = useState(0);
-    const [allPage, setAllPage] = useState(0);
+    const [page, setPage] = useState(1);
+    const [allPage, setAllPage] = useState(1);
     const [search, setSearch] = useState("");
     const [order, setOrder] = useState("desc");
     const [orderBy, setOrderBy] = useState("createdAt");
     const [checked, setChecked] = useState(false);
     const pathname = usePathname();
-
-    const handlePrevPage = async () => {
-        await fetchZone(
-            setDataShow,
-            setPage,
-            setAllPage,
-            (page - 1).toString()
-        );
-        setPage(page - 1);
-    };
-
-    const handleNextPage = async () => {
-        await fetchZone(
-            setDataShow,
-            setPage,
-            setAllPage,
-            (page + 1).toString()
-        );
-        setPage(page + 1);
-    };
+    const [loading, setLoading] = useState(false);
 
     const validateAndCreate = () => {
         setChecked(true);
@@ -80,8 +62,9 @@ const Zone = () => {
     };
     useEffect(() => {
         getPage();
-        fetchZone(setDataShow, setPage, setAllPage);
-    }, []);
+        fetchZone(setDataShow, setPage, setAllPage, page.toString());
+    }, [page]);
+
     const [open, setOpen] = useState(false);
     const onOpenModal = () => setOpen(true);
     const onCloseModal = () => setOpen(false);
@@ -441,7 +424,7 @@ const Zone = () => {
                                     variant="shadow"
                                     color="primary"
                                     onPress={() => validateAndCreate()}
-                                    isLoading={checked}
+                                    isLoading={loading}
                                 >
                                     แก้ไข
                                 </Button>
@@ -590,32 +573,14 @@ const Zone = () => {
                     </Button>
                 </div>
                 <ResponsiveTable data={dataShow} />
-                <div className="mt-8 flex align-middle gap-4">
-                    <button
-                        className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-                        disabled={page == 1}
-                        onClick={handlePrevPage}
-                    >
-                        <img
-                            src={getPublicBasePath("/svg/back-button.svg")}
-                            className="w-5 h-5"
-                        />
-                    </button>
-                    <div>
-                        <p className="text-center mt-2">
-                            {page} / {allPage}
-                        </p>
-                    </div>
-                    <button
-                        className="flex items-center space-x-2 border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-                        onClick={handleNextPage}
-                        disabled={page == allPage}
-                    >
-                        <img
-                            src={getPublicBasePath("/svg/next-button.svg")}
-                            className="w-5 h-5"
-                        />
-                    </button>
+                <div className="mt-8 flex justify-end align-middle gap-4">
+                    <Pagination
+                        isCompact
+                        showControls
+                        total={allPage}
+                        initialPage={page}
+                        onChange={(page) => setPage(page)}
+                    />
                 </div>
             </div>
         </>

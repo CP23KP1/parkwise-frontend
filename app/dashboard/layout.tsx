@@ -1,5 +1,11 @@
 import React from "react";
 import Sidebar from "../components/sidebar";
+import { Kanit } from "next/font/google";
+
+const kanit = Kanit({
+    weight: "200",
+    preload: false,
+});
 
 interface DashboardLayoutProps {
     children: React.ReactNode;
@@ -9,7 +15,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     return (
         <html>
             <head></head>
-            <body>
+            <body className={kanit.className}>
                 <div className="flex">
                     <Sidebar />
 
