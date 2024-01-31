@@ -25,6 +25,7 @@ import {
     TableHeader,
     TableRow,
     SelectItem,
+    Pagination,
 } from "@nextui-org/react";
 import { parkingColumns } from "@/app/utils/constants";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
