@@ -42,6 +42,7 @@ const Parking = () => {
     const [amount, setAmount] = useState("0");
     const [search, setSearch] = useState("");
     const [checked, setChecked] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetchZone(setZone, setZoneId);
@@ -251,7 +252,7 @@ const Parking = () => {
                                     variant="shadow"
                                     color="primary"
                                     onPress={() => checkAndCreate()}
-                                    isLoading={checked}
+                                    isLoading={loading}
                                 >
                                     เพิ่ม
                                 </Button>

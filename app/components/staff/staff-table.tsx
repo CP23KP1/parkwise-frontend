@@ -57,6 +57,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
         column: "name",
         direction: "ascending",
     });
+    const [loading, setLoading] = useState(false);
 
     const handleEdit = (data: StaffRowData) => {
         setId(data.id);
@@ -224,9 +225,9 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                     variant="shadow"
                                     color="primary"
                                     onPress={() => validateAndEdit()}
-                                    isLoading={checked}
+                                    isLoading={loading}
                                 >
-                                    แก้ไข
+                                    บันทึก
                                 </Button>
                             </ModalFooter>
                         </>

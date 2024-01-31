@@ -43,6 +43,7 @@ const Zone = () => {
     const [orderBy, setOrderBy] = useState("createdAt");
     const [checked, setChecked] = useState(false);
     const pathname = usePathname();
+    const [loading, setLoading] = useState(false);
 
     const handlePrevPage = async () => {
         await fetchZone(
@@ -441,7 +442,7 @@ const Zone = () => {
                                     variant="shadow"
                                     color="primary"
                                     onPress={() => validateAndCreate()}
-                                    isLoading={checked}
+                                    isLoading={loading}
                                 >
                                     แก้ไข
                                 </Button>

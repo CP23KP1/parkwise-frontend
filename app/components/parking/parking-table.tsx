@@ -50,6 +50,7 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
         column: "name",
         direction: "ascending",
     });
+    const [loading, setLoading] = useState(false);
 
     const validateAndEdit = () => {
         setChecked(true);
@@ -230,7 +231,7 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
                                     variant="shadow"
                                     color="primary"
                                     onPress={() => validateAndEdit()}
-                                    isLoading={checked}
+                                    isLoading={loading}
                                 >
                                     แก้ไข
                                 </Button>

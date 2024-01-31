@@ -54,6 +54,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
         column: "name",
         direction: "ascending",
     });
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetchZone(setZone);
@@ -253,7 +254,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                                     variant="shadow"
                                     color="primary"
                                     onPress={() => validateAndEdit()}
-                                    isLoading={checked}
+                                    isLoading={loading}
                                 >
                                     แก้ไข
                                 </Button>

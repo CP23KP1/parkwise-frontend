@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from "react";
-import { menuType } from "../assets/data/menu";
-import SidebarItem from "./sidebar-item";
 import { logout } from "../helper/auth";
 import { getPublicBasePath } from "../helper/basePath";
-import { Button } from "@nextui-org/react";
+import { Button, Listbox, ListboxItem, cn } from "@nextui-org/react";
+import { FaCartPlus } from "react-icons/fa6";
+import { usePathname, useRouter } from "next/navigation";
+import { menuType } from "../assets/data/menu";
 
 interface SidebarProps {
     open?: boolean;
@@ -14,6 +15,8 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
     const [openSidebar, setOpenSidebar] = useState(true);
     const width = openSidebar ? "w-42 md:w-56" : "w-16";
     const widthMobile = openSidebar ? "w-16 md:w-56" : "w-16";
+    const router = useRouter();
+    const pathname = usePathname();
 
     const handleClickOpenSidebar = () => {
         setOpenSidebar(!openSidebar);
@@ -89,17 +92,35 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                         maxHeight: "calc(100vh - 64px)",
                     }}
                 >
-                    {menuType.map((item) => {
-                        return (
-                            <SidebarItem
-                                key={item.name}
-                                icon={getPublicBasePath(item.icon)}
-                                name={item.name}
-                                link={getPublicBasePath(item.link)}
-                                open={openSidebar}
-                            />
-                        );
-                    })}
+                    <Listbox
+                        variant="solid"
+                        aria-label="Listbox menu with icons"
+                        itemClasses={{
+                            base: `px-3 gap-3 h-12 data-[hover=true]:bg-primary data-[hover=true]:opacity-80 rounded-lg`,
+                        }}
+                        color="primary"
+                    >
+                        {menuType.map((item) => {
+                            const path = () => pathname === item.link;
+                            return (
+                                <ListboxItem
+                                    className={cn({
+                                        "bg-primary rounded-lg text-white":
+                                            path(),
+                                    })}
+                                    key={item.name}
+                                    startContent={item.icon}
+                                    onClick={() => {
+                                        router.push(
+                                            getPublicBasePath(item.link)
+                                        );
+                                    }}
+                                >
+                                    {item.name}
+                                </ListboxItem>
+                            );
+                        })}
+                    </Listbox>
                     {renderLogout()}
                 </div>
             </div>

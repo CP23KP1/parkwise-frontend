@@ -46,6 +46,7 @@ const Staff = () => {
     const [search, setSearch] = useState("");
     const [status, setStatus] = useState("all");
     const [checked, setChecked] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleSelectActive = async () => {
         await fetchStaff(setStaff, setPage, setAllPage, page, "active", search);
@@ -140,7 +141,7 @@ const Staff = () => {
                                             label="ชื่อจริง"
                                             key="firstname"
                                             onChange={(e) =>
-                                                setEmail(e.target.value)
+                                                setFirstName(e.target.value)
                                             }
                                             error={false}
                                             errorMessage={CAN_NOT_BE_EMPTY}
@@ -203,7 +204,7 @@ const Staff = () => {
                                     variant="shadow"
                                     color="primary"
                                     onPress={() => handleClickCheck()}
-                                    isLoading={checked}
+                                    isLoading={loading}
                                 >
                                     เพิ่ม
                                 </Button>
