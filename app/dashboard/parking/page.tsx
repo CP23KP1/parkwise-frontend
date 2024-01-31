@@ -27,7 +27,7 @@ import {
     SelectItem,
     Pagination,
 } from "@nextui-org/react";
-import { ZoneRowData } from "@/app/assets/data/zone";
+import { ZoneRowData } from "@/app/types/data/zone";
 
 const Parking = () => {
     const [open, setOpen] = useState(false);

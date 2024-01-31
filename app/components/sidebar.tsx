@@ -5,7 +5,7 @@ import { getPublicBasePath } from "../helper/basePath";
 import { Button, Listbox, ListboxItem, cn } from "@nextui-org/react";
 import { FaCartPlus } from "react-icons/fa6";
 import { usePathname, useRouter } from "next/navigation";
-import { menuType } from "../assets/data/menu";
+import { menuType } from "../types/data/menu";
 
 interface SidebarProps {
     open?: boolean;

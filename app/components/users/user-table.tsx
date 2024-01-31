@@ -1,7 +1,7 @@
 // ResponsiveTable.tsx
 import React, { useCallback, useMemo, useState } from "react";
 import { Column, useTable } from "react-table";
-import { UserRowData } from "@/app/assets/data/user";
+import { UserRowData } from "@/app/types/data/user";
 import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";

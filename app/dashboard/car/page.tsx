@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { CarRowData } from "@/app/assets/data/car";
+import { CarRowData } from "@/app/types/data/car";
 import ResponsiveCarTable from "@/app/components/cars/car-table";
 import "react-responsive-modal/styles.css";
 import FilterButton from "@/app/components/button/filter";
@@ -9,7 +9,7 @@ import TextInput from "@/app/components/input/input";
 import { createCar, fetchCar, fetchStaff } from "./function";
 import { usePathname } from "next/navigation";
 import { getPublicBasePath } from "@/app/helper/basePath";
-import { StaffRowData } from "@/app/assets/data/staff";
+import { StaffRowData } from "@/app/types/data/staff";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
 import { Select } from "@/app/components/select/select";

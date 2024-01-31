@@ -1,5 +1,5 @@
 "use client";
-import { DeviceRowData } from "@/app/assets/data/devices";
+import { DeviceRowData } from "@/app/types/data/devices";
 import ResponsiveDeviceTable from "@/app/components/devices/devices-table";
 import "react-responsive-modal/styles.css";
 import React, { useEffect, useState } from "react";
@@ -7,7 +7,7 @@ import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import FilterButton from "@/app/components/button/filter";
 import TextInput from "@/app/components/input/input";
 import { createDevice, fetchDevice, fetchZone } from "./function";
-import { ZoneRowData } from "@/app/assets/data/zone";
+import { ZoneRowData } from "@/app/types/data/zone";
 import { getPublicBasePath } from "@/app/helper/basePath";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
@@ -19,6 +19,7 @@ import {
     ModalContent,
     ModalFooter,
     ModalHeader,
+    Pagination,
     Select,
     SelectItem,
 } from "@nextui-org/react";
@@ -50,12 +51,12 @@ const Device = () => {
             setDeviceShow,
             setPage,
             setAllPage,
-            1,
+            page,
             search,
             field,
             order
         );
-    }, []);
+    }, [page]);
 
     const handlePrevPage = async () => {
         await fetchDevice(setDeviceShow, setPage, setAllPage, page - 1);
@@ -299,32 +300,14 @@ const Device = () => {
                 </Button>
             </div>
             <ResponsiveDeviceTable data={deviceShow} />
-            <div className="mt-8 flex align-middle gap-4">
-                <button
-                    className="flex items-center space-x-2  border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-                    disabled={page === 1}
-                    onClick={handlePrevPage}
-                >
-                    <img
-                        src={getPublicBasePath("/svg/back-button.svg")}
-                        className="w-5 h-5"
-                    />
-                </button>
-                <div>
-                    <p className="text-center mt-2">
-                        {page} / {allPage}
-                    </p>
-                </div>
-                <button
-                    className="flex items-center space-x-2 border-solid border-2 hover:bg-gray-200 text-white font-semibold py-2 px-4 rounded"
-                    onClick={handleNextPage}
-                    disabled={page == allPage}
-                >
-                    <img
-                        src={getPublicBasePath("/svg/next-button.svg")}
-                        className="w-5 h-5"
-                    />
-                </button>
+            <div className="mt-8 flex justify-end align-middle gap-4">
+                <Pagination
+                    isCompact
+                    showControls
+                    total={allPage}
+                    initialPage={page}
+                    onChange={(page) => setPage(page)}
+                />
             </div>
         </>
     );

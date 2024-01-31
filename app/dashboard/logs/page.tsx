@@ -1,12 +1,12 @@
 "use client";
-import { LogsRowData } from "@/app/assets/data/logs";
+import { LogsRowData } from "@/app/types/data/logs";
 import ResponsiveLogsTable from "@/app/components/logs/logs-table";
 import { getPublicBasePath } from "@/app/helper/basePath";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { fetchZone } from "./function";
 import axios from "axios";
 import useSWR from "swr";
-import { ZoneRowData } from "@/app/assets/data/zone";
+import { ZoneRowData } from "@/app/types/data/zone";
 import {
     Autocomplete,
     AutocompleteItem,

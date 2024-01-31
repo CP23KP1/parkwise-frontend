@@ -23,7 +23,7 @@ export const fetchStaff = async (
         await axios
             .get(
                 process.env.NEXT_PUBLIC_API_HOST +
-                    `/staffs?page=${page}&limit=1&status=${status}${
+                    `/staffs?page=${page}&limit=10&status=${status}${
                         search ? `&search=${search}` : ""
                     }`,
                 {

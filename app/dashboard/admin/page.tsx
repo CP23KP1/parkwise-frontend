@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { UserRowData } from "@/app/assets/data/user";
+import { UserRowData } from "@/app/types/data/user";
 import ResponsiveUserTable from "@/app/components/users/user-table";
 import "react-responsive-modal/styles.css";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";

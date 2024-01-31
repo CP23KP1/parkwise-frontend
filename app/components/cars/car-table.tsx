@@ -1,13 +1,13 @@
 // ResponsiveTable.tsx
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Column, useTable } from "react-table";
-import { CarRowData } from "@/app/assets/data/car";
+import { CarRowData } from "@/app/types/data/car";
 import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
 import { createCar, fetchStaff } from "@/app/dashboard/car/function";
 import { deleteCar, editCar } from "./function";
-import { StaffRowData } from "@/app/assets/data/staff";
+import { StaffRowData } from "@/app/types/data/staff";
 import { Select } from "../select/select";
 import {
     Button,

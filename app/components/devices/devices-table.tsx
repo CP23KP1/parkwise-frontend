@@ -1,11 +1,11 @@
 // ResponsiveTable.tsx
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Column, useTable } from "react-table";
-import { DeviceRowData } from "@/app/assets/data/devices";
+import { DeviceRowData } from "@/app/types/data/devices";
 import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
-import { ZoneRowData } from "@/app/assets/data/zone";
+import { ZoneRowData } from "@/app/types/data/zone";
 import {
     deleteDevice,
     editDevice,

@@ -1,5 +1,5 @@
 "use client";
-import { StaffRowData } from "@/app/assets/data/staff";
+import { StaffRowData } from "@/app/types/data/staff";
 import ResponsiveStaffTable from "@/app/components/staff/staff-table";
 import React, { useEffect, useState } from "react";
 import "react-responsive-modal/styles.css";

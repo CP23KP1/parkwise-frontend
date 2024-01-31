@@ -5,7 +5,7 @@ import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
 import { deleteParking, editParking } from "./function";
-import { ZoneRowData } from "@/app/assets/data/zone";
+import { ZoneRowData } from "@/app/types/data/zone";
 import { fetchZone } from "@/app/dashboard/device/function";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
