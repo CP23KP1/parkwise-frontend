@@ -39,7 +39,6 @@ const Logs = () => {
                 setPage(res.meta.page);
                 return res;
             });
-
     const fetcherLatest = (url: string) =>
         axios
             .get(url)
@@ -116,7 +115,7 @@ const Logs = () => {
                         placeholder="เลือกโซน"
                         className="max-w-xs"
                         selectedKey={selectedZone}
-                        onSelectionChange={setSelectedZone}
+                        onSelectionChange={setSelectedZone as any}
                         inputValue={getZoneAutoCompleteLabel(selectedZone)}
                         isClearable={false}
                     >
