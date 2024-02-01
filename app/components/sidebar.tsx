@@ -116,7 +116,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                                         );
                                     }}
                                 >
-                                    {item.name}
+                                    {openSidebar && item.name}
                                 </ListboxItem>
                             );
                         })}
