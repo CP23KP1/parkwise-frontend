@@ -1,5 +1,5 @@
 // ResponsiveTable.tsx
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Column, useTable } from "react-table";
 import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
@@ -10,7 +10,9 @@ import { deleteZone, editZone } from "./function";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
 import {
+    Avatar,
     Button,
+    CircularProgress,
     Modal,
     ModalBody,
     ModalContent,
@@ -23,6 +25,7 @@ import {
     TableColumn,
     TableHeader,
     TableRow,
+    Tooltip,
 } from "@nextui-org/react";
 import { zoneColumns } from "@/app/utils/constants";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
@@ -49,6 +52,13 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
         direction: "ascending",
     });
     const [loading, setLoading] = useState(false);
+
+    const [isUploadImageLoading, setIsUploadImageLoading] = useState(false);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [selectedImageFile, setSelectedImageFile] = useState<File | null>(
+        null
+    );
+    const inputRef = useRef(null as any);
 
     const handleLatChange = (event: any) => {
         setSelectedLatLng({
@@ -179,6 +189,18 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
         []
     );
 
+    const handleImageChange = (event: any) => {
+        const file = event.target.files[0];
+        setSelectedImageFile(file);
+        if (file) {
+            const reader = new FileReader() as any;
+            reader.onloadend = () => {
+                setSelectedImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     return (
         <>
             <Modal isOpen={open} onClose={onCloseModal} size="4xl">
@@ -191,7 +213,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                             <ModalBody>
                                 <div className="grid grid-cols-2 gap-y-6 gap-x-4">
                                     <div className="col-span-1">
-                                        <div className="col-span-2">
+                                        <div className="flex h-full items-center">
                                             {isLoaded ? (
                                                 <>
                                                     <div className="places-container"></div>
@@ -218,14 +240,6 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                                         position.lat();
                                                                     const lng =
                                                                         position.lng();
-                                                                    console.log(
-                                                                        "Selected Latitude:",
-                                                                        lat
-                                                                    );
-                                                                    console.log(
-                                                                        "Selected Longitude:",
-                                                                        lng
-                                                                    );
                                                                     setSelectedLatLng(
                                                                         (
                                                                             prevState
@@ -248,6 +262,46 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
 
                                     <div className="col-span-1">
                                         <div className="grid grid-cols-2 gap-y-6 gap-x-4">
+                                            <div className="col-span-2">
+                                                <div className="h-full flex flex-row justify-center items-center p-2">
+                                                    <input
+                                                        className="hidden"
+                                                        type="file"
+                                                        accept="image/*"
+                                                        onChange={
+                                                            handleImageChange
+                                                        }
+                                                        ref={inputRef}
+                                                        placeholder="Upload Image"
+                                                    />
+
+                                                    <Tooltip
+                                                        color="primary"
+                                                        content="Edit Zone Image"
+                                                        className="capitalize text-white"
+                                                    >
+                                                        {isUploadImageLoading ? (
+                                                            <CircularProgress
+                                                                color="primary"
+                                                                aria-label="Loading..."
+                                                            />
+                                                        ) : (
+                                                            <Avatar
+                                                                className="hover:cursor-pointer w-32 h-32"
+                                                                isBordered
+                                                                color="primary"
+                                                                src={
+                                                                    selectedImage ??
+                                                                    "https://images.unsplash.com/broken"
+                                                                }
+                                                                onClick={() => {
+                                                                    inputRef.current.click();
+                                                                }}
+                                                            ></Avatar>
+                                                        )}
+                                                    </Tooltip>
+                                                </div>
+                                            </div>
                                             <div className="col-span-2">
                                                 <TextInput
                                                     label="ชื่อ"

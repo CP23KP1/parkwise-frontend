@@ -2,7 +2,7 @@
 import { ZoneRowData } from "@/app/types/data/zone";
 import ResponsiveTable from "@/app/components/zone/zone-table";
 import "react-responsive-modal/styles.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import "@reach/combobox/styles.css";
 import FilterButton from "@/app/components/button/filter";
@@ -19,7 +19,9 @@ import { getPublicBasePath } from "@/app/helper/basePath";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
 import {
+    Avatar,
     Button,
+    CircularProgress,
     Input,
     Modal,
     ModalBody,
@@ -27,6 +29,7 @@ import {
     ModalFooter,
     ModalHeader,
     Pagination,
+    Tooltip,
 } from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
 
@@ -45,6 +48,13 @@ const Zone = () => {
     const [checked, setChecked] = useState(false);
     const pathname = usePathname();
     const [loading, setLoading] = useState(false);
+
+    const [isUploadImageLoading, setIsUploadImageLoading] = useState(false);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [selectedImageFile, setSelectedImageFile] = useState<File | null>(
+        null
+    );
+    const inputRef = useRef(null as any);
 
     const validateAndCreate = () => {
         setChecked(true);
@@ -85,17 +95,6 @@ const Zone = () => {
             ...selectedLatLng,
             lng: parseFloat(event.target.value) || 0,
         });
-    };
-
-    const zone = () => {
-        return {
-            name: name,
-            description: description,
-            maxCapacity: maxCapacity,
-            address: address,
-            latitude: selectedLatLng.lat,
-            longitude: selectedLatLng.lng,
-        };
     };
 
     const handleCreateZone = async () => {
@@ -233,6 +232,18 @@ const Zone = () => {
         );
     };
 
+    const handleImageChange = (event: any) => {
+        const file = event.target.files[0];
+        setSelectedImageFile(file);
+        if (file) {
+            const reader = new FileReader() as any;
+            reader.onloadend = () => {
+                setSelectedImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     return (
         <>
             <Modal isOpen={open} onClose={onCloseModal} size="4xl">
@@ -245,7 +256,7 @@ const Zone = () => {
                             <ModalBody>
                                 <div className="grid grid-cols-2 gap-y-6 gap-x-4">
                                     <div className="col-span-1">
-                                        <div className="col-span-2">
+                                        <div className="flex h-full items-center">
                                             {isLoaded ? (
                                                 <>
                                                     <div className="places-container"></div>
@@ -272,14 +283,6 @@ const Zone = () => {
                                                                         position.lat();
                                                                     const lng =
                                                                         position.lng();
-                                                                    console.log(
-                                                                        "Selected Latitude:",
-                                                                        lat
-                                                                    );
-                                                                    console.log(
-                                                                        "Selected Longitude:",
-                                                                        lng
-                                                                    );
                                                                     setSelectedLatLng(
                                                                         (
                                                                             prevState
@@ -302,6 +305,46 @@ const Zone = () => {
 
                                     <div className="col-span-1">
                                         <div className="grid grid-cols-2 gap-y-6 gap-x-4">
+                                            <div className="col-span-2">
+                                                <div className="h-full flex flex-row justify-center items-center p-2">
+                                                    <input
+                                                        className="hidden"
+                                                        type="file"
+                                                        accept="image/*"
+                                                        onChange={
+                                                            handleImageChange
+                                                        }
+                                                        ref={inputRef}
+                                                        placeholder="Upload Image"
+                                                    />
+
+                                                    <Tooltip
+                                                        color="primary"
+                                                        content="Edit Zone Image"
+                                                        className="capitalize text-white"
+                                                    >
+                                                        {isUploadImageLoading ? (
+                                                            <CircularProgress
+                                                                color="primary"
+                                                                aria-label="Loading..."
+                                                            />
+                                                        ) : (
+                                                            <Avatar
+                                                                className="hover:cursor-pointer w-32 h-32"
+                                                                isBordered
+                                                                color="primary"
+                                                                src={
+                                                                    selectedImage ??
+                                                                    "https://images.unsplash.com/broken"
+                                                                }
+                                                                onClick={() => {
+                                                                    inputRef.current.click();
+                                                                }}
+                                                            ></Avatar>
+                                                        )}
+                                                    </Tooltip>
+                                                </div>
+                                            </div>
                                             <div className="col-span-2">
                                                 <TextInput
                                                     label="ชื่อ"
@@ -432,116 +475,6 @@ const Zone = () => {
                         </>
                     )}
                 </ModalContent>
-                {/* <div className="mx-10 my-4">
-                    <h2 className="font-bold text-xl">สร้างโซน</h2>
-                    <div className="flex flex-col gap-6">
-                        <div className="pt-4">
-                            <p>ชื่อ</p>
-                            <TextInput
-                                onChange={(e) => setName(e.target.value)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(name, 1, checked)}
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <p>คำอธิบาย</p>
-                            <TextInput
-                                onChange={(e) => setDescription(e.target.value)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(description, 1, checked)}
-                            />
-                        </div>
-                        <div>
-                            <p>รองรับได้</p>
-                            <TextInput
-                                type="number"
-                                onChange={(e) => setMaxCapacity(e.target.value)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(maxCapacity, 1, checked)}
-                            />
-                        </div>
-                        <div>
-                            <p>ที่อยู่</p>
-                            <TextInput
-                                onChange={(e) => setAddress(e.target.value)}
-                                errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(address, 1, checked)}
-                            />
-                        </div>
-                        <div>
-                            <p>ละติจูด</p>
-                            <TextInput
-                                value={selectedLatLng.lat}
-                                onChange={(e) =>
-                                    handleLatChange(e.target.value)
-                                }
-                                disabled
-                            />
-                        </div>
-                        <div>
-                            <p>ลองติจูด</p>
-                            <TextInput
-                                value={selectedLatLng.lng}
-                                onChange={(e) =>
-                                    handleLngChange(e.target.value)
-                                }
-                                disabled
-                            />
-                        </div>
-                        {isLoaded ? (
-                            <>
-                                <div className="places-container"></div>
-                                <GoogleMap
-                                    zoom={16}
-                                    center={selectedLatLng}
-                                    mapContainerStyle={{
-                                        width: "350px",
-                                        height: "350px",
-                                    }}
-                                    onClick={handleMapClick}
-                                >
-                                    <Marker
-                                        position={selectedLatLng}
-                                        onLoad={(marker) => {
-                                            const position =
-                                                marker.getPosition();
-                                            if (position) {
-                                                const lat = position.lat();
-                                                const lng = position.lng();
-                                                console.log(
-                                                    "Selected Latitude:",
-                                                    lat
-                                                );
-                                                console.log(
-                                                    "Selected Longitude:",
-                                                    lng
-                                                );
-                                                setSelectedLatLng(
-                                                    (prevState) => ({
-                                                        ...prevState,
-                                                        lat,
-                                                        lng,
-                                                    })
-                                                );
-                                            }
-                                        }}
-                                    />
-                                </GoogleMap>
-                            </>
-                        ) : (
-                            <></>
-                        )}
-                        <div className="flex justify-start">
-                            <button
-                                className="btn bg-sky-400 py-2 px-4 rounded-md text-white"
-                                onClick={validateAndCreate}
-                            >
-                                เพิ่ม
-                            </button>
-                        </div>
-                    </div>
-                    <div></div>
-                </div> */}
             </Modal>
             <div className="w-72 sm:w-full">
                 <div>
