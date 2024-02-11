@@ -1,4 +1,6 @@
 import { checkAuth } from "@/app/helper/auth";
+import { uploadFileFirebase } from "@/app/services/upload-file-firebase.service";
+import { CarRowData } from "@/app/types/data/car";
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -8,12 +10,13 @@ export const createCar = async (
     brand: string,
     model: string,
     year: string,
-    ownerId: string
+    ownerId: string,
+    imageFile?: File
 ) => {
     try {
         if (checkAuth()) {
             const token = localStorage.getItem("access_token");
-            await axios.post(
+            const { data } = await axios.post<CarRowData>(
                 process.env.NEXT_PUBLIC_API_HOST + "/cars",
                 {
                     licensePlate: licensePlate,
@@ -27,6 +30,17 @@ export const createCar = async (
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
+            if (data.id && imageFile) {
+                const imageUrl = await uploadFileFirebase(
+                    imageFile,
+                    `cars/${data.id}`
+                );
+                await axios.patch(
+                    process.env.NEXT_PUBLIC_API_HOST + "/cars/" + data.id,
+                    { imageUrl: imageUrl },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+            }
             Swal.fire({
                 icon: "success",
                 title: "ทำการสร้างรถเรียบร้อยแล้ว",

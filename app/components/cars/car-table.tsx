@@ -1,5 +1,11 @@
 // ResponsiveTable.tsx
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import { Column, useTable } from "react-table";
 import { CarRowData } from "@/app/types/data/car";
 import "react-responsive-modal/styles.css";
@@ -10,7 +16,9 @@ import { deleteCar, editCar } from "./function";
 import { StaffRowData } from "@/app/types/data/staff";
 import { Select } from "../select/select";
 import {
+    Avatar,
     Button,
+    CircularProgress,
     Modal,
     ModalBody,
     ModalContent,
@@ -23,11 +31,14 @@ import {
     TableColumn,
     TableHeader,
     TableRow,
+    Tooltip,
 } from "@nextui-org/react";
 import { carColumns } from "@/app/utils/constants";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import { validateLength } from "@/app/helper/validate";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
+import { ref } from "firebase/storage";
+import { storage } from "@/app/utils/firebase";
 
 interface Props {
     data: CarRowData[];
@@ -37,7 +48,10 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
     const [open, setOpen] = useState(false);
 
     const onOpenModal = () => setOpen(true);
-    const onCloseModal = () => setOpen(false);
+    const onCloseModal = () => {
+        setOpen(false);
+        setSelectedImage(null);
+    };
 
     const [carId, setCarId] = useState(0);
     const [licensePlate, setLicensePlate] = useState("");
@@ -53,12 +67,18 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
     });
     const [loading, setLoading] = useState(false);
     const [checked, setChecked] = useState(false);
+    const [isUploadImageLoading, setIsUploadImageLoading] = useState(false);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [selectedImageFile, setSelectedImageFile] = useState<File | null>(
+        null
+    );
+    const inputRef = useRef(null as any);
 
     useEffect(() => {
         fetchStaff(setStaff);
     }, []);
 
-    const validateAndEdit = () => {
+    const validateAndEdit = async () => {
         try {
             setLoading(true);
             setChecked(true);
@@ -70,7 +90,8 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                     brand,
                     model,
                     +year,
-                    ownerId
+                    ownerId,
+                    selectedImageFile!
                 );
                 setChecked(false);
             }
@@ -80,10 +101,15 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
         }
     };
 
-    const handleStaffChange = (event: any) => {
-        const selectedStaffId = parseInt(event, 10);
-        setOwnerId(selectedStaffId.toString());
-    };
+    const sortedItems = useMemo(() => {
+        return [...data].sort((a: any, b: any) => {
+            const first = a[sortDescriptor.column!];
+            const second = b[sortDescriptor.column!];
+            const cmp = first! < second! ? -1 : first! > second! ? 1 : 0;
+
+            return sortDescriptor.direction === "descending" ? -cmp : cmp;
+        });
+    }, [sortDescriptor, data]);
 
     const handleEdit = (data: any) => {
         setCarId(data.id);
@@ -93,7 +119,8 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
         setModel(data.model);
         setYear(data.year);
         setOwnerId(data.staffId);
-        setOpen(true);
+        setSelectedImage(data.image);
+        onOpenModal();
     };
 
     const handleDelete = (id: number) => {
@@ -112,15 +139,17 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
         });
     };
 
-    const sortedItems = useMemo(() => {
-        return [...data].sort((a: any, b: any) => {
-            const first = a[sortDescriptor.column!];
-            const second = b[sortDescriptor.column!];
-            const cmp = first! < second! ? -1 : first! > second! ? 1 : 0;
-
-            return sortDescriptor.direction === "descending" ? -cmp : cmp;
-        });
-    }, [sortDescriptor, data]);
+    const handleImageChange = (event: any) => {
+        const file = event.target.files[0];
+        setSelectedImageFile(file);
+        if (file) {
+            const reader = new FileReader() as any;
+            reader.onloadend = () => {
+                setSelectedImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     const renderCell = useCallback(
         (car: CarRowData, columnKey: keyof CarRowData) => {
@@ -159,7 +188,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
 
     return (
         <>
-            <Modal isOpen={open} onClose={onCloseModal} size="xl">
+            <Modal isOpen={open} onClose={onCloseModal} size="2xl">
                 <ModalContent>
                     {(onClose) => (
                         <>
@@ -168,79 +197,133 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                             </ModalHeader>
                             <ModalBody>
                                 <div className="grid grid-cols-2 gap-y-6 gap-x-4">
-                                    <div className="col-span-2">
-                                        <TextInput
-                                            label="ป้ายทะเบียน"
-                                            key="licensePlate"
-                                            onChange={(e) => {
-                                                setLicensePlate(e.target.value);
-                                            }}
-                                            error={validateLength(
-                                                licensePlate,
-                                                1,
-                                                checked
-                                            )}
-                                            errorMessage={CAN_NOT_BE_EMPTY}
-                                            value={licensePlate}
-                                            isRequired
-                                        />
-                                    </div>
-                                    <div className="col-span-2">
-                                        <TextInput
-                                            label="สี"
-                                            key="color"
-                                            onChange={(e) =>
-                                                setColor(e.target.value)
-                                            }
-                                            error={validateLength(
-                                                color,
-                                                1,
-                                                checked
-                                            )}
-                                            errorMessage={CAN_NOT_BE_EMPTY}
-                                            value={color}
-                                            isRequired
-                                        />
+                                    <div className="col-span-1">
+                                        <div className="h-full flex flex-row justify-center items-center p-2">
+                                            <input
+                                                className="hidden"
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handleImageChange}
+                                                ref={inputRef}
+                                                placeholder="Upload Image"
+                                            />
+
+                                            <Tooltip
+                                                color="primary"
+                                                content="Edit Car Image"
+                                                className="capitalize text-white"
+                                            >
+                                                {isUploadImageLoading ? (
+                                                    <CircularProgress
+                                                        color="primary"
+                                                        aria-label="Loading..."
+                                                    />
+                                                ) : (
+                                                    <Avatar
+                                                        className="hover:cursor-pointer w-32 h-32"
+                                                        isBordered
+                                                        color="primary"
+                                                        src={
+                                                            selectedImage ??
+                                                            "https://images.unsplash.com/broken"
+                                                        }
+                                                        onClick={() => {
+                                                            inputRef.current.click();
+                                                        }}
+                                                    ></Avatar>
+                                                )}
+                                            </Tooltip>
+                                        </div>
                                     </div>
                                     <div className="col-span-1">
-                                        <TextInput
-                                            label="แบรนด์"
-                                            key="brand"
-                                            onChange={(e) =>
-                                                setBrand(e.target.value)
-                                            }
-                                            error={checked}
-                                            errorMessage={CAN_NOT_BE_EMPTY}
-                                            value={brand}
-                                            isRequired
-                                        />
-                                    </div>
-                                    <div className="col-span-1">
-                                        <TextInput
-                                            label="รุ่น"
-                                            key="model"
-                                            onChange={(e) =>
-                                                setModel(e.target.value)
-                                            }
-                                            error={checked}
-                                            errorMessage={CAN_NOT_BE_EMPTY}
-                                            value={model}
-                                            isRequired
-                                        />
-                                    </div>
-                                    <div className="col-span-2">
-                                        <TextInput
-                                            label="ปีที่ผลิต"
-                                            key="year"
-                                            type="number"
-                                            onChange={(e) =>
-                                                setYear(e.target.value)
-                                            }
-                                            error={checked}
-                                            errorMessage={CAN_NOT_BE_EMPTY}
-                                            value={year}
-                                            isRequired
-                                        />
+                                        <div className="grid grid-cols-2 gap-y-6 gap-x-4">
+                                            <div className="col-span-2">
+                                                <TextInput
+                                                    label="ป้ายทะเบียน"
+                                                    key="licensePlate"
+                                                    onChange={(e) => {
+                                                        setLicensePlate(
+                                                            e.target.value
+                                                        );
+                                                    }}
+                                                    error={validateLength(
+                                                        licensePlate,
+                                                        1,
+                                                        checked
+                                                    )}
+                                                    errorMessage={
+                                                        CAN_NOT_BE_EMPTY
+                                                    }
+                                                    value={licensePlate}
+                                                    isRequired
+                                                />
+                                            </div>
+                                            <div className="col-span-2">
+                                                <TextInput
+                                                    label="สี"
+                                                    key="color"
+                                                    onChange={(e) =>
+                                                        setColor(e.target.value)
+                                                    }
+                                                    error={validateLength(
+                                                        color,
+                                                        1,
+                                                        checked
+                                                    )}
+                                                    errorMessage={
+                                                        CAN_NOT_BE_EMPTY
+                                                    }
+                                                    value={color}
+                                                    isRequired
+                                                />
+                                            </div>
+                                            <div className="col-span-1">
+                                                <TextInput
+                                                    label="แบรนด์"
+                                                    key="brand"
+                                                    onChange={(e) =>
+                                                        setBrand(e.target.value)
+                                                    }
+                                                    error={checked}
+                                                    errorMessage={
+                                                        CAN_NOT_BE_EMPTY
+                                                    }
+                                                    value={brand}
+                                                    isRequired
+                                                />
+                                            </div>
+                                            <div className="col-span-1">
+                                                <TextInput
+                                                    label="รุ่น"
+                                                    key="model"
+                                                    onChange={(e) =>
+                                                        setModel(e.target.value)
+                                                    }
+                                                    error={checked}
+                                                    errorMessage={
+                                                        CAN_NOT_BE_EMPTY
+                                                    }
+                                                    value={model}
+                                                    isRequired
+                                                />
+                                            </div>
+                                            <div className="col-span-2">
+                                                <TextInput
+                                                    label="ปีที่ผลิต"
+                                                    key="year"
+                                                    type="number"
+                                                    onChange={(e) =>
+                                                        setYear(e.target.value)
+                                                    }
+                                                    error={checked}
+                                                    errorMessage={
+                                                        CAN_NOT_BE_EMPTY
+                                                    }
+                                                    value={year}
+                                                    isRequired
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </ModalBody>
@@ -258,7 +341,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                                     onPress={() => validateAndEdit()}
                                     isLoading={loading}
                                 >
-                                    เพิ่ม
+                                    ยืนยัน
                                 </Button>
                             </ModalFooter>
                         </>

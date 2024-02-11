@@ -1,7 +1,7 @@
 "use client";
 import { StaffRowData } from "@/app/types/data/staff";
 import ResponsiveStaffTable from "@/app/components/staff/staff-table";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "react-responsive-modal/styles.css";
 import FilterButton from "@/app/components/button/filter";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
@@ -17,7 +17,9 @@ import {
     validatePhoneWording,
 } from "@/app/helper/validate";
 import {
+    Avatar,
     Button,
+    CircularProgress,
     Input,
     Modal,
     ModalBody,
@@ -25,6 +27,7 @@ import {
     ModalFooter,
     ModalHeader,
     Pagination,
+    Tooltip,
 } from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
 import TextInput from "@/app/components/input/input";
@@ -38,12 +41,20 @@ const Staff = () => {
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
+    const [position, setPosition] = useState("");
     const [page, setPage] = useState(1);
     const [allPage, setAllPage] = useState(1);
     const [search, setSearch] = useState("");
     const [status, setStatus] = useState("all");
     const [checked, setChecked] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    const [isUploadImageLoading, setIsUploadImageLoading] = useState(false);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [selectedImageFile, setSelectedImageFile] = useState<File | null>(
+        null
+    );
+    const inputRef = useRef(null as any);
 
     useEffect(() => {
         fetchStaff(setStaff, setPage, setAllPage, page, "all", undefined);
@@ -97,7 +108,14 @@ const Staff = () => {
     const handleClickCheck = () => {
         setChecked(true);
         if (firstName && lastName && email && phone) {
-            createStaff(firstName, lastName, email, phone);
+            createStaff(
+                firstName,
+                lastName,
+                email,
+                phone,
+                position,
+                selectedImageFile!
+            );
         }
     };
     const handleSearch = async (e: any) => {
@@ -112,9 +130,21 @@ const Staff = () => {
         );
     };
 
+    const handleImageChange = (event: any) => {
+        const file = event.target.files[0];
+        setSelectedImageFile(file);
+        if (file) {
+            const reader = new FileReader() as any;
+            reader.onloadend = () => {
+                setSelectedImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     return (
         <>
-            <Modal isOpen={open} onClose={onCloseModal} size="xl">
+            <Modal isOpen={open} onClose={onCloseModal} size="2xl">
                 <ModalContent>
                     {(onClose) => (
                         <>
@@ -126,58 +156,130 @@ const Staff = () => {
                             <ModalBody>
                                 <div className="grid grid-cols-2 gap-3">
                                     <div className="col-span-1">
-                                        <TextInput
-                                            label="ชื่อจริง"
-                                            key="firstname"
-                                            onChange={(e) =>
-                                                setFirstName(e.target.value)
-                                            }
-                                            error={false}
-                                            errorMessage={CAN_NOT_BE_EMPTY}
-                                            value={firstName}
-                                            isRequired
-                                        />
+                                        <div className="h-full flex flex-row justify-center items-center p-2">
+                                            <input
+                                                className="hidden"
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handleImageChange}
+                                                ref={inputRef}
+                                                placeholder="Upload Image"
+                                            />
+
+                                            <Tooltip
+                                                color="primary"
+                                                content="Edit Car Image"
+                                                className="capitalize text-white"
+                                            >
+                                                {isUploadImageLoading ? (
+                                                    <CircularProgress
+                                                        color="primary"
+                                                        aria-label="Loading..."
+                                                    />
+                                                ) : (
+                                                    <Avatar
+                                                        className="hover:cursor-pointer w-32 h-32"
+                                                        isBordered
+                                                        color="primary"
+                                                        src={
+                                                            selectedImage ??
+                                                            "https://images.unsplash.com/broken"
+                                                        }
+                                                        onClick={() => {
+                                                            inputRef.current.click();
+                                                        }}
+                                                    ></Avatar>
+                                                )}
+                                            </Tooltip>
+                                        </div>
                                     </div>
                                     <div className="col-span-1">
-                                        <TextInput
-                                            label="นามสกุล"
-                                            key="lastname"
-                                            onChange={(e) =>
-                                                setLastName(e.target.value)
-                                            }
-                                            error={false}
-                                            errorMessage={CAN_NOT_BE_EMPTY}
-                                            value={lastName}
-                                            isRequired
-                                        />
-                                    </div>
-                                    <div className="col-span-2">
-                                        <TextInput
-                                            label="อีเมลล์"
-                                            key="email"
-                                            type="email"
-                                            onChange={(e) =>
-                                                setEmail(e.target.value)
-                                            }
-                                            error={false}
-                                            errorMessage={CAN_NOT_BE_EMPTY}
-                                            value={email}
-                                            isRequired
-                                        />
-                                    </div>
-                                    <div className="col-span-2">
-                                        <TextInput
-                                            label="เบอร์โทรศัพท์"
-                                            key="phone"
-                                            type="text"
-                                            onChange={(e) =>
-                                                setPhone(e.target.value)
-                                            }
-                                            error={false}
-                                            errorMessage={CAN_NOT_BE_EMPTY}
-                                            value={phone}
-                                            isRequired
-                                        />
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div className="col-span-1">
+                                                <TextInput
+                                                    label="ชื่อจริง"
+                                                    key="firstname"
+                                                    onChange={(e) =>
+                                                        setFirstName(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    error={false}
+                                                    errorMessage={
+                                                        CAN_NOT_BE_EMPTY
+                                                    }
+                                                    value={firstName}
+                                                    isRequired
+                                                />
+                                            </div>
+                                            <div className="col-span-1">
+                                                <TextInput
+                                                    label="นามสกุล"
+                                                    key="lastname"
+                                                    onChange={(e) =>
+                                                        setLastName(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    error={false}
+                                                    errorMessage={
+                                                        CAN_NOT_BE_EMPTY
+                                                    }
+                                                    value={lastName}
+                                                    isRequired
+                                                />
+                                            </div>
+                                            <div className="col-span-2">
+                                                <TextInput
+                                                    label="อีเมลล์"
+                                                    key="email"
+                                                    type="email"
+                                                    onChange={(e) =>
+                                                        setEmail(e.target.value)
+                                                    }
+                                                    error={false}
+                                                    errorMessage={
+                                                        CAN_NOT_BE_EMPTY
+                                                    }
+                                                    value={email}
+                                                    isRequired
+                                                />
+                                            </div>
+                                            <div className="col-span-2">
+                                                <TextInput
+                                                    label="เบอร์โทรศัพท์"
+                                                    key="phone"
+                                                    type="text"
+                                                    onChange={(e) =>
+                                                        setPhone(e.target.value)
+                                                    }
+                                                    error={false}
+                                                    errorMessage={
+                                                        CAN_NOT_BE_EMPTY
+                                                    }
+                                                    value={phone}
+                                                    isRequired
+                                                />
+                                            </div>
+                                            <div className="col-span-2">
+                                                <TextInput
+                                                    label="ตำแหน่ง"
+                                                    key="position"
+                                                    type="text"
+                                                    onChange={(e) =>
+                                                        setPosition(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    error={false}
+                                                    errorMessage={
+                                                        CAN_NOT_BE_EMPTY
+                                                    }
+                                                    value={phone}
+                                                    isRequired
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </ModalBody>
