@@ -156,7 +156,19 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
         });
     }, [sortDescriptor, data]);
 
-    const renderCell = useCallback(
+    const handleImageChange = (event: any) => {
+        const file = event.target.files[0];
+        setSelectedImageFile(file);
+        if (file) {
+            const reader = new FileReader() as any;
+            reader.onloadend = () => {
+                setSelectedImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const renderCell: any = useCallback(
         (zone: ZoneRowData, columnKey: keyof ZoneRowData) => {
             const cellValue = zone[columnKey];
 
@@ -188,18 +200,6 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
         },
         []
     );
-
-    const handleImageChange = (event: any) => {
-        const file = event.target.files[0];
-        setSelectedImageFile(file);
-        if (file) {
-            const reader = new FileReader() as any;
-            reader.onloadend = () => {
-                setSelectedImage(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
 
     return (
         <>
@@ -579,10 +579,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                             <TableRow key={item.id}>
                                 {(columnKey) => (
                                     <TableCell>
-                                        {renderCell(
-                                            item,
-                                            columnKey as keyof ZoneRowData
-                                        )}
+                                        {renderCell(item, columnKey as any)}
                                     </TableCell>
                                 )}
                             </TableRow>

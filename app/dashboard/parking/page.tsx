@@ -58,7 +58,7 @@ const Parking = () => {
         );
     }, [page]);
 
-    const handleZoneChange = (e) => {
+    const handleZoneChange = (e: any) => {
         setZoneId(e.target.value);
     };
 
@@ -82,7 +82,7 @@ const Parking = () => {
         setPage(page + 1);
     };
 
-    const handleSearch = async (e) => {
+    const handleSearch = async (e: any) => {
         setSearch(e.target.value);
         await fetchParking(
             setParking,
@@ -111,7 +111,7 @@ const Parking = () => {
                         setParking,
                         setPage,
                         setAllPage,
-                        page,
+                        page.toString(),
                         search,
                         "createdAt",
                         "desc"
@@ -124,7 +124,7 @@ const Parking = () => {
                         setParking,
                         setPage,
                         setAllPage,
-                        page,
+                        page.toString(),
                         search,
                         "createdAt",
                         "asc"
@@ -137,7 +137,7 @@ const Parking = () => {
                         setParking,
                         setPage,
                         setAllPage,
-                        page,
+                        page.toString(),
                         search,
                         "amount",
                         "desc"
@@ -150,7 +150,7 @@ const Parking = () => {
                         setParking,
                         setPage,
                         setAllPage,
-                        page,
+                        page.toString(),
                         search,
                         "amount",
                         "asc"
