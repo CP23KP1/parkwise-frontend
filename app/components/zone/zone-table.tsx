@@ -29,6 +29,10 @@ import {
 } from "@nextui-org/react";
 import { zoneColumns } from "@/app/utils/constants";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
+import {
+    displayImageUrl,
+    displayImageUrlWithSelectedImage,
+} from "@/app/helper/display-image";
 
 interface Props {
     data: ZoneRowData[];
@@ -38,7 +42,16 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
     const [open, setOpen] = useState(false);
 
     const onOpenModal = () => setOpen(true);
-    const onCloseModal = () => setOpen(false);
+    const onCloseModal = () => {
+        setId("");
+        setZoneName("");
+        setDescription("");
+        setMaxCapacity("");
+        setAddress("");
+        setChecked(false);
+        setOpen(false);
+    };
+
     const [id, setId] = useState("");
     const [zoneName, setZoneName] = useState("");
     const [description, setDescription] = useState("");
@@ -46,6 +59,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
     const [address, setAddress] = useState("");
     const [lat, setLat] = useState("");
     const [long, setLong] = useState("");
+
     const [checked, setChecked] = useState(false);
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "name",
@@ -74,19 +88,22 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
         });
     };
 
-    const validateAndEdit = () => {
+    const validateAndEdit = async () => {
         setChecked(true);
+        setLoading(true);
         if (zoneName && maxCapacity && address) {
-            editZone(
+            await editZone(
                 id,
                 zoneName,
                 description,
                 maxCapacity,
                 address,
-                selectedLatLng
+                selectedLatLng,
+                selectedImageFile!
             );
         }
         setChecked(false);
+        setLoading(false);
     };
 
     const handleEdit = (data: any) => {
@@ -99,6 +116,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
             lat: parseFloat(data.latitude) || 0,
             lng: parseFloat(data.longitude) || 0,
         });
+        setSelectedImage(data.imageUrl);
         onOpenModal();
     };
 
@@ -118,17 +136,6 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
         });
     };
 
-    const handleEditZone = async () => {
-        await editZone(
-            id,
-            zoneName,
-            description,
-            maxCapacity,
-            address,
-            selectedLatLng
-        );
-    };
-
     const [selectedLatLng, setSelectedLatLng] = useState({
         lat: 13.6512990907,
         lng: 100.493667011,
@@ -141,8 +148,6 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
     const handleMapClick = (e: any) => {
         const lat = e.latLng.lat();
         const lng = e.latLng.lng();
-        console.log("Clicked Latitude:", lat);
-        console.log("Clicked Longitude:", lng);
         setSelectedLatLng({ lat, lng });
     };
 
@@ -156,7 +161,19 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
         });
     }, [sortDescriptor, data]);
 
-    const renderCell = useCallback(
+    const handleImageChange = (event: any) => {
+        const file = event.target.files[0];
+        setSelectedImageFile(file);
+        if (file) {
+            const reader = new FileReader() as any;
+            reader.onloadend = () => {
+                setSelectedImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const renderCell: any = useCallback(
         (zone: ZoneRowData, columnKey: keyof ZoneRowData) => {
             const cellValue = zone[columnKey];
 
@@ -188,18 +205,6 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
         },
         []
     );
-
-    const handleImageChange = (event: any) => {
-        const file = event.target.files[0];
-        setSelectedImageFile(file);
-        if (file) {
-            const reader = new FileReader() as any;
-            reader.onloadend = () => {
-                setSelectedImage(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
 
     return (
         <>
@@ -289,11 +294,9 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                             <Avatar
                                                                 className="hover:cursor-pointer w-32 h-32"
                                                                 isBordered
-                                                                color="primary"
-                                                                src={
-                                                                    selectedImage ??
-                                                                    "https://images.unsplash.com/broken"
-                                                                }
+                                                                src={displayImageUrlWithSelectedImage(
+                                                                    selectedImage!
+                                                                )}
                                                                 onClick={() => {
                                                                     inputRef.current.click();
                                                                 }}
@@ -311,7 +314,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -328,7 +331,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -346,7 +349,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -364,7 +367,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -380,7 +383,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         handleLatChange(e)
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -399,7 +402,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         handleLngChange(e)
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -419,6 +422,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                     color="danger"
                                     variant="light"
                                     onPress={onClose}
+                                    isDisabled={loading}
                                 >
                                     ปิด
                                 </Button>
@@ -579,10 +583,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                             <TableRow key={item.id}>
                                 {(columnKey) => (
                                     <TableCell>
-                                        {renderCell(
-                                            item,
-                                            columnKey as keyof ZoneRowData
-                                        )}
+                                        {renderCell(item, columnKey as any)}
                                     </TableCell>
                                 )}
                             </TableRow>

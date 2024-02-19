@@ -39,6 +39,10 @@ import {
 } from "@nextui-org/react";
 import { FaTrashCan, FaPencil } from "react-icons/fa6";
 import { staffColumns } from "@/app/utils/constants";
+import {
+    displayImageUrl,
+    displayImageUrlWithSelectedImage,
+} from "@/app/helper/display-image";
 
 interface Props {
     data: StaffRowData[];
@@ -48,7 +52,18 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
     const [open, setOpen] = useState(false);
 
     const onOpenModal = () => setOpen(true);
-    const onCloseModal = () => setOpen(false);
+    const onCloseModal = () => {
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPhone("");
+        setId(0);
+        setPosition("");
+        setSelectedImage(null);
+        setSelectedImageFile(null);
+        setChecked(false);
+        setOpen(false);
+    };
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -56,6 +71,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
     const [phone, setPhone] = useState("");
     const [id, setId] = useState(0);
     const [position, setPosition] = useState("");
+
     const [checked, setChecked] = useState(false);
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "name",
@@ -77,21 +93,29 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
         setEmail(data.email);
         setPhone(data.phoneNumber);
         setPosition(data.position);
+        setSelectedImage(data.imageUrl);
         setOpen(true);
     };
 
-    const validateAndEdit = () => {
+    const validateAndEdit = async () => {
         setChecked(true);
-        if (id && firstName && lastName && email && phone && position) {
-            editStaff(
-                id,
-                firstName,
-                lastName,
-                email,
-                phone,
-                position,
-                selectedImageFile!
-            );
+        setLoading(true);
+        try {
+            if (id && firstName && lastName && email && phone && position) {
+                await editStaff(
+                    id,
+                    firstName,
+                    lastName,
+                    email,
+                    phone,
+                    position,
+                    selectedImageFile!
+                );
+            }
+            setChecked(false);
+        } catch (error) {
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -214,11 +238,9 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                                     <Avatar
                                                         className="hover:cursor-pointer w-32 h-32"
                                                         isBordered
-                                                        color="primary"
-                                                        src={
-                                                            selectedImage ??
-                                                            "https://images.unsplash.com/broken"
-                                                        }
+                                                        src={displayImageUrlWithSelectedImage(
+                                                            selectedImage!
+                                                        )}
                                                         onClick={() => {
                                                             inputRef.current.click();
                                                         }}
@@ -236,7 +258,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         setEmail(e.target.value)
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -253,7 +275,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -269,7 +291,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         setEmail(e.target.value)
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -285,7 +307,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         setPhone(e.target.value)
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }

@@ -41,7 +41,6 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
     const [open, setOpen] = useState(false);
 
     const onOpenModal = () => setOpen(true);
-    const onCloseModal = () => setOpen(false);
     const [deviceId, setDeviceId] = useState(0);
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
@@ -55,6 +54,17 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
         direction: "ascending",
     });
     const [loading, setLoading] = useState(false);
+
+    const onCloseModal = () => {
+        setOpen(false);
+        setChecked(false);
+        setLoading(false);
+        setName("");
+        setDescription("");
+        setPrice("");
+        setBrand("");
+        setZoneId(0);
+    };
 
     useEffect(() => {
         fetchZone(setZone);
@@ -172,7 +182,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setName(e.target.value)
                                             }
-                                            error={false}
+                                            error={checked}
                                             errorMessage={CAN_NOT_BE_EMPTY}
                                             value={name}
                                             isRequired
@@ -185,7 +195,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setDescription(e.target.value)
                                             }
-                                            error={false}
+                                            error={checked}
                                             errorMessage={CAN_NOT_BE_EMPTY}
                                             value={description}
                                             isRequired
@@ -199,7 +209,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setBrand(e.target.value)
                                             }
-                                            error={false}
+                                            error={checked}
                                             errorMessage={CAN_NOT_BE_EMPTY}
                                             value={brand}
                                             isRequired
@@ -213,7 +223,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setPrice(e.target.value)
                                             }
-                                            error={false}
+                                            error={checked}
                                             errorMessage={CAN_NOT_BE_EMPTY}
                                             value={price}
                                             isRequired

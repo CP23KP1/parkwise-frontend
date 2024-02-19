@@ -32,7 +32,14 @@ import { ZoneRowData } from "@/app/types/data/zone";
 const Parking = () => {
     const [open, setOpen] = useState(false);
     const onOpenModal = () => setOpen(true);
-    const onCloseModal = () => setOpen(false);
+    const onCloseModal = () => {
+        setName("");
+        setDesc("");
+        setAmount("0");
+        setChecked(false);
+        setOpen(false);
+    };
+
     const [parking, setParking] = useState<ParkingRowData[]>([]);
     const [page, setPage] = useState(1);
     const [allPage, setAllPage] = useState(1);
@@ -58,7 +65,7 @@ const Parking = () => {
         );
     }, [page]);
 
-    const handleZoneChange = (e) => {
+    const handleZoneChange = (e: any) => {
         setZoneId(e.target.value);
     };
 
@@ -82,7 +89,7 @@ const Parking = () => {
         setPage(page + 1);
     };
 
-    const handleSearch = async (e) => {
+    const handleSearch = async (e: any) => {
         setSearch(e.target.value);
         await fetchParking(
             setParking,
@@ -111,7 +118,7 @@ const Parking = () => {
                         setParking,
                         setPage,
                         setAllPage,
-                        page,
+                        page.toString(),
                         search,
                         "createdAt",
                         "desc"
@@ -124,7 +131,7 @@ const Parking = () => {
                         setParking,
                         setPage,
                         setAllPage,
-                        page,
+                        page.toString(),
                         search,
                         "createdAt",
                         "asc"
@@ -137,7 +144,7 @@ const Parking = () => {
                         setParking,
                         setPage,
                         setAllPage,
-                        page,
+                        page.toString(),
                         search,
                         "amount",
                         "desc"
@@ -150,7 +157,7 @@ const Parking = () => {
                         setParking,
                         setPage,
                         setAllPage,
-                        page,
+                        page.toString(),
                         search,
                         "amount",
                         "asc"

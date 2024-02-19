@@ -1,4 +1,5 @@
 import { checkAuth } from "@/app/helper/auth";
+import { uploadFileFirebase } from "@/app/services/upload-file-firebase.service";
 import axios from "axios";
 import { error } from "console";
 import Swal from "sweetalert2";
@@ -8,10 +9,15 @@ export const editZone = async (
     description: string,
     maxCapacity: string,
     address: string,
-    selectedLatLng: any
+    selectedLatLng: any,
+    imageFile?: File
 ) => {
     if (checkAuth()) {
         const token = localStorage.getItem("access_token");
+        let imageUrl;
+        if (imageFile) {
+            imageUrl = await uploadFileFirebase(imageFile!, `zones/${id}`);
+        }
         await axios
             .patch(
                 process.env.NEXT_PUBLIC_API_HOST + "/zones/" + id,
@@ -23,6 +29,7 @@ export const editZone = async (
                     occupancy: 0,
                     latitude: selectedLatLng.lat,
                     longitude: selectedLatLng.lng,
+                    imageUrl: imageUrl,
                 },
                 {
                     headers: { Authorization: `Bearer ${token}` },

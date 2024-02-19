@@ -103,7 +103,22 @@ const Staff = () => {
     const [open, setOpen] = useState(false);
 
     const onOpenModal = () => setOpen(true);
-    const onCloseModal = () => setOpen(false);
+    const onCloseModal = () => {
+        setChecked(false);
+        setLoading(false);
+        resetForm();
+        setOpen(false);
+    };
+
+    const resetForm = () => {
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPhone("");
+        setPosition("");
+        setSelectedImage(null);
+        setSelectedImageFile(null);
+    };
 
     const handleClickCheck = () => {
         setChecked(true);
@@ -180,7 +195,6 @@ const Staff = () => {
                                                     <Avatar
                                                         className="hover:cursor-pointer w-32 h-32"
                                                         isBordered
-                                                        color="primary"
                                                         src={
                                                             selectedImage ??
                                                             "https://images.unsplash.com/broken"
@@ -204,7 +218,7 @@ const Staff = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -221,7 +235,7 @@ const Staff = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -237,7 +251,7 @@ const Staff = () => {
                                                     onChange={(e) =>
                                                         setEmail(e.target.value)
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -253,7 +267,7 @@ const Staff = () => {
                                                     onChange={(e) =>
                                                         setPhone(e.target.value)
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -271,7 +285,7 @@ const Staff = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }

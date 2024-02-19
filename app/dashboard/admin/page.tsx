@@ -31,7 +31,16 @@ const User = () => {
     const [open, setOpen] = useState(false);
 
     const onOpenModal = () => setOpen(true);
-    const onCloseModal = () => setOpen(false);
+    const onCloseModal = () => {
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+        setFirstName("");
+        setLastName("");
+        setChecked(false);
+        setOpen(false);
+    };
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -204,7 +213,7 @@ const User = () => {
                                             onChange={(e) =>
                                                 setPassword(e.target.value)
                                             }
-                                            error={false}
+                                            error={checked}
                                             errorMessage={CAN_NOT_BE_EMPTY}
                                             value={password}
                                             isRequired
@@ -220,7 +229,7 @@ const User = () => {
                                                     e.target.value
                                                 )
                                             }
-                                            error={false}
+                                            error={checked}
                                             errorMessage={CAN_NOT_BE_EMPTY}
                                             value={confirmPassword}
                                             isRequired

@@ -101,12 +101,17 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                         color="primary"
                     >
                         {menuType.map((item) => {
-                            const path = () => pathname === item.link;
+                            const isActive = () => {
+                                if (item.link !== "/dashboard") {
+                                    return pathname.includes(item.link);
+                                }
+                                return pathname === item.link;
+                            };
                             return (
                                 <ListboxItem
                                     className={cn({
                                         "bg-primary rounded-lg text-white":
-                                            path(),
+                                            isActive(),
                                     })}
                                     key={item.name}
                                     startContent={item.icon}

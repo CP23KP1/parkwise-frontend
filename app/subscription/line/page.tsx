@@ -52,7 +52,8 @@ const Line = () => {
                                             <p>รหัสพนักงาน: </p>
                                             <TextInput
                                                 type="text"
-                                                placeHolder="Enter Text..."
+                                                placeholder="Enter Text..."
+                                                value=""
                                             />
                                         </div>
                                         <div className="relative mt-10 text-center">
