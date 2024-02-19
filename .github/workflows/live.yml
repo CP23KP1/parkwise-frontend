@@ -25,5 +25,8 @@ jobs:
             - name: Build Docker Image 🐳
               run: docker build parkwise-frontend/ -t cp23kp1/node-parkwise-frontend
 
+            - name: Remove exist container 🏺
+              run: docker rm -f parkwise-frontend
+
             - name: Run Docker Container 🏺
               run: docker run --restart=always --network backend --name parkwise-frontend -d cp23kp1/node-parkwise-frontend
