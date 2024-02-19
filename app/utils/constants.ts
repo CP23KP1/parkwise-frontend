@@ -13,7 +13,8 @@ export const staffColumns = [
     { name: "นามสกุล", uid: "lastname", sortable: true },
     { name: "อีเมลล์", uid: "email", sortable: true },
     { name: "เบอร์มือถือ", uid: "phoneNumber", sortable: true },
-    { name: "ตำแหน่ง", uid: "position", sortable: true },
+    //* Comment
+    // { name: "ตำแหน่ง", uid: "position", sortable: true },
     { name: "สถานะ", uid: "status", sortable: true },
     { name: "", uid: "actions" },
 ];
@@ -177,5 +178,4 @@ export const logColumns = [
         uid: "arrowDirection",
         sortable: true,
     },
-
 ];

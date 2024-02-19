@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { CarRowData } from "@/app/types/data/car";
 import ResponsiveCarTable from "@/app/components/cars/car-table";
 import "react-responsive-modal/styles.css";
@@ -14,6 +14,8 @@ import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
 import { Select } from "@/app/components/select/select";
 import {
+    Autocomplete,
+    AutocompleteItem,
     Avatar,
     Button,
     CircularProgress,
@@ -27,6 +29,7 @@ import {
     Tooltip,
 } from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
+import { provinces } from "@/app/common/data/province.data";
 
 const Car = () => {
     const [licensePlate, setLicensePlate] = useState("");
@@ -35,9 +38,11 @@ const Car = () => {
     const [model, setModel] = useState("");
     const [year, setYear] = useState("");
     const [ownerId, setOwnerId] = useState("");
+    const [province, setProvince] = useState("");
+
     const [page, setPage] = useState(1);
     const [allPage, setAllPage] = useState(1);
-    const [staff, setStaff] = useState<StaffRowData[]>([]);
+    const [staffs, setStaff] = useState<StaffRowData[]>([]);
     const [search, setSearch] = useState("");
     const [orderBy, setOrderBy] = useState("createdAt");
     const [order, setOrder] = useState("desc");
@@ -75,18 +80,19 @@ const Car = () => {
         setPage(page + 1);
     };
 
-    const validateAndCreate = () => {
+    const validateAndCreate = async () => {
         try {
             setLoading(true);
             setChecked(true);
             if (licensePlate && color && brand && model && year && ownerId) {
-                createCar(
+                await createCar(
                     licensePlate,
                     color,
                     brand,
                     model,
                     year,
                     ownerId,
+                    province,
                     selectedImageFile!
                 );
                 setChecked(false);
@@ -149,7 +155,6 @@ const Car = () => {
 
     const onOpenModal = () => {
         setOpen(true);
-        setOwnerId(staff[0].id.toString());
     };
     const onCloseModal = () => {
         setColor("");
@@ -160,6 +165,7 @@ const Car = () => {
         setOwnerId("");
         setSelectedImage(null);
         setSelectedImageFile(null);
+        setProvince("");
         setChecked(false);
         setOpen(false);
     };
@@ -179,6 +185,24 @@ const Car = () => {
             reader.readAsDataURL(file);
         }
     };
+
+    const getStaffAutoCompleteLabel = useCallback(
+        (ownerId: string) => {
+            const staff = staffs.find((item) => item.id === parseInt(ownerId));
+            return staff ? `${staff.firstname} ${staff.lastname}` : "";
+        },
+        [staffs]
+    );
+
+    const getPronvinceAutoCompleteLabel = useCallback(
+        (province: string) => {
+            const provinceData = provinces.find(
+                (item) => item.name_en === province
+            );
+            return provinceData ? provinceData.name_th : "";
+        },
+        [provinces]
+    );
 
     return (
         <>
@@ -231,6 +255,30 @@ const Car = () => {
                                     <div className="col-span-1">
                                         <div className="grid grid-cols-2 gap-y-6 gap-x-4">
                                             <div className="col-span-2">
+                                                <Autocomplete
+                                                    size="sm"
+                                                    items={staffs}
+                                                    label="เจ้าของรถ"
+                                                    className="max-w-xs"
+                                                    selectedKey={ownerId}
+                                                    onSelectionChange={
+                                                        setOwnerId as any
+                                                    }
+                                                    inputValue={getStaffAutoCompleteLabel(
+                                                        ownerId
+                                                    )}
+                                                    isClearable={false}
+                                                >
+                                                    {(item) => (
+                                                        <AutocompleteItem
+                                                            key={item.id}
+                                                        >
+                                                            {`${item.firstname} ${item.lastname}`}
+                                                        </AutocompleteItem>
+                                                    )}
+                                                </Autocomplete>
+                                            </div>
+                                            <div className="col-span-2">
                                                 <TextInput
                                                     label="ป้ายทะเบียน"
                                                     key="licensePlate"
@@ -250,6 +298,30 @@ const Car = () => {
                                                     value={licensePlate}
                                                     isRequired
                                                 />
+                                            </div>
+                                            <div className="col-span-2">
+                                                <Autocomplete
+                                                    size="sm"
+                                                    items={provinces}
+                                                    label="จังหวัดจดทะเบียน"
+                                                    className="max-w-xs"
+                                                    selectedKey={province}
+                                                    onSelectionChange={
+                                                        setProvince as any
+                                                    }
+                                                    inputValue={getPronvinceAutoCompleteLabel(
+                                                        province
+                                                    )}
+                                                    isClearable={false}
+                                                >
+                                                    {(item) => (
+                                                        <AutocompleteItem
+                                                            key={item.name_en}
+                                                        >
+                                                            {item.name_th}
+                                                        </AutocompleteItem>
+                                                    )}
+                                                </Autocomplete>
                                             </div>
                                             <div className="col-span-2">
                                                 <TextInput

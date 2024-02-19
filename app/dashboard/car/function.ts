@@ -11,6 +11,7 @@ export const createCar = async (
     model: string,
     year: string,
     ownerId: string,
+    province: string,
     imageFile?: File
 ) => {
     try {
@@ -24,6 +25,7 @@ export const createCar = async (
                     brand: brand,
                     model: model,
                     year: parseInt(year),
+                    province: province,
                     staffId: parseInt(ownerId),
                 },
                 {
