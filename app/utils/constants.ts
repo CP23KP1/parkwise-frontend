@@ -21,6 +21,11 @@ export const staffColumns = [
 
 export const deviceColumns = [
     {
+        name: "ID",
+        uid: "id",
+        sortable: true,
+    },
+    {
         name: "ชื่อ",
         uid: "name",
         sortable: true,
