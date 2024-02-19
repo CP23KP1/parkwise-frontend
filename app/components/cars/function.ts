@@ -11,6 +11,7 @@ export const editCar = async (
     model: string,
     year: number,
     staffId: string,
+    province: string,
     imageFile?: File
 ) => {
     try {
@@ -32,7 +33,8 @@ export const editCar = async (
                     model: model,
                     year: year,
                     staffId: parseInt(staffId),
-                    imageUrl: imageFile,
+                    province: province,
+                    imageUrl: imageUrl,
                 },
                 {
                     headers: { Authorization: `Bearer ${token}` },

@@ -165,7 +165,11 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setName(e.target.value)
                                             }
-                                            error={checked}
+                                            error={validateLength(
+                                                name,
+                                                1,
+                                                checked
+                                            )}
                                             errorMessage={CAN_NOT_BE_EMPTY}
                                             value={name}
                                             isRequired

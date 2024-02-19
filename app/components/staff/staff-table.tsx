@@ -258,7 +258,11 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         setEmail(e.target.value)
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        firstName,
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -275,7 +279,11 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        lastName,
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -291,7 +299,10 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         setEmail(e.target.value)
                                                     }
-                                                    error={checked}
+                                                    error={validateEmail(
+                                                        email,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -307,7 +318,10 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         setPhone(e.target.value)
                                                     }
-                                                    error={checked}
+                                                    error={validatePhone(
+                                                        phone,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }

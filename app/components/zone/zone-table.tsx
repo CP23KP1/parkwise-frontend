@@ -314,7 +314,11 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        zoneName,
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -331,7 +335,11 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        description,
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -349,7 +357,11 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        address,
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -367,7 +379,11 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        maxCapacity,
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -383,7 +399,11 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         handleLatChange(e)
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        selectedLatLng.lat?.toString(),
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -402,7 +422,11 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         handleLngChange(e)
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        selectedLatLng.lng?.toString(),
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }

@@ -364,7 +364,11 @@ const Zone = () => {
                                                     onChange={(e) =>
                                                         setName(e.target.value)
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        name,
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -381,7 +385,11 @@ const Zone = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        description,
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -399,7 +407,11 @@ const Zone = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        address,
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -417,7 +429,11 @@ const Zone = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        maxCapacity,
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -433,7 +449,11 @@ const Zone = () => {
                                                     onChange={(e) =>
                                                         handleLatChange(e)
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        selectedLatLng.lat?.toString(),
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -452,7 +472,11 @@ const Zone = () => {
                                                     onChange={(e) =>
                                                         handleLngChange(e)
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        selectedLatLng.lng?.toString(),
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }

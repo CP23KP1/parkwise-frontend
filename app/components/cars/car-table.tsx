@@ -42,6 +42,7 @@ import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { ref } from "firebase/storage";
 import { storage } from "@/app/utils/firebase";
 import { displayImageUrlWithSelectedImage } from "@/app/helper/display-image";
+import { provinces } from "@/app/common/data/province.data";
 
 interface Props {
     data: CarRowData[];
@@ -64,6 +65,8 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
     const [model, setModel] = useState("");
     const [year, setYear] = useState("");
     const [ownerId, setOwnerId] = useState("");
+    const [province, setProvince] = useState("");
+
     const [staffs, setStaffs] = useState<StaffRowData[]>([]);
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "name",
@@ -95,6 +98,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                     model,
                     +year,
                     ownerId,
+                    province,
                     selectedImageFile!
                 );
                 setChecked(false);
@@ -124,6 +128,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
         setYear(data.year);
         setOwnerId(data.staffId);
         setSelectedImage(data.image);
+        setProvince(data.province);
         onOpenModal();
     };
 
@@ -196,6 +201,16 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
             return staff ? `${staff.firstname} ${staff.lastname}` : "";
         },
         [staffs]
+    );
+
+    const getPronvinceAutoCompleteLabel = useCallback(
+        (province: string) => {
+            const provinceData = provinces.find(
+                (item) => item.name_en === province
+            );
+            return provinceData ? provinceData.name_th : "";
+        },
+        [provinces]
     );
 
     return (
@@ -295,6 +310,30 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                                                 />
                                             </div>
                                             <div className="col-span-2">
+                                                <Autocomplete
+                                                    size="sm"
+                                                    items={provinces}
+                                                    label="จังหวัดจดทะเบียน"
+                                                    className="max-w-xs"
+                                                    selectedKey={province}
+                                                    onSelectionChange={
+                                                        setProvince as any
+                                                    }
+                                                    inputValue={getPronvinceAutoCompleteLabel(
+                                                        province
+                                                    )}
+                                                    isClearable={false}
+                                                >
+                                                    {(item) => (
+                                                        <AutocompleteItem
+                                                            key={item.name_en}
+                                                        >
+                                                            {item.name_th}
+                                                        </AutocompleteItem>
+                                                    )}
+                                                </Autocomplete>
+                                            </div>
+                                            <div className="col-span-2">
                                                 <TextInput
                                                     label="สี"
                                                     key="color"
@@ -320,7 +359,11 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         setBrand(e.target.value)
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        brand,
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -335,7 +378,11 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         setModel(e.target.value)
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        model,
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -351,7 +398,11 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         setYear(e.target.value)
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        year.toString(),
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }

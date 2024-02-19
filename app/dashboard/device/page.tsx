@@ -221,7 +221,11 @@ const Device = () => {
                                             onChange={(e) =>
                                                 setBrand(e.target.value)
                                             }
-                                            error={checked}
+                                            error={validateLength(
+                                                brand,
+                                                1,
+                                                checked
+                                            )}
                                             errorMessage={CAN_NOT_BE_EMPTY}
                                             value={brand}
                                             isRequired
@@ -235,7 +239,11 @@ const Device = () => {
                                             onChange={(e) =>
                                                 setPrice(e.target.value)
                                             }
-                                            error={checked}
+                                            error={validateLength(
+                                                price,
+                                                1,
+                                                checked
+                                            )}
                                             errorMessage={CAN_NOT_BE_EMPTY}
                                             value={price}
                                             isRequired
