@@ -32,6 +32,7 @@ import {
     Tooltip,
 } from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
+import { displayImageUrlWithSelectedImage } from "@/app/helper/display-image";
 
 const Zone = () => {
     const [dataShow, setDataShow] = useState<ZoneRowData[]>([]);
@@ -58,9 +59,11 @@ const Zone = () => {
 
     const validateAndCreate = () => {
         setChecked(true);
+        setLoading(true);
         if (name && description && maxCapacity && address) {
             handleCreateZone();
         }
+        setLoading(false);
     };
 
     const getPage = () => {
@@ -77,7 +80,17 @@ const Zone = () => {
 
     const [open, setOpen] = useState(false);
     const onOpenModal = () => setOpen(true);
-    const onCloseModal = () => setOpen(false);
+    const onCloseModal = () => {
+        setName("");
+        setDescription("");
+        setMaxCapacity("");
+        setAddress("");
+        setSelectedImage(null);
+        setSelectedImageFile(null);
+        setChecked(false);
+        setOpen(false);
+    };
+
     const [selectedLatLng, setSelectedLatLng] = useState({
         lat: 13.6512990907,
         lng: 100.493667011,
@@ -105,7 +118,8 @@ const Zone = () => {
             address,
             selectedLatLng,
             createStatus,
-            setCreateStatus
+            setCreateStatus,
+            selectedImageFile!
         );
     };
 
@@ -332,11 +346,9 @@ const Zone = () => {
                                                             <Avatar
                                                                 className="hover:cursor-pointer w-32 h-32"
                                                                 isBordered
-                                                                color="primary"
-                                                                src={
-                                                                    selectedImage ??
-                                                                    "https://images.unsplash.com/broken"
-                                                                }
+                                                                src={displayImageUrlWithSelectedImage(
+                                                                    selectedImage!
+                                                                )}
                                                                 onClick={() => {
                                                                     inputRef.current.click();
                                                                 }}
@@ -352,7 +364,7 @@ const Zone = () => {
                                                     onChange={(e) =>
                                                         setName(e.target.value)
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -369,7 +381,7 @@ const Zone = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -387,7 +399,7 @@ const Zone = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -405,7 +417,7 @@ const Zone = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -421,7 +433,7 @@ const Zone = () => {
                                                     onChange={(e) =>
                                                         handleLatChange(e)
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -440,7 +452,7 @@ const Zone = () => {
                                                     onChange={(e) =>
                                                         handleLngChange(e)
                                                     }
-                                                    error={false}
+                                                    error={checked}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -460,6 +472,7 @@ const Zone = () => {
                                     color="danger"
                                     variant="light"
                                     onPress={onClose}
+                                    isDisabled={loading}
                                 >
                                     ปิด
                                 </Button>

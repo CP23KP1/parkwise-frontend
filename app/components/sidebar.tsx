@@ -101,7 +101,12 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                         color="primary"
                     >
                         {menuType.map((item) => {
-                            const isActive = () => pathname.includes(item.link);
+                            const isActive = () => {
+                                if (item.link !== "/dashboard") {
+                                    return pathname.includes(item.link);
+                                }
+                                return pathname === item.link;
+                            };
                             return (
                                 <ListboxItem
                                     className={cn({

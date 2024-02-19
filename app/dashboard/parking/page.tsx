@@ -32,7 +32,14 @@ import { ZoneRowData } from "@/app/types/data/zone";
 const Parking = () => {
     const [open, setOpen] = useState(false);
     const onOpenModal = () => setOpen(true);
-    const onCloseModal = () => setOpen(false);
+    const onCloseModal = () => {
+        setName("");
+        setDesc("");
+        setAmount("0");
+        setChecked(false);
+        setOpen(false);
+    };
+
     const [parking, setParking] = useState<ParkingRowData[]>([]);
     const [page, setPage] = useState(1);
     const [allPage, setAllPage] = useState(1);

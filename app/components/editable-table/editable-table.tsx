@@ -26,6 +26,7 @@ const EditableTable = <T extends object>({
     const onOpenModal = () => setOpen(true);
     const onCloseModal = () => {
         setOpen(false);
+
         setSelectedData(null);
     };
 

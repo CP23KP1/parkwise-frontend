@@ -43,7 +43,15 @@ const Device = () => {
     const [loading, setLoading] = useState(false);
 
     const onOpenModal = () => setOpen(true);
-    const onCloseModal = () => setOpen(false);
+    const onCloseModal = () => {
+        setName("");
+        setDescription("");
+        setPrice("");
+        setBrand("");
+        setChecked(false);
+        setLoading(false);
+        setOpen(false);
+    };
 
     useEffect(() => {
         fetchZone(setZone, setZoneId);
