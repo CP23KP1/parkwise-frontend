@@ -16,6 +16,8 @@ import { deleteCar, editCar } from "./function";
 import { StaffRowData } from "@/app/types/data/staff";
 import { Select } from "../select/select";
 import {
+    Autocomplete,
+    AutocompleteItem,
     Avatar,
     Button,
     CircularProgress,
@@ -39,6 +41,7 @@ import { validateLength } from "@/app/helper/validate";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { ref } from "firebase/storage";
 import { storage } from "@/app/utils/firebase";
+import { displayImageUrlWithSelectedImage } from "@/app/helper/display-image";
 
 interface Props {
     data: CarRowData[];
@@ -50,6 +53,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
     const onOpenModal = () => setOpen(true);
     const onCloseModal = () => {
         setOpen(false);
+        setChecked(false);
         setSelectedImage(null);
     };
 
@@ -60,7 +64,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
     const [model, setModel] = useState("");
     const [year, setYear] = useState("");
     const [ownerId, setOwnerId] = useState("");
-    const [staff, setStaff] = useState<StaffRowData[]>([]);
+    const [staffs, setStaffs] = useState<StaffRowData[]>([]);
     const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
         column: "name",
         direction: "ascending",
@@ -75,7 +79,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
     const inputRef = useRef(null as any);
 
     useEffect(() => {
-        fetchStaff(setStaff);
+        fetchStaff(setStaffs);
     }, []);
 
     const validateAndEdit = async () => {
@@ -83,7 +87,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
             setLoading(true);
             setChecked(true);
             if (licensePlate && color && brand && model && year && ownerId) {
-                editCar(
+                await editCar(
                     carId,
                     licensePlate,
                     color,
@@ -186,6 +190,14 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
         []
     );
 
+    const getStaffAutoCompleteLabel = useCallback(
+        (ownerId: string) => {
+            const staff = staffs.find((item) => item.id === parseInt(ownerId));
+            return staff ? `${staff.firstname} ${staff.lastname}` : "";
+        },
+        [staffs]
+    );
+
     return (
         <>
             <Modal isOpen={open} onClose={onCloseModal} size="2xl">
@@ -223,10 +235,9 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                                                         className="hover:cursor-pointer w-32 h-32"
                                                         isBordered
                                                         color="primary"
-                                                        src={
-                                                            selectedImage ??
-                                                            "https://images.unsplash.com/broken"
-                                                        }
+                                                        src={displayImageUrlWithSelectedImage(
+                                                            selectedImage!
+                                                        )}
                                                         onClick={() => {
                                                             inputRef.current.click();
                                                         }}
@@ -237,6 +248,31 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                                     </div>
                                     <div className="col-span-1">
                                         <div className="grid grid-cols-2 gap-y-6 gap-x-4">
+                                            <div className="col-span-2">
+                                                <Autocomplete
+                                                    size="sm"
+                                                    items={staffs}
+                                                    label="เจ้าของรถ"
+                                                    placeholder="เลือกเจ้าของรถ"
+                                                    className="max-w-xs"
+                                                    selectedKey={ownerId}
+                                                    onSelectionChange={
+                                                        setOwnerId as any
+                                                    }
+                                                    inputValue={getStaffAutoCompleteLabel(
+                                                        ownerId
+                                                    )}
+                                                    isClearable={false}
+                                                >
+                                                    {(item) => (
+                                                        <AutocompleteItem
+                                                            key={item.id}
+                                                        >
+                                                            {`${item.firstname} ${item.lastname}`}
+                                                        </AutocompleteItem>
+                                                    )}
+                                                </Autocomplete>
+                                            </div>
                                             <div className="col-span-2">
                                                 <TextInput
                                                     label="ป้ายทะเบียน"

@@ -38,7 +38,16 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
     const [open, setOpen] = useState(false);
 
     const onOpenModal = () => setOpen(true);
-    const onCloseModal = () => setOpen(false);
+
+    const onCloseModal = () => {
+        setOpen(false);
+        setId("");
+        setName("");
+        setDescription("");
+        setAmount("");
+        setZoneId("");
+        setChecked(false);
+    };
 
     const [id, setId] = useState("");
     const [name, setName] = useState("");
@@ -156,7 +165,7 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setName(e.target.value)
                                             }
-                                            error={false}
+                                            error={checked}
                                             errorMessage={CAN_NOT_BE_EMPTY}
                                             value={name}
                                             isRequired

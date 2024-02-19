@@ -151,7 +151,18 @@ const Car = () => {
         setOpen(true);
         setOwnerId(staff[0].id.toString());
     };
-    const onCloseModal = () => setOpen(false);
+    const onCloseModal = () => {
+        setColor("");
+        setLicensePlate("");
+        setBrand("");
+        setModel("");
+        setYear("");
+        setOwnerId("");
+        setSelectedImage(null);
+        setSelectedImageFile(null);
+        setChecked(false);
+        setOpen(false);
+    };
 
     const handleStaffChange = (e: any) => {
         setOwnerId(e);
@@ -205,7 +216,6 @@ const Car = () => {
                                                     <Avatar
                                                         className="hover:cursor-pointer w-32 h-32"
                                                         isBordered
-                                                        color="primary"
                                                         src={
                                                             selectedImage ??
                                                             "https://images.unsplash.com/broken"

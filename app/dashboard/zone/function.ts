@@ -2,6 +2,7 @@ import { ZoneRowData } from "@/app/types/data/zone";
 import { checkAuth } from "@/app/helper/auth";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { uploadFileFirebase } from "@/app/services/upload-file-firebase.service";
 
 export const fetchZone = (
     setDataShow: any,
@@ -52,13 +53,14 @@ export const createZone = async (
     address: string,
     selectedLatLng: any,
     status: boolean,
-    setStatus: any
+    setStatus: any,
+    imageFile?: File
 ) => {
     if (checkAuth()) {
         const token = localStorage.getItem("access_token");
 
         try {
-            const res = await axios.post(
+            const { data } = await axios.post<ZoneRowData>(
                 process.env.NEXT_PUBLIC_API_HOST + "/zones",
                 {
                     name: name,
@@ -73,6 +75,18 @@ export const createZone = async (
                     headers: { Authorization: `Bearer ${token}` },
                 }
             );
+
+            if (data.id && imageFile) {
+                const imageUrl = await uploadFileFirebase(
+                    imageFile,
+                    `zones/${data.id}`
+                );
+                await axios.patch(
+                    process.env.NEXT_PUBLIC_API_HOST + "/zones/" + data.id,
+                    { imageUrl: imageUrl },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+            }
 
             Swal.fire({
                 icon: "success",

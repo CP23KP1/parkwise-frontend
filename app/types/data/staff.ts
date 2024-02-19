@@ -7,6 +7,7 @@ export interface StaffRowData {
     position: string;
     email: string;
     phoneNumber: string;
+    imageUrl: string;
     status: boolean;
     actions?: any;
 }

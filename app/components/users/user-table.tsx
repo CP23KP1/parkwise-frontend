@@ -34,7 +34,16 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
     const [open, setOpen] = useState(false);
 
     const onOpenModal = () => setOpen(true);
-    const onCloseModal = () => setOpen(false);
+    const onCloseModal = () => {
+        setId("");
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPassword("");
+        setChecked(false);
+        setOpen(false);
+    };
+
     const [id, setId] = useState("");
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
