@@ -6,6 +6,7 @@ import { Button, Listbox, ListboxItem, cn } from "@nextui-org/react";
 import { FaCartPlus } from "react-icons/fa6";
 import { usePathname, useRouter } from "next/navigation";
 import { menuType } from "../types/data/menu";
+import { log } from "console";
 
 interface SidebarProps {
     open?: boolean;
@@ -102,9 +103,6 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                     >
                         {menuType.map((item) => {
                             const isActive = () => {
-                                if (item.link !== "/dashboard") {
-                                    return pathname.includes(item.link);
-                                }
                                 return pathname === item.link;
                             };
                             return (
@@ -116,9 +114,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                                     key={item.name}
                                     startContent={item.icon}
                                     onClick={() => {
-                                        router.push(
-                                            getPublicBasePath(item.link)
-                                        );
+                                        router.push(item.link);
                                     }}
                                 >
                                     {openSidebar && item.name}
