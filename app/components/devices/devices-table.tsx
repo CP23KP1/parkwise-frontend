@@ -182,7 +182,11 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setName(e.target.value)
                                             }
-                                            error={checked}
+                                            error={validateLength(
+                                                name,
+                                                1,
+                                                checked
+                                            )}
                                             errorMessage={CAN_NOT_BE_EMPTY}
                                             value={name}
                                             isRequired
@@ -195,7 +199,11 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setDescription(e.target.value)
                                             }
-                                            error={checked}
+                                            error={validateLength(
+                                                description,
+                                                1,
+                                                checked
+                                            )}
                                             errorMessage={CAN_NOT_BE_EMPTY}
                                             value={description}
                                             isRequired
@@ -209,7 +217,11 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setBrand(e.target.value)
                                             }
-                                            error={checked}
+                                            error={validateLength(
+                                                brand,
+                                                1,
+                                                checked
+                                            )}
                                             errorMessage={CAN_NOT_BE_EMPTY}
                                             value={brand}
                                             isRequired
@@ -223,7 +235,11 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setPrice(e.target.value)
                                             }
-                                            error={checked}
+                                            error={validateLength(
+                                                price,
+                                                1,
+                                                checked
+                                            )}
                                             errorMessage={CAN_NOT_BE_EMPTY}
                                             value={price}
                                             isRequired

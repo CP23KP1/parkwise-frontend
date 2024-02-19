@@ -277,7 +277,11 @@ const Car = () => {
                                                     onChange={(e) =>
                                                         setBrand(e.target.value)
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        brand,
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -292,7 +296,11 @@ const Car = () => {
                                                     onChange={(e) =>
                                                         setModel(e.target.value)
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        model,
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -307,7 +315,11 @@ const Car = () => {
                                                     onChange={(e) =>
                                                         setYear(e.target.value)
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        year,
+                                                        1,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }

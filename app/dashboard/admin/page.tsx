@@ -213,7 +213,10 @@ const User = () => {
                                             onChange={(e) =>
                                                 setPassword(e.target.value)
                                             }
-                                            error={checked}
+                                            error={validatePassword(
+                                                password,
+                                                checked
+                                            )}
                                             errorMessage={CAN_NOT_BE_EMPTY}
                                             value={password}
                                             isRequired
@@ -229,8 +232,17 @@ const User = () => {
                                                     e.target.value
                                                 )
                                             }
-                                            error={checked}
-                                            errorMessage={CAN_NOT_BE_EMPTY}
+                                            error={
+                                                validatePassword(
+                                                    confirmPassword,
+                                                    checked
+                                                ) ||
+                                                confirmPassword !== password
+                                            }
+                                            errorMessage={
+                                                CAN_NOT_BE_EMPTY ||
+                                                "รหัสผ่านไม่ตรงกัน"
+                                            }
                                             value={confirmPassword}
                                             isRequired
                                         />

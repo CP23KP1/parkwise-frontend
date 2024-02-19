@@ -26,7 +26,7 @@ export const editStaff = async (
                     lastname: lastName,
                     email: email,
                     phoneNumber: mobileNo,
-                    position: position,
+                    position: "Other",
                     imageUrl: imageUrl,
                 },
                 {

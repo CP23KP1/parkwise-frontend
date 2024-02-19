@@ -218,7 +218,11 @@ const Staff = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        firstName,
+                                                        2,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -235,7 +239,11 @@ const Staff = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={checked}
+                                                    error={validateLength(
+                                                        lastName,
+                                                        2,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -251,7 +259,10 @@ const Staff = () => {
                                                     onChange={(e) =>
                                                         setEmail(e.target.value)
                                                     }
-                                                    error={checked}
+                                                    error={validateEmail(
+                                                        email,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -267,7 +278,10 @@ const Staff = () => {
                                                     onChange={(e) =>
                                                         setPhone(e.target.value)
                                                     }
-                                                    error={checked}
+                                                    error={validatePhone(
+                                                        phone,
+                                                        checked
+                                                    )}
                                                     errorMessage={
                                                         CAN_NOT_BE_EMPTY
                                                     }
@@ -275,7 +289,7 @@ const Staff = () => {
                                                     isRequired
                                                 />
                                             </div>
-                                            <div className="col-span-2">
+                                            {/* <div className="col-span-2">
                                                 <TextInput
                                                     label="ตำแหน่ง"
                                                     key="position"
@@ -292,7 +306,7 @@ const Staff = () => {
                                                     value={phone}
                                                     isRequired
                                                 />
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </div>

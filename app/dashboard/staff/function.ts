@@ -58,7 +58,7 @@ export const createStaff = async (
                     firstname: firstName,
                     lastname: lastName,
                     email: email,
-                    position: position,
+                    position: "Other",
                     phoneNumber: phoneNumber,
                 },
                 { headers: { Authorization: `Bearer ${token}` } }
