@@ -103,8 +103,6 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                     >
                         {menuType.map((item) => {
                             const isActive = () => {
-                                console.log("pathname", pathname);
-                                console.log("item.link", item.link);
                                 return pathname === item.link;
                             };
                             return (
@@ -116,9 +114,7 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                                     key={item.name}
                                     startContent={item.icon}
                                     onClick={() => {
-                                        router.push(
-                                            getPublicBasePath(item.link)
-                                        );
+                                        router.push(item.link);
                                     }}
                                 >
                                     {openSidebar && item.name}
