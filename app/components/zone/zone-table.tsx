@@ -380,7 +380,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                         )
                                                     }
                                                     error={validateLength(
-                                                        maxCapacity,
+                                                        maxCapacity.toString(),
                                                         1,
                                                         checked
                                                     )}

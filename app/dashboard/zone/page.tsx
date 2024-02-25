@@ -430,7 +430,7 @@ const Zone = () => {
                                                         )
                                                     }
                                                     error={validateLength(
-                                                        maxCapacity,
+                                                        maxCapacity.toString(),
                                                         1,
                                                         checked
                                                     )}
