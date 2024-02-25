@@ -3,6 +3,7 @@ import { RiAdminFill } from "react-icons/ri";
 import { BiCctv } from "react-icons/bi";
 import { SiAmazonecs } from "react-icons/si";
 import { BsDatabase } from "react-icons/bs";
+import { MdOutlineEmergency } from "react-icons/md";
 
 export const menuType = [
     {
@@ -49,5 +50,10 @@ export const menuType = [
         name: "ผู้ดูแล",
         icon: <RiAdminFill />,
         link: "/dashboard/admin",
+    },
+    {
+        name: "เบอร์โทรฉุกเฉิก",
+        icon: <MdOutlineEmergency />,
+        link: "/dashboard/emergency",
     },
 ];
