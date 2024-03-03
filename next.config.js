@@ -7,6 +7,7 @@ const nextConfig = {
     publicRuntimeConfig: {
         basePath: process.env.NEXT_PUBLIC_BASEPATH,
     },
+    output: "standalone",
 };
 
 module.exports = nextConfig;

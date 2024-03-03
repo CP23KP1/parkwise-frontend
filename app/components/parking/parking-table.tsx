@@ -281,7 +281,7 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
                         )}
                     </TableHeader>
                     <TableBody
-                        emptyContent={"ไม่มีข้อมูล Staff"}
+                        emptyContent={"ไม่มีข้อมูลที่จอดรถ"}
                         items={sortedItems}
                     >
                         {(item) => (

@@ -22,6 +22,15 @@ jobs:
                   touch parkwise-frontend/.env
                   echo "$PROD_ENV" >> parkwise-frontend/.env
 
+            - name: Remove cache in docker 🏺
+              run: docker system prune -f
+
+            - name: Remove exist container 🏺
+              run: docker rm -f parkwise-frontend
+
+            - name: Remove exist image 🏺
+              run: docker image rm -f cp23kp1/node-parkwise-frontend
+
             - name: Build Docker Image 🐳
               run: docker build parkwise-frontend/ -t cp23kp1/node-parkwise-frontend
 

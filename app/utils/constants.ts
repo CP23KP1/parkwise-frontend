@@ -21,6 +21,11 @@ export const staffColumns = [
 
 export const deviceColumns = [
     {
+        name: "ID",
+        uid: "id",
+        sortable: true,
+    },
+    {
         name: "ชื่อ",
         uid: "name",
         sortable: true,
@@ -177,5 +182,29 @@ export const logColumns = [
         name: "เข้า/ออก",
         uid: "arrowDirection",
         sortable: true,
+    },
+];
+
+
+export const emergencyColumns = [
+    {
+        name: "ชื่อเบอร์ฉุกเฉิน",
+        uid: "name",
+        sortable: true,
+    },
+    {
+        name: "เบอร์โทรศัพท์",
+        uid: "phoneNumber",
+        sortable: true,
+    },
+    {
+        name: "แสดงอยู่",
+        uid: "active",
+        sortable: true,
+    },
+    {
+        name: "",
+        uid: "actions",
+        sortable: false,
     },
 ];
