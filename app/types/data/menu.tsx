@@ -51,4 +51,9 @@ export const menuType = [
         icon: <RiAdminFill />,
         link: getPublicBasePath("/dashboard/admin"),
     },
+    {
+        name: "เบอร์ฉุกเฉิน",
+        icon: <RiAdminFill />,
+        link: getPublicBasePath("/dashboard/emergency"),
+    },
 ];
