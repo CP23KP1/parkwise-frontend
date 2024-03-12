@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import FilterButton from "@/app/components/button/filter";
 import TextInput from "@/app/components/input/input";
-import { createDevice, fetchDevice, fetchZone } from "./function";
 import { ZoneRowData } from "@/app/types/data/zone";
 import { getPublicBasePath } from "@/app/helper/basePath";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
@@ -24,6 +23,7 @@ import {
     SelectItem,
 } from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
+import { createDevice, fetchDevice, fetchZone } from "@/app/services/device.service";
 
 const Device = () => {
     const [open, setOpen] = useState(false);

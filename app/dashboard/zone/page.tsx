@@ -14,7 +14,6 @@ import { error } from "console";
 import Swal from "sweetalert2";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
-import { createZone, fetchZone } from "./function";
 import { getPublicBasePath } from "@/app/helper/basePath";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
@@ -33,6 +32,7 @@ import {
 } from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
 import { displayImageUrlWithSelectedImage } from "@/app/helper/display-image";
+import { createZone, fetchZone } from "@/app/services/zone.service";
 
 const Zone = () => {
     const [dataShow, setDataShow] = useState<ZoneRowData[]>([]);

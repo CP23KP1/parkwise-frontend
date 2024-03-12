@@ -29,8 +29,8 @@ import {
 import { FaTrashCan, FaPencil } from "react-icons/fa6";
 import { emergencyColumns } from "@/app/utils/constants";
 import { EmergencyRowData } from "@/app/types/data/emergency";
-import { deleteEmergency, editEmergency } from "@/app/dashboard/emergency/function";
 import { activeChoice } from "@/app/dashboard/emergency/page";
+import { deleteEmergency, editEmergency } from "@/app/services/emergency.service";
 
 interface Props {
   data: EmergencyRowData[];

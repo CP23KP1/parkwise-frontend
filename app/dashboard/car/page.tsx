@@ -6,13 +6,9 @@ import "react-responsive-modal/styles.css";
 import FilterButton from "@/app/components/button/filter";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import TextInput from "@/app/components/input/input";
-import { createCar, fetchCar, fetchStaff } from "./function";
-import { usePathname } from "next/navigation";
-import { getPublicBasePath } from "@/app/helper/basePath";
 import { StaffRowData } from "@/app/types/data/staff";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
-import { Select } from "@/app/components/select/select";
 import {
     Autocomplete,
     AutocompleteItem,
@@ -30,6 +26,7 @@ import {
 } from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
 import { provinces } from "@/app/common/data/province.data";
+import { createCar, fetchCar, fetchStaff } from "@/app/services/car.service";
 
 const Car = () => {
     const [licensePlate, setLicensePlate] = useState("");
@@ -69,16 +66,6 @@ const Car = () => {
         );
         fetchStaff(setStaff);
     }, [page]);
-
-    const handlePrevPage = async () => {
-        await fetchCar(setCar, setPage, setAllPage, (page - 1).toString());
-        setPage(page - 1);
-    };
-
-    const handleNextPage = async () => {
-        await fetchCar(setCar, setPage, setAllPage, (page + 1).toString());
-        setPage(page + 1);
-    };
 
     const validateAndCreate = async () => {
         try {
