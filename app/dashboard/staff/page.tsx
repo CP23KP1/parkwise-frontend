@@ -5,7 +5,6 @@ import React, { useEffect, useRef, useState } from "react";
 import "react-responsive-modal/styles.css";
 import FilterButton from "@/app/components/button/filter";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
-import { createStaff, fetchStaff } from "./function";
 import { usePathname } from "next/navigation";
 import { getPublicBasePath } from "@/app/helper/basePath";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
@@ -32,6 +31,7 @@ import {
 import { IoIosSearch } from "react-icons/io";
 import TextInput from "@/app/components/input/input";
 import { FaAirbnb, FaPerson } from "react-icons/fa6";
+import { createStaff, fetchStaff } from "@/app/services/staff.service";
 
 const Staff = () => {
     const pathname = usePathname();

@@ -6,15 +6,11 @@ import React, {
     useRef,
     useState,
 } from "react";
-import { Column, useTable } from "react-table";
 import { CarRowData } from "@/app/types/data/car";
 import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
-import { createCar, fetchStaff } from "@/app/dashboard/car/function";
-import { deleteCar, editCar } from "./function";
 import { StaffRowData } from "@/app/types/data/staff";
-import { Select } from "../select/select";
 import {
     Autocomplete,
     AutocompleteItem,
@@ -39,10 +35,9 @@ import { carColumns } from "@/app/utils/constants";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
 import { validateLength } from "@/app/helper/validate";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
-import { ref } from "firebase/storage";
-import { storage } from "@/app/utils/firebase";
 import { displayImageUrlWithSelectedImage } from "@/app/helper/display-image";
 import { provinces } from "@/app/common/data/province.data";
+import { deleteCar, editCar, fetchStaff } from "@/app/services/car.service";
 
 interface Props {
     data: CarRowData[];

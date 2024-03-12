@@ -16,10 +16,10 @@ import { IoIosSearch } from "react-icons/io";
 import { ZoneRowData } from "@/app/types/data/zone";
 import ResponsiveEmergencyTable from "@/app/components/emergency/emergency-table";
 import { EmergencyRowData } from "@/app/types/data/emergency";
-import { createEmergencyNumber, fetchEmergency, searchEmergency } from "./function";
 import TextInput from "@/app/components/input/input";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
+import { createEmergencyNumber, fetchEmergency, searchEmergency } from "@/app/services/emergency.service";
 
 export const activeChoice = [
     {
