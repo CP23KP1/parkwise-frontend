@@ -6,7 +6,6 @@ import Swal from "sweetalert2";
 import { ZoneRowData } from "@/app/types/data/zone";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import TextInput from "../input/input";
-import { deleteZone, editZone } from "./function";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
 import {
@@ -33,6 +32,7 @@ import {
     displayImageUrl,
     displayImageUrlWithSelectedImage,
 } from "@/app/helper/display-image";
+import { deleteZone, editZone } from "@/app/services/zone.service";
 
 interface Props {
     data: ZoneRowData[];

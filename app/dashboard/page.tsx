@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import SummaryCard from "../components/summary-card";
-import { countCar, countDevice, countStaff } from "./device/function";
-import { countZone } from "./zone/function";
+import { countCar, countDevice, countStaff } from "../services/device.service";
+import { countZone } from "../services/zone.service";
 
 const Dashboard: React.FC = () => {
   const [zone, setZone] = useState(0);

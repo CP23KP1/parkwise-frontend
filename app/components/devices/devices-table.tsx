@@ -1,16 +1,10 @@
 // ResponsiveTable.tsx
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Column, useTable } from "react-table";
 import { DeviceRowData } from "@/app/types/data/devices";
 import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
 import { ZoneRowData } from "@/app/types/data/zone";
-import {
-    deleteDevice,
-    editDevice,
-    fetchZone,
-} from "@/app/dashboard/device/function";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
 import {
@@ -32,6 +26,7 @@ import {
 } from "@nextui-org/react";
 import { deviceColumns } from "@/app/utils/constants";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
+import { deleteDevice, editDevice, fetchZone } from "@/app/services/device.service";
 
 interface Props {
     data: DeviceRowData[];
@@ -331,39 +326,6 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                     )}
                 </TableBody>
             </Table>
-
-            {/* <div
-        className="table-wrapper"
-        style={{ maxHeight: "400px", overflowY: "auto" }}
-      >
-        <table {...getTableProps()} className="responsive-table">
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div> */}
         </div>
     );
 };

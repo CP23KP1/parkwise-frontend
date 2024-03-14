@@ -1,17 +1,11 @@
 "use client";
-import DeleteModal from "@/app/components/modal/delete-modal";
 import ResponsiveParkingTable from "@/app/components/parking/parking-table";
-import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
-import { use, useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import FilterButton, {
     FilterButtonProps,
 } from "@/app/components/button/filter";
-import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import TextInput from "@/app/components/input/input";
-import { getPublicBasePath } from "@/app/helper/basePath";
-import { createParking, fetchParking } from "./function";
-import { fetchZone } from "../device/function";
 import { validateLength } from "@/app/helper/validate";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { IoIosSearch } from "react-icons/io";
@@ -28,6 +22,8 @@ import {
     Pagination,
 } from "@nextui-org/react";
 import { ZoneRowData } from "@/app/types/data/zone";
+import { createParking, fetchParking } from "@/app/services/parking.service";
+import { fetchZone } from "@/app/services/device.service";
 
 const Parking = () => {
     const [open, setOpen] = useState(false);

@@ -184,3 +184,27 @@ export const logColumns = [
         sortable: true,
     },
 ];
+
+
+export const emergencyColumns = [
+    {
+        name: "ชื่อเบอร์ฉุกเฉิน",
+        uid: "name",
+        sortable: true,
+    },
+    {
+        name: "เบอร์โทรศัพท์",
+        uid: "phoneNumber",
+        sortable: true,
+    },
+    {
+        name: "แสดงอยู่",
+        uid: "active",
+        sortable: true,
+    },
+    {
+        name: "",
+        uid: "actions",
+        sortable: false,
+    },
+];

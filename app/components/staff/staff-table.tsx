@@ -5,7 +5,6 @@ import { StaffRowData } from "@/app/types/data/staff";
 import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
-import { deleteStaff, editStaff } from "./function";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import {
     validateEmail,
@@ -43,6 +42,7 @@ import {
     displayImageUrl,
     displayImageUrlWithSelectedImage,
 } from "@/app/helper/display-image";
+import { deleteStaff, editStaff } from "@/app/services/staff.service";
 
 interface Props {
     data: StaffRowData[];

@@ -1,12 +1,9 @@
 // ResponsiveTable.tsx
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Column, useTable } from "react-table";
 import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
-import { deleteParking, editParking } from "./function";
 import { ZoneRowData } from "@/app/types/data/zone";
-import { fetchZone } from "@/app/dashboard/device/function";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { validateLength } from "@/app/helper/validate";
 import {
@@ -29,6 +26,8 @@ import {
 } from "@nextui-org/react";
 import { parkingColumns } from "@/app/utils/constants";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
+import { deleteParking, editParking } from "@/app/services/parking.service";
+import { fetchZone } from "@/app/services/device.service";
 
 interface Props {
     data: ParkingRowData[];
@@ -281,7 +280,7 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
                         )}
                     </TableHeader>
                     <TableBody
-                        emptyContent={"ไม่มีข้อมูล Staff"}
+                        emptyContent={"ไม่มีข้อมูลที่จอดรถ"}
                         items={sortedItems}
                     >
                         {(item) => (
