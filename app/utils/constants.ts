@@ -185,7 +185,6 @@ export const logColumns = [
     },
 ];
 
-
 export const emergencyColumns = [
     {
         name: "ชื่อเบอร์ฉุกเฉิน",
@@ -206,5 +205,18 @@ export const emergencyColumns = [
         name: "",
         uid: "actions",
         sortable: false,
+    },
+];
+
+export const activeChoice = [
+    {
+        id: 1,
+        name: "แสดง",
+        value: true,
+    },
+    {
+        id: 2,
+        name: "ไม่แสดง",
+        value: false,
     },
 ];
