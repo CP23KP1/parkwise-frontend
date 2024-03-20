@@ -10,6 +10,7 @@ export const createDevice = async (
     zoneId: string
 ) => {
     try {
+        Swal.isLoading();
         if (checkAuth()) {
             const token = localStorage.getItem("access_token");
             await axios.post(
@@ -103,6 +104,7 @@ export const editDevice = async (
     zoneId: string
 ) => {
     try {
+        Swal.isLoading();
         if (checkAuth()) {
             const token = localStorage.getItem("access_token");
             axios.patch(
@@ -138,6 +140,7 @@ export const editDevice = async (
 
 export const deleteDevice = async (id: number) => {
     try {
+        Swal.isLoading();
         if (checkAuth()) {
             const token = localStorage.getItem("access_token");
             axios

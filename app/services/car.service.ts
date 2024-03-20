@@ -16,6 +16,7 @@ export const editCar = async (
     imageFile?: File
 ) => {
     try {
+        Swal.isLoading();
         if (checkAuth()) {
             const token = localStorage.getItem("access_token");
             let imageUrl;
@@ -61,6 +62,7 @@ export const editCar = async (
 
 export const deleteCar = async (id: number) => {
     try {
+        Swal.isLoading();
         if (checkAuth()) {
             const token = localStorage.getItem("access_token");
             axios
@@ -108,6 +110,7 @@ export const createCar = async (
     imageFile?: File
 ) => {
     try {
+        Swal.isLoading();
         if (checkAuth()) {
             const token = localStorage.getItem("access_token");
             const { data } = await axios.post<CarRowData>(

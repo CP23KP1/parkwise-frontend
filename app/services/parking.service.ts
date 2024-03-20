@@ -10,6 +10,7 @@ export const editParking = async (
     zoneId: number
 ) => {
     try {
+        Swal.isLoading();
         if (checkAuth()) {
             const token = localStorage.getItem("access_token");
             await axios.patch(
@@ -42,6 +43,7 @@ export const editParking = async (
 
 export const deleteParking = async (id: number) => {
     try {
+        Swal.isLoading();
         if (checkAuth()) {
             const token = localStorage.getItem("access_token");
             axios
@@ -72,8 +74,6 @@ export const deleteParking = async (id: number) => {
         });
     }
 };
-
-
 
 export const fetchParking = (
     setParking: any,
@@ -116,6 +116,7 @@ export const createParking = async (
     amount: number,
     zoneId: number
 ) => {
+    Swal.isLoading();
     if (checkAuth()) {
         const token = localStorage.getItem("access_token");
         await axios

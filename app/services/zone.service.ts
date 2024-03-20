@@ -57,8 +57,8 @@ export const createZone = async (
     imageFile?: File
 ) => {
     if (checkAuth()) {
+        Swal.isLoading();
         const token = localStorage.getItem("access_token");
-
         try {
             const { data } = await axios.post<ZoneRowData>(
                 process.env.NEXT_PUBLIC_API_HOST + "/zones",
@@ -121,7 +121,6 @@ export const countZone = async (setCount: any) => {
     }
 };
 
-
 export const editZone = async (
     id: string | number,
     name: string,
@@ -132,6 +131,7 @@ export const editZone = async (
     imageFile?: File
 ) => {
     if (checkAuth()) {
+        Swal.isLoading();
         const token = localStorage.getItem("access_token");
         let imageUrl;
         if (imageFile) {
@@ -176,8 +176,8 @@ export const editZone = async (
 
 export const deleteZone = async (id: string | number) => {
     if (checkAuth()) {
+        Swal.isLoading();
         const token = localStorage.getItem("access_token");
-        await axios;
         await axios
             .delete(process.env.NEXT_PUBLIC_API_HOST + "/zones/" + id, {
                 headers: { Authorization: `Bearer ${token}` },

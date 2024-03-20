@@ -14,6 +14,7 @@ export const editStaff = async (
     imageFile?: File
 ) => {
     if (checkAuth()) {
+        Swal.isLoading();
         const url = process.env.NEXT_PUBLIC_API_HOST + "/staffs/" + id;
         let imageUrl;
         if (imageFile) {
@@ -60,6 +61,7 @@ export const editStaff = async (
 
 export const deleteStaff = async (id: number) => {
     try {
+        Swal.isLoading();
         if (checkAuth()) {
             const token = localStorage.getItem("access_token");
             axios
@@ -90,8 +92,6 @@ export const deleteStaff = async (id: number) => {
         });
     }
 };
-
-
 
 export const fetchStaff = async (
     setStaff: any,
@@ -137,6 +137,7 @@ export const createStaff = async (
     position: string,
     imageFile?: File
 ) => {
+    Swal.isLoading();
     if (checkAuth()) {
         const token = localStorage.getItem("access_token");
 
