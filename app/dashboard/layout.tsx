@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../components/sidebar";
 import { Kanit } from "next/font/google";
 
@@ -18,7 +18,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
             <body className={kanit.className}>
                 <div className="flex">
                     <Sidebar />
-
                     <main className="flex-grow p-8 bg-gray-50">{children}</main>
                 </div>
                 <footer></footer>

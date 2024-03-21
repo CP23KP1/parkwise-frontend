@@ -13,6 +13,7 @@ import {
     TableRow,
 } from "@nextui-org/react";
 import { logColumns } from "@/app/utils/constants";
+import dayjs from "dayjs";
 
 interface Props {
     data: LogsRowData[] | any[];
@@ -40,8 +41,6 @@ const ResponsiveLogsTable: React.FC<Props> = ({ data }) => {
     }, [sortDescriptor, data]);
 
     const renderCell = (item: LogsRowData, columnKey: keyof LogsRowData) => {
-        console.log(item);
-
         const cellValue = item[columnKey];
 
         switch (columnKey) {
@@ -52,6 +51,10 @@ const ResponsiveLogsTable: React.FC<Props> = ({ data }) => {
                     <>
                         {item.staff.firstname} {item.staff.lastname}
                     </>
+                );
+            case "timestamp":
+                return (
+                    <>{dayjs(item.timestamp).format("DD/MM/YYYY HH:mm:ss")}</>
                 );
             case "arrowDirection":
                 return (

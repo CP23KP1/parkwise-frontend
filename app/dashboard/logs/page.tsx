@@ -30,9 +30,13 @@ const Logs = () => {
     const [selectedZone, setSelectedZone] = useState("1");
     const [allPage, setAllPage] = useState(0);
 
+    const [token, setToken] = useState("");
+
     const fetcher = (url: string) =>
         axios
-            .get(url)
+            .get(url, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
             .then((res) => res.data)
             .then((res) => {
                 setAllPage(res.meta.totalPages);
@@ -41,7 +45,9 @@ const Logs = () => {
             });
     const fetcherLatest = (url: string) =>
         axios
-            .get(url)
+            .get(url, {
+                headers: { Authorization: `Bearer ${token}` },
+            })
             .then((res) => res.data)
             .then((res) => {
                 return res;
@@ -57,6 +63,7 @@ const Logs = () => {
     );
 
     useEffect(() => {
+        setToken(localStorage.getItem("access_token") || "");
         if (
             latestSwrData &&
             latestSwrData.data &&
@@ -78,6 +85,7 @@ const Logs = () => {
     );
 
     useEffect(() => {
+        setToken(localStorage.getItem("access_token") || "");
         fetchZone(setZone, setSelectedZone);
     }, []);
 
@@ -152,8 +160,9 @@ const Logs = () => {
                         <h1 className="text-base md:text-xl">
                             รถยนต์ทะเบียน:{" "}
                         </h1>
-                        <h1 className="text-base md:text-xl">
-                            {latestData && latestData.car.licensePlate}
+                        <h1 className="font-bold md:text-xl">
+                            {(latestData && latestData.car.licensePlate) ||
+                                "ไม่มีข้อมูล"}
                         </h1>
                         <h1 className="text-base md:text-xl">
                             ชื่อผู้ใช้บริการ:{" "}
