@@ -90,8 +90,8 @@ const Emergency = () => {
                                         <div className="grid grid-cols-1 gap-y-6 gap-x-4">
                                             <div className="col-span-2">
                                                 <TextInput
-                                                    label="ป้ายทะเบียน"
-                                                    key="licensePlate"
+                                                    label="ชื่อ-นามสกุล"
+                                                    key="name"
                                                     onChange={(e) => {
                                                         setName(e.target.value);
                                                     }}
