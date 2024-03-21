@@ -66,7 +66,12 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
 
     const validateAndEdit = () => {
         setChecked(true);
-        if (firstName !== "" && lastName !== "" && email !== "") {
+
+        const isFirstnameValidated = validateLength(firstName, 1, checked);
+        const isLastnameValidated = validateLength(lastName, 1, checked);
+        const isEmailValidated = validateEmail(email, checked);
+
+        if (isFirstnameValidated && isLastnameValidated && isEmailValidated) {
             editAdmin(parseInt(id), firstName, lastName, email, password);
         }
     };

@@ -86,7 +86,18 @@ const ResponsiveEmergencyTable: React.FC<Props> = ({ data }) => {
         setChecked(true);
         setLoading(true);
         try {
-            if (id && name && phoneNumber && active != null) {
+            const isNameValidated = validateLength(name, 1, checked);
+            const isPhoneNumberValidated = validateLength(
+                phoneNumber,
+                1,
+                checked
+            );
+            if (
+                id &&
+                isNameValidated &&
+                isPhoneNumberValidated &&
+                active != null
+            ) {
                 await editEmergency(id, name, phoneNumber, active);
                 setChecked(false);
             }

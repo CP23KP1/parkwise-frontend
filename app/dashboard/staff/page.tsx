@@ -120,17 +120,35 @@ const Staff = () => {
         setSelectedImageFile(null);
     };
 
-    const handleClickCheck = () => {
+    const handleCreateStaff = async () => {
         setChecked(true);
-        if (firstName && lastName && email && phone) {
-            createStaff(
-                firstName,
-                lastName,
-                email,
-                phone,
-                position,
-                selectedImageFile!
-            );
+        setLoading(true);
+
+        const isFirstnameValidated = validateLength(firstName, 1, checked);
+        const isLastnameValidated = validateLength(lastName, 1, checked);
+        const isEmailValidated = validateEmail(email, checked);
+        const isPhoneValidated = validatePhone(phone, checked);
+
+        try {
+            if (
+                isFirstnameValidated &&
+                isLastnameValidated &&
+                isEmailValidated &&
+                isPhoneValidated
+            ) {
+                await createStaff(
+                    firstName,
+                    lastName,
+                    email,
+                    phone,
+                    position,
+                    selectedImageFile!
+                );
+            }
+            setChecked(false);
+        } catch (error) {
+        } finally {
+            setLoading(false);
         }
     };
     const handleSearch = async (e: any) => {
@@ -322,7 +340,7 @@ const Staff = () => {
                                 <Button
                                     variant="shadow"
                                     color="primary"
-                                    onPress={() => handleClickCheck()}
+                                    onPress={() => handleCreateStaff()}
                                     isLoading={loading}
                                 >
                                     เพิ่ม

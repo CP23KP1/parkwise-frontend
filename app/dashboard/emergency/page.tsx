@@ -58,10 +58,21 @@ const Emergency = () => {
     };
 
     const validateAndCreate = async () => {
-        if (!name || !phoneNumber || !active) {
-            setChecked(true);
-        } else {
-            await createEmergencyNumber(name, phoneNumber, active);
+        setChecked(true);
+        try {
+            const isNameValidated = validateLength(name, 1, checked);
+            const isPhoneNumberValidated = validateLength(
+                phoneNumber,
+                1,
+                checked
+            );
+
+            if (isNameValidated && isPhoneNumberValidated && active != null) {
+                await createEmergencyNumber(name, phoneNumber, active);
+            }
+            setChecked(false);
+        } catch (error) {
+        } finally {
         }
     };
 
@@ -90,7 +101,7 @@ const Emergency = () => {
                                         <div className="grid grid-cols-1 gap-y-6 gap-x-4">
                                             <div className="col-span-2">
                                                 <TextInput
-                                                    label="ชื่อ-นามสกุล"
+                                                    label="ชื่อเบอร์โทรฉุกเฉิน"
                                                     key="name"
                                                     onChange={(e) => {
                                                         setName(e.target.value);

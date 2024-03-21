@@ -23,7 +23,11 @@ import {
     SelectItem,
 } from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
-import { createDevice, fetchDevice, fetchZone } from "@/app/services/device.service";
+import {
+    createDevice,
+    fetchDevice,
+    fetchZone,
+} from "@/app/services/device.service";
 
 const Device = () => {
     const [open, setOpen] = useState(false);
@@ -78,7 +82,17 @@ const Device = () => {
 
     const createDeviceWithValidate = () => {
         setChecked(true);
-        if (name && checked && price && brand) {
+
+        const isNameValidated = validateLength(name, 1, checked);
+        const isBrandValidated = validateLength(description, 1, checked);
+        const isPriceValidated = validateLength(price, 1, checked);
+
+        if (
+            isNameValidated &&
+            checked &&
+            isPriceValidated &&
+            isBrandValidated
+        ) {
             createDevice(name, description, price, brand, zoneId.toString());
             setChecked(false);
         }

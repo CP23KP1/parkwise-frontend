@@ -63,7 +63,10 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
 
     const validateAndEdit = () => {
         setChecked(true);
-        if (name && checked && amount) {
+        const isNameValidated = validateLength(name, 1, checked);
+        const isAmountValidated = validateLength(amount, 1, checked);
+
+        if (isNameValidated && checked && isAmountValidated) {
             editParking(id, name, description, amount, parseInt(zoneId));
         }
     };

@@ -111,16 +111,26 @@ const Zone = () => {
     };
 
     const handleCreateZone = async () => {
-        await createZone(
-            name,
-            description,
-            maxCapacity,
-            address,
-            selectedLatLng,
-            createStatus,
-            setCreateStatus,
-            selectedImageFile!
-        );
+        const isZoneNameValidated = validateLength(name, 1, checked);
+        const isDescriptionValidated = validateLength(description, 1, checked);
+        const isMaxCapacityValidated = validateLength(maxCapacity, 1, checked);
+
+        if (
+            isZoneNameValidated &&
+            isDescriptionValidated &&
+            isMaxCapacityValidated
+        ) {
+            await createZone(
+                name,
+                description,
+                maxCapacity,
+                address,
+                selectedLatLng,
+                createStatus,
+                setCreateStatus,
+                selectedImageFile!
+            );
+        }
     };
 
     const { isLoaded } = useLoadScript({

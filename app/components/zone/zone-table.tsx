@@ -91,7 +91,15 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
     const validateAndEdit = async () => {
         setChecked(true);
         setLoading(true);
-        if (zoneName && maxCapacity && address) {
+        const isZoneNameValidated = validateLength(zoneName, 1, checked);
+        const isDescriptionValidated = validateLength(description, 1, checked);
+        const isMaxCapacityValidated = validateLength(maxCapacity, 1, checked);
+
+        if (
+            isZoneNameValidated &&
+            isDescriptionValidated &&
+            isMaxCapacityValidated
+        ) {
             await editZone(
                 id,
                 zoneName,

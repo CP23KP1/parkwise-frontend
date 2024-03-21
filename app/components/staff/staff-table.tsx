@@ -101,7 +101,19 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
         setChecked(true);
         setLoading(true);
         try {
-            if (id && firstName && lastName && email && phone && position) {
+            const isFirstnameValidated = validateLength(firstName, 1, checked);
+            const isLastnameValidated = validateLength(lastName, 1, checked);
+            const isEmailValidated = validateEmail(email, checked);
+            const isPhoneValidated = validatePhone(phone, checked);
+
+            if (
+                id &&
+                isFirstnameValidated &&
+                isLastnameValidated &&
+                isEmailValidated &&
+                isPhoneValidated &&
+                position
+            ) {
                 await editStaff(
                     id,
                     firstName,

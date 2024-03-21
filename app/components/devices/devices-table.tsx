@@ -76,9 +76,12 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
 
     const validateAndEdit = () => {
         setChecked(true);
-        console.log(checked);
 
-        if (name && price && brand) {
+        const isNameValidated = validateLength(name, 1, checked);
+        const isBrandValidated = validateLength(description, 1, checked);
+        const isPriceValidated = validateLength(price, 1, checked);
+
+        if (isNameValidated && isPriceValidated && isBrandValidated) {
             editDevice(
                 deviceId.toString(),
                 name,

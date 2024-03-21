@@ -71,23 +71,24 @@ const Car = () => {
         try {
             setLoading(true);
             setChecked(true);
-            const isValidateLicensePlate = validateLength(
+            const isLicensePlateValidated = validateLength(
                 licensePlate,
                 1,
                 checked
             );
 
-            const isValidateColor = validateLength(color, 1, checked);
-            const isValidateBrand = validateLength(brand, 1, checked);
-            const isValidateModel = validateLength(model, 1, checked);
-            const isValidateYear = validateLength(year, 1, checked);
+            const isColorValidated = validateLength(color, 1, checked);
+            const isBrandValidated = validateLength(brand, 1, checked);
+            const isModelValidated = validateLength(model, 1, checked);
+            const isYearValidated = validateLength(year, 1, checked);
 
             if (
-                isValidateLicensePlate &&
-                isValidateColor &&
-                isValidateBrand &&
-                isValidateModel &&
-                isValidateYear &&
+                isLicensePlateValidated &&
+                isColorValidated &&
+                isBrandValidated &&
+                isModelValidated &&
+                isYearValidated &&
+                province &&
                 ownerId
             ) {
                 await createCar(

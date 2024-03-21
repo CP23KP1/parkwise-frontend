@@ -98,7 +98,10 @@ const Parking = () => {
 
     const checkAndCreate = async () => {
         setChecked(true);
-        if (name && desc && amount && +zoneId) {
+        const isNameValidated = validateLength(name, 1, checked);
+        const isAmountValidated = validateLength(amount, 1, checked);
+
+        if (isNameValidated && isAmountValidated && +zoneId) {
             await createParking(name, desc, +amount, +zoneId);
             setOpen(false);
         }
