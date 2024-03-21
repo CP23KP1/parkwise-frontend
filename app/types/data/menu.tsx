@@ -1,5 +1,6 @@
 import { FaCar, FaHouse, FaSquareParking } from "react-icons/fa6";
 import { RiAdminFill } from "react-icons/ri";
+import { MdOutlineEmergency } from "react-icons/md";
 import { BiCctv } from "react-icons/bi";
 import { SiAmazonecs } from "react-icons/si";
 import { BsDatabase } from "react-icons/bs";
@@ -53,7 +54,7 @@ export const menuType = [
     },
     {
         name: "เบอร์ฉุกเฉิน",
-        icon: <RiAdminFill />,
+        icon: <MdOutlineEmergency />,
         link: getPublicBasePath("/dashboard/emergency"),
     },
 ];
