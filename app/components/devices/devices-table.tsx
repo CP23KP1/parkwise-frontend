@@ -26,7 +26,11 @@ import {
 } from "@nextui-org/react";
 import { deviceColumns } from "@/app/utils/constants";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
-import { deleteDevice, editDevice, fetchZone } from "@/app/services/device.service";
+import {
+    deleteDevice,
+    editDevice,
+    fetchZone,
+} from "@/app/services/device.service";
 
 interface Props {
     data: DeviceRowData[];
@@ -289,7 +293,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                 aria-label="Example table with custom cells, pagination and sorting"
                 isHeaderSticky
                 classNames={{
-                    wrapper: "max-h-[382px]",
+                    wrapper: "max-h-full",
                 }}
                 sortDescriptor={sortDescriptor}
                 topContentPlacement="outside"

@@ -205,7 +205,7 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
                     aria-label="Example table with custom cells, pagination and sorting"
                     isHeaderSticky
                     classNames={{
-                        wrapper: "max-h-[382px]",
+                        wrapper: "max-h-full",
                     }}
                     sortDescriptor={sortDescriptor}
                     topContentPlacement="outside"
