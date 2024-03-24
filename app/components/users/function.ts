@@ -2,13 +2,28 @@ import { checkAuth } from "@/app/helper/auth";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-export const editAdmin = (
+const isRequiredFieldValidated = (
+    firstname: string,
+    lastname: string,
+    email: string,
+    password: string
+) => {
+    if (!firstname || !lastname || !email || !password) {
+        return false;
+    }
+    return true;
+};
+
+export const editAdmin = async (
     id: number,
     firstName: string,
     lastName: string,
     email: string,
     password: string
 ) => {
+    if (!isRequiredFieldValidated(firstName, lastName, email, password)) {
+        return;
+    }
     if (checkAuth()) {
         const url = process.env.NEXT_PUBLIC_API_HOST + "/admin/" + id;
         let data: any = {
@@ -16,14 +31,6 @@ export const editAdmin = (
             lastname: lastName,
             email: email,
         };
-        if (password !== "") {
-            data = {
-                firstname: firstName,
-                lastname: lastName,
-                email: email,
-                password: password,
-            };
-        }
         axios
             .patch(url, data, {
                 headers: {

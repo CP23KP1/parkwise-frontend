@@ -5,9 +5,9 @@ import Swal from "sweetalert2";
 import TextInput from "../input/input";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import {
-    validateLength,
-    validatePhone,
-    validatePhoneWording,
+    inValidateLength,
+    inValidatePhone,
+    inValidatePhoneWording,
 } from "@/app/helper/validate";
 import {
     Table,
@@ -86,20 +86,19 @@ const ResponsiveEmergencyTable: React.FC<Props> = ({ data }) => {
         setChecked(true);
         setLoading(true);
         try {
-            const isNameValidated = validateLength(name, 1, checked);
-            const isPhoneNumberValidated = validateLength(
+            const isNameInValidated = inValidateLength(name, 1, checked);
+            const isPhoneNumberInValidated = inValidateLength(
                 phoneNumber,
                 1,
                 checked
             );
             if (
                 id &&
-                isNameValidated &&
-                isPhoneNumberValidated &&
+                !isNameInValidated &&
+                !isPhoneNumberInValidated &&
                 active != null
             ) {
                 await editEmergency(id, name, phoneNumber, active);
-                setChecked(false);
             }
         } catch (error) {
         } finally {
@@ -201,7 +200,7 @@ const ResponsiveEmergencyTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setName(e.target.value)
                                             }
-                                            error={validateLength(
+                                            error={inValidateLength(
                                                 name,
                                                 1,
                                                 checked
@@ -218,11 +217,11 @@ const ResponsiveEmergencyTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setPhoneNumber(e.target.value)
                                             }
-                                            error={validatePhone(
+                                            error={inValidatePhone(
                                                 phoneNumber,
                                                 checked
                                             )}
-                                            errorMessage={validatePhoneWording(
+                                            errorMessage={inValidatePhoneWording(
                                                 phoneNumber
                                             )}
                                             value={phoneNumber}

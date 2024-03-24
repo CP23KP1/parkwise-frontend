@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import TextInput from "../input/input";
 import { ZoneRowData } from "@/app/types/data/zone";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
-import { validateLength } from "@/app/helper/validate";
+import { inValidateLength, inValidateMinNumber } from "@/app/helper/validate";
 import {
     Select,
     Modal,
@@ -46,6 +46,7 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
         setAmount("");
         setZoneId("");
         setChecked(false);
+        setLoading(false);
     };
 
     const [id, setId] = useState("");
@@ -61,14 +62,16 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
     });
     const [loading, setLoading] = useState(false);
 
-    const validateAndEdit = () => {
+    const validateAndEdit = async () => {
         setChecked(true);
-        const isNameValidated = validateLength(name, 1, checked);
-        const isAmountValidated = validateLength(amount, 1, checked);
+        setLoading(true);
+        const isNameInValidated = inValidateLength(name, 1, checked);
+        const isAmountInValidated = inValidateMinNumber(+amount, 1, checked);
 
-        if (isNameValidated && checked && isAmountValidated) {
+        if (!isNameInValidated && !isAmountInValidated) {
             editParking(id, name, description, amount, parseInt(zoneId));
         }
+        setLoading(false);
     };
 
     useEffect(() => {
@@ -156,7 +159,7 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
                     {(onClose) => (
                         <>
                             <ModalHeader className="flex flex-col gap-1">
-                                <span className="text-xl">เพิ่มที่จอดรถ</span>
+                                <span className="text-xl">แก้ไขที่จอดรถ</span>
                             </ModalHeader>
                             <ModalBody>
                                 <div className="grid grid-cols-2 gap-3">
@@ -167,7 +170,7 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setName(e.target.value)
                                             }
-                                            error={validateLength(
+                                            error={inValidateLength(
                                                 name,
                                                 1,
                                                 checked
@@ -184,7 +187,7 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setDescription(e.target.value)
                                             }
-                                            error={validateLength(
+                                            error={inValidateLength(
                                                 description,
                                                 1,
                                                 checked
@@ -202,7 +205,7 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setAmount(e.target.value)
                                             }
-                                            error={validateLength(
+                                            error={inValidateLength(
                                                 amount,
                                                 1,
                                                 checked
@@ -249,7 +252,7 @@ const ResponsiveParkingTable: React.FC<Props> = ({ data }) => {
                                     onPress={() => validateAndEdit()}
                                     isLoading={loading}
                                 >
-                                    แก้ไข
+                                    บันทึก
                                 </Button>
                             </ModalFooter>
                         </>

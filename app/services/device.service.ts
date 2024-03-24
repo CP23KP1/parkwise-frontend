@@ -2,6 +2,19 @@ import { checkAuth } from "@/app/helper/auth";
 import axios from "axios";
 import Swal from "sweetalert2";
 
+const isRequiredFieldValidated = (
+    name: string,
+    description: string,
+    price: string,
+    brand: string,
+    zoneId: string
+) => {
+    if (!name || !description || !price || !brand || !zoneId) {
+        return false;
+    }
+    return true;
+};
+
 export const createDevice = async (
     name: string,
     description: string,
@@ -9,6 +22,9 @@ export const createDevice = async (
     brand: string,
     zoneId: string
 ) => {
+    if (!isRequiredFieldValidated(name, description, price, brand, zoneId)) {
+        return;
+    }
     try {
         Swal.isLoading();
         if (checkAuth()) {
@@ -103,6 +119,10 @@ export const editDevice = async (
     brand: string,
     zoneId: string
 ) => {
+    if (!isRequiredFieldValidated(name, description, price, brand, zoneId)) {
+        return;
+    }
+
     try {
         Swal.isLoading();
         if (checkAuth()) {

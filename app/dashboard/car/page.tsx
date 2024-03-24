@@ -8,7 +8,7 @@ import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import TextInput from "@/app/components/input/input";
 import { StaffRowData } from "@/app/types/data/staff";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
-import { validateLength } from "@/app/helper/validate";
+import { inValidateLength } from "@/app/helper/validate";
 import {
     Autocomplete,
     AutocompleteItem,
@@ -71,23 +71,23 @@ const Car = () => {
         try {
             setLoading(true);
             setChecked(true);
-            const isLicensePlateValidated = validateLength(
+            const isLicensePlateInValidated = inValidateLength(
                 licensePlate,
                 1,
                 checked
             );
 
-            const isColorValidated = validateLength(color, 1, checked);
-            const isBrandValidated = validateLength(brand, 1, checked);
-            const isModelValidated = validateLength(model, 1, checked);
-            const isYearValidated = validateLength(year, 1, checked);
+            const isColorInValidated = inValidateLength(color, 1, checked);
+            const isBrandInValidated = inValidateLength(brand, 1, checked);
+            const isModelInValidated = inValidateLength(model, 1, checked);
+            const isYearInValidated = inValidateLength(year, 1, checked);
 
             if (
-                isLicensePlateValidated &&
-                isColorValidated &&
-                isBrandValidated &&
-                isModelValidated &&
-                isYearValidated &&
+                !isLicensePlateInValidated &&
+                !isColorInValidated &&
+                !isBrandInValidated &&
+                !isModelInValidated &&
+                !isYearInValidated &&
                 province &&
                 ownerId
             ) {
@@ -101,7 +101,6 @@ const Car = () => {
                     province,
                     selectedImageFile!
                 );
-                setChecked(false);
             }
         } catch (error) {
         } finally {
@@ -274,6 +273,21 @@ const Car = () => {
                                                         ownerId
                                                     )}
                                                     isClearable={false}
+                                                    isRequired
+                                                    errorMessage={
+                                                        inValidateLength(
+                                                            ownerId,
+                                                            1,
+                                                            checked
+                                                        )
+                                                            ? "กรุณาเลือกเจ้าของรถ"
+                                                            : ""
+                                                    }
+                                                    isInvalid={inValidateLength(
+                                                        ownerId,
+                                                        1,
+                                                        checked
+                                                    )}
                                                 >
                                                     {(item) => (
                                                         <AutocompleteItem
@@ -293,7 +307,7 @@ const Car = () => {
                                                             e.target.value
                                                         );
                                                     }}
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         licensePlate,
                                                         1,
                                                         checked
@@ -319,6 +333,21 @@ const Car = () => {
                                                         province
                                                     )}
                                                     isClearable={false}
+                                                    isRequired
+                                                    errorMessage={
+                                                        inValidateLength(
+                                                            province,
+                                                            1,
+                                                            checked
+                                                        )
+                                                            ? "กรุณาเลือกจังหวัด"
+                                                            : ""
+                                                    }
+                                                    isInvalid={inValidateLength(
+                                                        province,
+                                                        1,
+                                                        checked
+                                                    )}
                                                 >
                                                     {(item) => (
                                                         <AutocompleteItem
@@ -336,7 +365,7 @@ const Car = () => {
                                                     onChange={(e) =>
                                                         setColor(e.target.value)
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         color,
                                                         1,
                                                         checked
@@ -355,7 +384,7 @@ const Car = () => {
                                                     onChange={(e) =>
                                                         setBrand(e.target.value)
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         brand,
                                                         1,
                                                         checked
@@ -374,7 +403,7 @@ const Car = () => {
                                                     onChange={(e) =>
                                                         setModel(e.target.value)
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         model,
                                                         1,
                                                         checked
@@ -393,7 +422,7 @@ const Car = () => {
                                                     onChange={(e) =>
                                                         setYear(e.target.value)
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         year,
                                                         1,
                                                         checked

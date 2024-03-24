@@ -5,13 +5,13 @@ import { StaffRowData } from "@/app/types/data/staff";
 import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
-import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
+import { CAN_NOT_BE_EMPTY, PHONE_LENGTH_INVALID } from "@/app/helper/wording";
 import {
-    validateEmail,
-    validateEmailWording,
-    validateLength,
-    validatePhone,
-    validatePhoneWording,
+    inValidateEmail,
+    inValidateEmailWording,
+    inValidateLength,
+    inValidatePhone,
+    inValidatePhoneWording,
 } from "@/app/helper/validate";
 import {
     Table,
@@ -101,18 +101,25 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
         setChecked(true);
         setLoading(true);
         try {
-            const isFirstnameValidated = validateLength(firstName, 1, checked);
-            const isLastnameValidated = validateLength(lastName, 1, checked);
-            const isEmailValidated = validateEmail(email, checked);
-            const isPhoneValidated = validatePhone(phone, checked);
+            const isFirstnameInValidated = inValidateLength(
+                firstName,
+                1,
+                checked
+            );
+            const isLastnameInValidated = inValidateLength(
+                lastName,
+                1,
+                checked
+            );
+            const isEmailInValidated = inValidateEmail(email, checked);
+            const isPhoneInValidated = inValidatePhone(phone, checked);
 
             if (
                 id &&
-                isFirstnameValidated &&
-                isLastnameValidated &&
-                isEmailValidated &&
-                isPhoneValidated &&
-                position
+                !isFirstnameInValidated &&
+                !isLastnameInValidated &&
+                !isEmailInValidated &&
+                !isPhoneInValidated
             ) {
                 await editStaff(
                     id,
@@ -124,7 +131,6 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                     selectedImageFile!
                 );
             }
-            setChecked(false);
         } catch (error) {
         } finally {
             setLoading(false);
@@ -270,7 +276,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         setEmail(e.target.value)
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         firstName,
                                                         1,
                                                         checked
@@ -291,7 +297,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         lastName,
                                                         1,
                                                         checked
@@ -311,7 +317,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         setEmail(e.target.value)
                                                     }
-                                                    error={validateEmail(
+                                                    error={inValidateEmail(
                                                         email,
                                                         checked
                                                     )}
@@ -330,12 +336,12 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         setPhone(e.target.value)
                                                     }
-                                                    error={validatePhone(
+                                                    error={inValidatePhone(
                                                         phone,
                                                         checked
                                                     )}
                                                     errorMessage={
-                                                        CAN_NOT_BE_EMPTY
+                                                        PHONE_LENGTH_INVALID
                                                     }
                                                     value={phone}
                                                     isRequired

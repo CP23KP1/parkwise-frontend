@@ -16,7 +16,7 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import { getPublicBasePath } from "@/app/helper/basePath";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
-import { validateLength } from "@/app/helper/validate";
+import { inValidateLength } from "@/app/helper/validate";
 import {
     Avatar,
     Button,
@@ -57,11 +57,33 @@ const Zone = () => {
     );
     const inputRef = useRef(null as any);
 
-    const validateAndCreate = () => {
+    const validateAndCreate = async () => {
         setChecked(true);
         setLoading(true);
-        if (name && description && maxCapacity && address) {
-            handleCreateZone();
+
+        const isZoneNameInValidated = inValidateLength(name, 1, checked);
+        const isAddressInValidated = inValidateLength(address, 1, checked);
+        const isMaxCapacityInValidated = inValidateLength(
+            maxCapacity,
+            1,
+            checked
+        );
+
+        if (
+            !isZoneNameInValidated &&
+            !isAddressInValidated &&
+            !isMaxCapacityInValidated
+        ) {
+            await createZone(
+                name,
+                description,
+                maxCapacity,
+                address,
+                selectedLatLng,
+                createStatus,
+                setCreateStatus,
+                selectedImageFile!
+            );
         }
         setLoading(false);
     };
@@ -108,29 +130,6 @@ const Zone = () => {
             ...selectedLatLng,
             lng: parseFloat(event.target.value) || 0,
         });
-    };
-
-    const handleCreateZone = async () => {
-        const isZoneNameValidated = validateLength(name, 1, checked);
-        const isDescriptionValidated = validateLength(description, 1, checked);
-        const isMaxCapacityValidated = validateLength(maxCapacity, 1, checked);
-
-        if (
-            isZoneNameValidated &&
-            isDescriptionValidated &&
-            isMaxCapacityValidated
-        ) {
-            await createZone(
-                name,
-                description,
-                maxCapacity,
-                address,
-                selectedLatLng,
-                createStatus,
-                setCreateStatus,
-                selectedImageFile!
-            );
-        }
     };
 
     const { isLoaded } = useLoadScript({
@@ -374,7 +373,7 @@ const Zone = () => {
                                                     onChange={(e) =>
                                                         setName(e.target.value)
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         name,
                                                         1,
                                                         checked
@@ -395,16 +394,7 @@ const Zone = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={validateLength(
-                                                        description,
-                                                        1,
-                                                        checked
-                                                    )}
-                                                    errorMessage={
-                                                        CAN_NOT_BE_EMPTY
-                                                    }
                                                     value={description}
-                                                    isRequired
                                                 />
                                             </div>
                                             <div className="col-span-2">
@@ -417,7 +407,7 @@ const Zone = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         address,
                                                         1,
                                                         checked
@@ -439,7 +429,7 @@ const Zone = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         maxCapacity.toString(),
                                                         1,
                                                         checked
@@ -459,7 +449,7 @@ const Zone = () => {
                                                     onChange={(e) =>
                                                         handleLatChange(e)
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         selectedLatLng.lat?.toString(),
                                                         1,
                                                         checked
@@ -482,7 +472,7 @@ const Zone = () => {
                                                     onChange={(e) =>
                                                         handleLngChange(e)
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         selectedLatLng.lng?.toString(),
                                                         1,
                                                         checked
@@ -516,7 +506,7 @@ const Zone = () => {
                                     onPress={() => validateAndCreate()}
                                     isLoading={loading}
                                 >
-                                    แก้ไข
+                                    เพิ่ม
                                 </Button>
                             </ModalFooter>
                         </>

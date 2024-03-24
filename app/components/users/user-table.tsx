@@ -6,7 +6,7 @@ import "react-responsive-modal/styles.css";
 import Swal from "sweetalert2";
 import TextInput from "../input/input";
 import { deleteAdmin, editAdmin } from "./function";
-import { validateEmail, validateLength } from "@/app/helper/validate";
+import { inValidateEmail, inValidateLength } from "@/app/helper/validate";
 import { CAN_NOT_BE_EMPTY, EMAIL_INVALID } from "@/app/helper/wording";
 import {
     Button,
@@ -64,16 +64,22 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
         onOpenModal();
     };
 
-    const validateAndEdit = () => {
+    const validateAndEdit = async () => {
         setChecked(true);
+        setLoading(true);
 
-        const isFirstnameValidated = validateLength(firstName, 1, checked);
-        const isLastnameValidated = validateLength(lastName, 1, checked);
-        const isEmailValidated = validateEmail(email, checked);
+        const isFirstnameInValidated = inValidateLength(firstName, 1, checked);
+        const isLastnameInValidated = inValidateLength(lastName, 1, checked);
+        const isEmailInValidated = inValidateEmail(email, checked);
 
-        if (isFirstnameValidated && isLastnameValidated && isEmailValidated) {
-            editAdmin(parseInt(id), firstName, lastName, email, password);
+        if (
+            !isFirstnameInValidated &&
+            !isLastnameInValidated &&
+            !isEmailInValidated
+        ) {
+            await editAdmin(parseInt(id), firstName, lastName, email, password);
         }
+        setLoading(false);
     };
 
     const handleDelete = (id: number) => {
@@ -155,7 +161,7 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setFirstName(e.target.value)
                                             }
-                                            error={validateLength(
+                                            error={inValidateLength(
                                                 firstName,
                                                 1,
                                                 checked
@@ -172,7 +178,7 @@ const ResponsiveUserTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setLastName(e.target.value)
                                             }
-                                            error={validateLength(
+                                            error={inValidateLength(
                                                 lastName,
                                                 1,
                                                 checked

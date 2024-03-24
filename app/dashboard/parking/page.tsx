@@ -6,7 +6,7 @@ import FilterButton, {
     FilterButtonProps,
 } from "@/app/components/button/filter";
 import TextInput from "@/app/components/input/input";
-import { validateLength } from "@/app/helper/validate";
+import { inValidateLength, inValidateMinNumber } from "@/app/helper/validate";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { IoIosSearch } from "react-icons/io";
 import {
@@ -98,14 +98,13 @@ const Parking = () => {
 
     const checkAndCreate = async () => {
         setChecked(true);
-        const isNameValidated = validateLength(name, 1, checked);
-        const isAmountValidated = validateLength(amount, 1, checked);
+        const isNameInValidated = inValidateLength(name, 1, checked);
+        const isAmountInValidated = inValidateMinNumber(+amount, 1, checked);
 
-        if (isNameValidated && isAmountValidated && +zoneId) {
+        if (!isNameInValidated && !isAmountInValidated && +zoneId) {
             await createParking(name, desc, +amount, +zoneId);
             setOpen(false);
         }
-        setChecked(false);
     };
 
     const filterData: FilterButtonProps = {
@@ -165,9 +164,6 @@ const Parking = () => {
         ],
     };
 
-    const isInValid = useMemo(() => {
-        return validateLength(name, 1, checked);
-    }, [checked]);
     return (
         <>
             <Modal isOpen={open} onClose={onCloseModal} size="xl">
@@ -186,7 +182,11 @@ const Parking = () => {
                                             onChange={(e) =>
                                                 setName(e.target.value)
                                             }
-                                            error={isInValid}
+                                            error={inValidateLength(
+                                                name,
+                                                1,
+                                                checked
+                                            )}
                                             errorMessage={CAN_NOT_BE_EMPTY}
                                             value={name}
                                             isRequired
@@ -199,14 +199,7 @@ const Parking = () => {
                                             onChange={(e) =>
                                                 setDesc(e.target.value)
                                             }
-                                            error={validateLength(
-                                                desc,
-                                                1,
-                                                checked
-                                            )}
-                                            errorMessage={CAN_NOT_BE_EMPTY}
                                             value={desc}
-                                            isRequired
                                         />
                                     </div>
                                     <div>
@@ -217,8 +210,8 @@ const Parking = () => {
                                             onChange={(e) =>
                                                 setAmount(e.target.value)
                                             }
-                                            error={validateLength(
-                                                desc,
+                                            error={inValidateMinNumber(
+                                                +amount,
                                                 1,
                                                 checked
                                             )}

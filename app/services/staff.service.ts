@@ -13,6 +13,9 @@ export const editStaff = async (
     position: string,
     imageFile?: File
 ) => {
+    if (!isRequiredFieldValidated(firstName, lastName, email, mobileNo)) {
+        return;
+    }
     if (checkAuth()) {
         Swal.isLoading();
         const url = process.env.NEXT_PUBLIC_API_HOST + "/staffs/" + id;
@@ -137,6 +140,9 @@ export const createStaff = async (
     position: string,
     imageFile?: File
 ) => {
+    if (!isRequiredFieldValidated(firstName, lastName, email, phoneNumber)) {
+        return;
+    }
     Swal.isLoading();
     if (checkAuth()) {
         const token = localStorage.getItem("access_token");
@@ -170,6 +176,7 @@ export const createStaff = async (
                 icon: "success",
                 title: "ทำการสร้างเสร็จสิ้น",
             });
+            window.location.reload();
         } catch (error) {
             await Swal.fire({
                 icon: "error",
@@ -178,4 +185,16 @@ export const createStaff = async (
             });
         }
     }
+};
+
+const isRequiredFieldValidated = (
+    firstname: string,
+    lastname: string,
+    email: string,
+    phoneNumber: string
+) => {
+    if (!firstname || !lastname || !email || !phoneNumber) {
+        return false;
+    }
+    return true;
 };

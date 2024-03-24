@@ -10,6 +10,9 @@ export const editParking = async (
     zoneId: number
 ) => {
     try {
+        if (!isRequiredFieldValidated(name, zoneId, +amount)) {
+            return;
+        }
         Swal.isLoading();
         if (checkAuth()) {
             const token = localStorage.getItem("access_token");
@@ -110,12 +113,26 @@ export const fetchParking = (
     }
 };
 
+const isRequiredFieldValidated = (
+    name: string,
+    zoneId: number,
+    amount: number
+) => {
+    if (name === "" || !zoneId || amount === 0) {
+        return false;
+    }
+    return true;
+};
+
 export const createParking = async (
     name: string,
     description: string,
     amount: number,
     zoneId: number
 ) => {
+    if (!isRequiredFieldValidated(name, zoneId, amount)) {
+        return;
+    }
     Swal.isLoading();
     if (checkAuth()) {
         const token = localStorage.getItem("access_token");
@@ -134,12 +151,12 @@ export const createParking = async (
                 Swal.fire({
                     icon: "success",
                     title: "สร้างเรียบร้อยแล้ว",
+                    timer: 2000,
                 }).then((result) => {
                     if (result.isConfirmed) {
                         window.location.reload();
                     }
                 });
-                window.location.reload();
             })
             .catch((error) => {
                 Swal.fire({

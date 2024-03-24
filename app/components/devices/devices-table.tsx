@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import TextInput from "../input/input";
 import { ZoneRowData } from "@/app/types/data/zone";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
-import { validateLength } from "@/app/helper/validate";
+import { inValidateLength } from "@/app/helper/validate";
 import {
     Select,
     Button,
@@ -74,15 +74,16 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
         setZoneId(selectedZoneId);
     };
 
-    const validateAndEdit = () => {
+    const validateAndEdit = async () => {
         setChecked(true);
+        setLoading(true);
 
-        const isNameValidated = validateLength(name, 1, checked);
-        const isBrandValidated = validateLength(description, 1, checked);
-        const isPriceValidated = validateLength(price, 1, checked);
+        const isNameInValidated = inValidateLength(name, 1, checked);
+        const isBrandInValidated = inValidateLength(description, 1, checked);
+        const isPriceInValidated = inValidateLength(price, 1, checked);
 
-        if (isNameValidated && isPriceValidated && isBrandValidated) {
-            editDevice(
+        if (!isNameInValidated && !isPriceInValidated && !isBrandInValidated) {
+            await editDevice(
                 deviceId.toString(),
                 name,
                 description,
@@ -90,8 +91,9 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                 brand,
                 zoneId.toString()
             );
+            setOpen(false);
         }
-        setChecked(false);
+        setLoading(false);
     };
 
     const sortedItems = useMemo(() => {
@@ -184,7 +186,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setName(e.target.value)
                                             }
-                                            error={validateLength(
+                                            error={inValidateLength(
                                                 name,
                                                 1,
                                                 checked
@@ -201,7 +203,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setDescription(e.target.value)
                                             }
-                                            error={validateLength(
+                                            error={inValidateLength(
                                                 description,
                                                 1,
                                                 checked
@@ -219,7 +221,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setBrand(e.target.value)
                                             }
-                                            error={validateLength(
+                                            error={inValidateLength(
                                                 brand,
                                                 1,
                                                 checked
@@ -237,7 +239,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                                             onChange={(e) =>
                                                 setPrice(e.target.value)
                                             }
-                                            error={validateLength(
+                                            error={inValidateLength(
                                                 price,
                                                 1,
                                                 checked
@@ -284,7 +286,7 @@ const ResponsiveDeviceTable: React.FC<Props> = ({ data }) => {
                                     onPress={() => validateAndEdit()}
                                     isLoading={loading}
                                 >
-                                    แก้ไข
+                                    บันทึก
                                 </Button>
                             </ModalFooter>
                         </>

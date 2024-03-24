@@ -7,7 +7,7 @@ import { ZoneRowData } from "@/app/types/data/zone";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import TextInput from "../input/input";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
-import { validateLength } from "@/app/helper/validate";
+import { inValidateLength } from "@/app/helper/validate";
 import {
     Avatar,
     Button,
@@ -50,6 +50,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
         setAddress("");
         setChecked(false);
         setOpen(false);
+        setLoading(false);
     };
 
     const [id, setId] = useState("");
@@ -91,14 +92,18 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
     const validateAndEdit = async () => {
         setChecked(true);
         setLoading(true);
-        const isZoneNameValidated = validateLength(zoneName, 1, checked);
-        const isDescriptionValidated = validateLength(description, 1, checked);
-        const isMaxCapacityValidated = validateLength(maxCapacity, 1, checked);
+        const isZoneNameInValidated = inValidateLength(zoneName, 1, checked);
+        const isAddressInValidated = inValidateLength(address, 1, checked);
+        const isMaxCapacityInValidated = inValidateLength(
+            maxCapacity,
+            1,
+            checked
+        );
 
         if (
-            isZoneNameValidated &&
-            isDescriptionValidated &&
-            isMaxCapacityValidated
+            !isZoneNameInValidated &&
+            !isAddressInValidated &&
+            !isMaxCapacityInValidated
         ) {
             await editZone(
                 id,
@@ -110,7 +115,6 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                 selectedImageFile!
             );
         }
-        setChecked(false);
         setLoading(false);
     };
 
@@ -322,7 +326,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         zoneName,
                                                         1,
                                                         checked
@@ -343,16 +347,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={validateLength(
-                                                        description,
-                                                        1,
-                                                        checked
-                                                    )}
-                                                    errorMessage={
-                                                        CAN_NOT_BE_EMPTY
-                                                    }
                                                     value={description}
-                                                    isRequired
                                                 />
                                             </div>
                                             <div className="col-span-2">
@@ -365,7 +360,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         address,
                                                         1,
                                                         checked
@@ -387,7 +382,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         maxCapacity.toString(),
                                                         1,
                                                         checked
@@ -407,7 +402,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         handleLatChange(e)
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         selectedLatLng.lat?.toString(),
                                                         1,
                                                         checked
@@ -430,7 +425,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         handleLngChange(e)
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         selectedLatLng.lng?.toString(),
                                                         1,
                                                         checked
@@ -464,7 +459,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                     onPress={() => validateAndEdit()}
                                     isLoading={loading}
                                 >
-                                    แก้ไข
+                                    บันทึก
                                 </Button>
                             </ModalFooter>
                         </>
@@ -478,7 +473,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                             <TextInput
                                 onChange={(e) => setName(e.target.value)}
                                 errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(name, 1, checked)}
+                                error={inValidateLength(name, 1, checked)}
                             />
                         </div>
                         <div className="pt-4">
@@ -486,7 +481,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                             <TextInput
                                 onChange={(e) => setDescription(e.target.value)}
                                 errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(description, 1, checked)}
+                                error={inValidateLength(description, 1, checked)}
                             />
                         </div>
                         <div>
@@ -495,7 +490,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                                 type="number"
                                 onChange={(e) => setMaxCapacity(e.target.value)}
                                 errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(maxCapacity, 1, checked)}
+                                error={inValidateLength(maxCapacity, 1, checked)}
                             />
                         </div>
                         <div>
@@ -503,7 +498,7 @@ const ResponsiveZoneTable: React.FC<Props> = ({ data }) => {
                             <TextInput
                                 onChange={(e) => setAddress(e.target.value)}
                                 errorMessage={CAN_NOT_BE_EMPTY}
-                                error={validateLength(address, 1, checked)}
+                                error={inValidateLength(address, 1, checked)}
                             />
                         </div>
                         <div>

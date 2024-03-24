@@ -7,13 +7,13 @@ import FilterButton from "@/app/components/button/filter";
 import { FilterMenuProps } from "@/app/components/button/filter-menu";
 import { usePathname } from "next/navigation";
 import { getPublicBasePath } from "@/app/helper/basePath";
-import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
+import { CAN_NOT_BE_EMPTY, PHONE_LENGTH_INVALID } from "@/app/helper/wording";
 import {
-    validateEmail,
-    validateEmailWording,
-    validateLength,
-    validatePhone,
-    validatePhoneWording,
+    inValidateEmail,
+    inValidateEmailWording,
+    inValidateLength,
+    inValidatePhone,
+    inValidatePhoneWording,
 } from "@/app/helper/validate";
 import {
     Avatar,
@@ -124,17 +124,17 @@ const Staff = () => {
         setChecked(true);
         setLoading(true);
 
-        const isFirstnameValidated = validateLength(firstName, 1, checked);
-        const isLastnameValidated = validateLength(lastName, 1, checked);
-        const isEmailValidated = validateEmail(email, checked);
-        const isPhoneValidated = validatePhone(phone, checked);
+        const isFirstnameInValidated = inValidateLength(firstName, 1, checked);
+        const isLastnameInValidated = inValidateLength(lastName, 1, checked);
+        const isEmailInValidated = inValidateEmail(email, checked);
+        const isPhoneInValidated = inValidatePhone(phone, checked);
 
         try {
             if (
-                isFirstnameValidated &&
-                isLastnameValidated &&
-                isEmailValidated &&
-                isPhoneValidated
+                !isFirstnameInValidated &&
+                !isLastnameInValidated &&
+                !isEmailInValidated &&
+                !isPhoneInValidated
             ) {
                 await createStaff(
                     firstName,
@@ -145,12 +145,12 @@ const Staff = () => {
                     selectedImageFile!
                 );
             }
-            setChecked(false);
         } catch (error) {
         } finally {
             setLoading(false);
         }
     };
+
     const handleSearch = async (e: any) => {
         setSearch(e.target.value);
         await fetchStaff(
@@ -236,9 +236,9 @@ const Staff = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         firstName,
-                                                        2,
+                                                        1,
                                                         checked
                                                     )}
                                                     errorMessage={
@@ -257,9 +257,9 @@ const Staff = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         lastName,
-                                                        2,
+                                                        1,
                                                         checked
                                                     )}
                                                     errorMessage={
@@ -277,7 +277,7 @@ const Staff = () => {
                                                     onChange={(e) =>
                                                         setEmail(e.target.value)
                                                     }
-                                                    error={validateEmail(
+                                                    error={inValidateEmail(
                                                         email,
                                                         checked
                                                     )}
@@ -296,12 +296,12 @@ const Staff = () => {
                                                     onChange={(e) =>
                                                         setPhone(e.target.value)
                                                     }
-                                                    error={validatePhone(
+                                                    error={inValidatePhone(
                                                         phone,
                                                         checked
                                                     )}
                                                     errorMessage={
-                                                        CAN_NOT_BE_EMPTY
+                                                        PHONE_LENGTH_INVALID
                                                     }
                                                     value={phone}
                                                     isRequired

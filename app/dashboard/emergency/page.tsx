@@ -18,7 +18,7 @@ import ResponsiveEmergencyTable from "@/app/components/emergency/emergency-table
 import { EmergencyRowData } from "@/app/types/data/emergency";
 import TextInput from "@/app/components/input/input";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
-import { validateLength } from "@/app/helper/validate";
+import { inValidateLength } from "@/app/helper/validate";
 import {
     createEmergencyNumber,
     fetchEmergency,
@@ -60,17 +60,20 @@ const Emergency = () => {
     const validateAndCreate = async () => {
         setChecked(true);
         try {
-            const isNameValidated = validateLength(name, 1, checked);
-            const isPhoneNumberValidated = validateLength(
+            const isNameInValidated = inValidateLength(name, 1, checked);
+            const isPhoneNumberInValidated = inValidateLength(
                 phoneNumber,
                 1,
                 checked
             );
 
-            if (isNameValidated && isPhoneNumberValidated && active != null) {
+            if (
+                !isNameInValidated &&
+                !isPhoneNumberInValidated &&
+                active != null
+            ) {
                 await createEmergencyNumber(name, phoneNumber, active);
             }
-            setChecked(false);
         } catch (error) {
         } finally {
         }
@@ -82,6 +85,10 @@ const Emergency = () => {
 
     const onCloseModal = () => {
         setOpen(false);
+        setName("");
+        setPhoneNumber("");
+        setActive(true);
+        setChecked(false);
     };
 
     return (
@@ -106,7 +113,7 @@ const Emergency = () => {
                                                     onChange={(e) => {
                                                         setName(e.target.value);
                                                     }}
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         name,
                                                         1,
                                                         checked
@@ -127,7 +134,7 @@ const Emergency = () => {
                                                             e.target.value
                                                         )
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         phoneNumber,
                                                         1,
                                                         checked

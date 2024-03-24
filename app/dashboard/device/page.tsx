@@ -9,7 +9,7 @@ import TextInput from "@/app/components/input/input";
 import { ZoneRowData } from "@/app/types/data/zone";
 import { getPublicBasePath } from "@/app/helper/basePath";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
-import { validateLength } from "@/app/helper/validate";
+import { inValidateLength } from "@/app/helper/validate";
 import {
     Button,
     Input,
@@ -80,22 +80,24 @@ const Device = () => {
         setPage(page + 1);
     };
 
-    const createDeviceWithValidate = () => {
+    const createDeviceWithValidate = async () => {
         setChecked(true);
+        setLoading(true);
 
-        const isNameValidated = validateLength(name, 1, checked);
-        const isBrandValidated = validateLength(description, 1, checked);
-        const isPriceValidated = validateLength(price, 1, checked);
+        const isNameInValidated = inValidateLength(name, 1, checked);
+        const isBrandInValidated = inValidateLength(description, 1, checked);
+        const isPriceInValidated = inValidateLength(price, 1, checked);
 
-        if (
-            isNameValidated &&
-            checked &&
-            isPriceValidated &&
-            isBrandValidated
-        ) {
-            createDevice(name, description, price, brand, zoneId.toString());
-            setChecked(false);
+        if (!isNameInValidated && !isPriceInValidated && !isBrandInValidated) {
+            await createDevice(
+                name,
+                description,
+                price,
+                brand,
+                zoneId.toString()
+            );
         }
+        setLoading(false);
     };
 
     const filterData: FilterMenuProps[] = [
@@ -201,7 +203,7 @@ const Device = () => {
                                             onChange={(e) => {
                                                 setName(e.target.value);
                                             }}
-                                            error={validateLength(
+                                            error={inValidateLength(
                                                 name,
                                                 1,
                                                 checked
@@ -218,7 +220,7 @@ const Device = () => {
                                             onChange={(e) =>
                                                 setDescription(e.target.value)
                                             }
-                                            error={validateLength(
+                                            error={inValidateLength(
                                                 description,
                                                 1,
                                                 checked
@@ -235,7 +237,7 @@ const Device = () => {
                                             onChange={(e) =>
                                                 setBrand(e.target.value)
                                             }
-                                            error={validateLength(
+                                            error={inValidateLength(
                                                 brand,
                                                 1,
                                                 checked
@@ -253,7 +255,7 @@ const Device = () => {
                                             onChange={(e) =>
                                                 setPrice(e.target.value)
                                             }
-                                            error={validateLength(
+                                            error={inValidateLength(
                                                 price,
                                                 1,
                                                 checked

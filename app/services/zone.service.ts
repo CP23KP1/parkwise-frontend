@@ -4,6 +4,24 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { uploadFileFirebase } from "@/app/services/upload-file-firebase.service";
 
+const isRequiredFieldValidated = (
+    name: string,
+    maxCapacity: string,
+    selectedLatLng: any,
+    address: string
+) => {
+    if (
+        !name ||
+        !maxCapacity ||
+        !address ||
+        !selectedLatLng.lat ||
+        !selectedLatLng.lng
+    ) {
+        return false;
+    }
+    return true;
+};
+
 export const fetchZone = (
     setDataShow: any,
     setPage: any,
@@ -56,6 +74,9 @@ export const createZone = async (
     setStatus: any,
     imageFile?: File
 ) => {
+    if (!isRequiredFieldValidated(name, maxCapacity, selectedLatLng, address)) {
+        return;
+    }
     if (checkAuth()) {
         Swal.isLoading();
         const token = localStorage.getItem("access_token");
@@ -130,6 +151,9 @@ export const editZone = async (
     selectedLatLng: any,
     imageFile?: File
 ) => {
+    if (!isRequiredFieldValidated(name, maxCapacity, selectedLatLng, address)) {
+        return;
+    }
     if (checkAuth()) {
         Swal.isLoading();
         const token = localStorage.getItem("access_token");

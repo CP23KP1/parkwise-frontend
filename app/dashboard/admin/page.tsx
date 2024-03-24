@@ -10,10 +10,10 @@ import { createUser, fetchUsers } from "./function";
 import { getPublicBasePath } from "@/app/helper/basePath";
 import { CAN_NOT_BE_EMPTY, EMAIL_INVALID } from "@/app/helper/wording";
 import {
-    validateEmail,
-    validateEmailWording,
-    validateLength,
-    validatePassword,
+    inValidateEmail,
+    inValidateEmailWording,
+    inValidateLength,
+    inValidatePassword,
 } from "@/app/helper/validate";
 import {
     Button,
@@ -135,11 +135,21 @@ const User = () => {
         );
     };
 
-    const validateAndCreate = () => {
+    const validateAndCreate = async () => {
         setChecked(true);
-        if (email && password && firstName && lastName) {
-            createUser(email, password, firstName, lastName);
+        setLoading(true);
+        const isFirstnameInValidated = inValidateLength(firstName, 1, checked);
+        const isLastnameInValidated = inValidateLength(lastName, 1, checked);
+        const isEmailInValidated = inValidateEmail(email, checked);
+
+        if (
+            isFirstnameInValidated ||
+            isLastnameInValidated ||
+            isEmailInValidated
+        ) {
+            await createUser(email, password, firstName, lastName);
         }
+        setLoading(false);
     };
     return (
         <>
@@ -161,7 +171,7 @@ const User = () => {
                                             onChange={(e) =>
                                                 setFirstName(e.target.value)
                                             }
-                                            error={validateLength(
+                                            error={inValidateLength(
                                                 firstName,
                                                 1,
                                                 checked
@@ -178,7 +188,7 @@ const User = () => {
                                             onChange={(e) =>
                                                 setLastName(e.target.value)
                                             }
-                                            error={validateLength(
+                                            error={inValidateLength(
                                                 lastName,
                                                 1,
                                                 checked
@@ -196,7 +206,7 @@ const User = () => {
                                             onChange={(e) =>
                                                 setEmail(e.target.value)
                                             }
-                                            error={validateEmail(
+                                            error={inValidateEmail(
                                                 email,
                                                 checked
                                             )}
@@ -213,7 +223,7 @@ const User = () => {
                                             onChange={(e) =>
                                                 setPassword(e.target.value)
                                             }
-                                            error={validatePassword(
+                                            error={inValidatePassword(
                                                 password,
                                                 checked
                                             )}
@@ -233,7 +243,7 @@ const User = () => {
                                                 )
                                             }
                                             error={
-                                                validatePassword(
+                                                inValidatePassword(
                                                     confirmPassword,
                                                     checked
                                                 ) ||

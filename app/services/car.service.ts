@@ -4,6 +4,29 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { CarRowData } from "../types/data/car";
 
+const isRequiredFieldValidated = (
+    licensePlate: string,
+    color: string,
+    brand: string,
+    model: string,
+    year: number,
+    ownerId: number,
+    province: string
+) => {
+    if (
+        !licensePlate ||
+        !color ||
+        !brand ||
+        !model ||
+        !year ||
+        !ownerId ||
+        !province
+    ) {
+        return false;
+    }
+    return true;
+};
+
 export const editCar = async (
     carId: number,
     licensePlate: string,
@@ -11,10 +34,24 @@ export const editCar = async (
     brand: string,
     model: string,
     year: number,
-    staffId: string,
+    ownerId: string,
     province: string,
     imageFile?: File
 ) => {
+    if (
+        !isRequiredFieldValidated(
+            licensePlate,
+            color,
+            brand,
+            model,
+            +year,
+            +ownerId,
+            province
+        )
+    ) {
+        return;
+    }
+
     try {
         Swal.isLoading();
         if (checkAuth()) {
@@ -109,6 +146,19 @@ export const createCar = async (
     province: string,
     imageFile?: File
 ) => {
+    if (
+        !isRequiredFieldValidated(
+            licensePlate,
+            color,
+            brand,
+            model,
+            parseInt(year),
+            parseInt(ownerId),
+            province
+        )
+    ) {
+        return;
+    }
     try {
         Swal.isLoading();
         if (checkAuth()) {

@@ -33,7 +33,7 @@ import {
 } from "@nextui-org/react";
 import { carColumns } from "@/app/utils/constants";
 import { FaPencil, FaTrashCan } from "react-icons/fa6";
-import { validateLength } from "@/app/helper/validate";
+import { inValidateLength } from "@/app/helper/validate";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
 import { displayImageUrlWithSelectedImage } from "@/app/helper/display-image";
 import { provinces } from "@/app/common/data/province.data";
@@ -85,23 +85,24 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
             setLoading(true);
             setChecked(true);
 
-            const isLicensePlateValidated = validateLength(
+            const isLicensePlateInValidated = inValidateLength(
                 licensePlate,
                 1,
                 checked
             );
-            const isColorValidated = validateLength(color, 1, checked);
-            const isBrandValidated = validateLength(brand, 1, checked);
-            const isModelValidated = validateLength(model, 1, checked);
-            const isYearValidated = validateLength(year, 1, checked);
+            const isColorInValidated = inValidateLength(color, 1, checked);
+            const isBrandInValidated = inValidateLength(brand, 1, checked);
+            const isModelInValidated = inValidateLength(model, 1, checked);
+            const isYearInValidated = inValidateLength(year, 1, checked);
 
             if (
-                isLicensePlateValidated &&
-                isColorValidated &&
-                isBrandValidated &&
-                isModelValidated &&
-                isYearValidated &&
-                ownerId
+                !isLicensePlateInValidated &&
+                !isColorInValidated &&
+                !isBrandInValidated &&
+                !isModelInValidated &&
+                !isYearInValidated &&
+                ownerId &&
+                province
             ) {
                 await editCar(
                     carId,
@@ -114,7 +115,6 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                     province,
                     selectedImageFile!
                 );
-                setChecked(false);
             }
         } catch (error) {
         } finally {
@@ -310,7 +310,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                                                             e.target.value
                                                         );
                                                     }}
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         licensePlate,
                                                         1,
                                                         checked
@@ -353,7 +353,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         setColor(e.target.value)
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         color,
                                                         1,
                                                         checked
@@ -372,7 +372,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         setBrand(e.target.value)
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         brand,
                                                         1,
                                                         checked
@@ -391,7 +391,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         setModel(e.target.value)
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         model,
                                                         1,
                                                         checked
@@ -411,7 +411,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                                                     onChange={(e) =>
                                                         setYear(e.target.value)
                                                     }
-                                                    error={validateLength(
+                                                    error={inValidateLength(
                                                         year.toString(),
                                                         1,
                                                         checked
@@ -441,7 +441,7 @@ const ResponsiveCarTable: React.FC<Props> = ({ data }) => {
                                     onPress={() => validateAndEdit()}
                                     isLoading={loading}
                                 >
-                                    ยืนยัน
+                                    บันทึก
                                 </Button>
                             </ModalFooter>
                         </>

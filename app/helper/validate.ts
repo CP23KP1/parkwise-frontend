@@ -1,4 +1,4 @@
-export const validatePassword = (password: string, checked: boolean) => {
+export const inValidatePassword = (password: string, checked: boolean) => {
     const lengthCheck = password.length >= 8;
 
     const regexCheck = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]+$/;
@@ -12,7 +12,21 @@ export const validatePassword = (password: string, checked: boolean) => {
     return false;
 };
 
-export const validatePasswordWording = (password: string) => {
+export const inValidateMinNumber = (
+    value: number,
+    min: number,
+    checked: boolean
+) => {
+    if (checked) {
+        if (value >= min) {
+            return false;
+        }
+        return true;
+    }
+    return false;
+};
+
+export const inValidatePasswordWording = (password: string) => {
     const lengthCheck = password.length >= 8;
 
     const regexCheck = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]+$/;
@@ -28,7 +42,7 @@ export const validatePasswordWording = (password: string) => {
     return "";
 };
 
-export const validateLength = (
+export const inValidateLength = (
     value: string,
     length: number,
     checked: boolean
@@ -42,7 +56,7 @@ export const validateLength = (
     return false;
 };
 
-export const validatePhone = (phone: string, checked: boolean) => {
+export const inValidatePhone = (phone: string, checked: boolean) => {
     if (checked) {
         const regex = /^\d{10}$/;
         if (!regex.test(phone)) {
@@ -53,7 +67,7 @@ export const validatePhone = (phone: string, checked: boolean) => {
     return false;
 };
 
-export const validatePhoneWording = (phone: string) => {
+export const inValidatePhoneWording = (phone: string) => {
     const regex = /^\d{10}$/;
     if (phone.length === 0) {
         return "กรุณากรอกเบอร์โทรศัพท์";
@@ -64,7 +78,7 @@ export const validatePhoneWording = (phone: string) => {
     return "";
 };
 
-export const validateEmail = (email: string, checked: boolean) => {
+export const inValidateEmail = (email: string, checked: boolean) => {
     if (checked) {
         const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return !regex.test(email);
@@ -72,7 +86,7 @@ export const validateEmail = (email: string, checked: boolean) => {
     return false;
 };
 
-export const validateEmailWording = (email: string) => {
+export const inValidateEmailWording = (email: string) => {
     const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (email.length === 0) {
         return "กรุณากรอกอีเมล";
