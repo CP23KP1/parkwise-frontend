@@ -14,7 +14,6 @@ interface DashboardLayoutProps {
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     return (
         <html>
-            <head></head>
             <body className={kanit.className}>
                 <div className="flex">
                     <Sidebar />
