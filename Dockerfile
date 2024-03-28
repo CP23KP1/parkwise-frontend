@@ -1,13 +1,4 @@
-# FROM node:18-alpine
-# RUN mkdir -p /app
-# WORKDIR /app
-# COPY . .
-# RUN yarn install
-# RUN yarn build
-# EXPOSE 3000
-# CMD ["yarn", "start"]
-
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
