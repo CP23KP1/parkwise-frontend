@@ -71,7 +71,6 @@ export const editCar = async (
                     brand: brand,
                     model: model,
                     year: year,
-                    staffId: parseInt(staffId),
                     province: province,
                     imageUrl: imageUrl,
                 },
