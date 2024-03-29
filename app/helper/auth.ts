@@ -10,7 +10,6 @@ export const checkAuth = () => {
         const token = localStorage.getItem("refresh_token");
         if (!token) {
             logout();
-            window.location.href = getPublicBasePath("/login");
             return false;
         }
         try {
@@ -29,14 +28,12 @@ export const checkAuth = () => {
                     });
             } catch (err) {
                 logout();
-                window.location.href = getPublicBasePath("/login");
                 return false;
             }
 
             return true;
         } catch (err) {
             logout();
-            window.location.href = getPublicBasePath("/login");
             return false;
         }
     }
@@ -47,7 +44,7 @@ export const checkAuth = () => {
 export const logout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
-    if (window.location.pathname !== "/login") {
+    if (window.location.pathname !== getPublicBasePath("/login")) {
         window.location.href = getPublicBasePath("/login");
     }
 };
