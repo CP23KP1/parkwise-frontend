@@ -32,6 +32,8 @@ import { IoIosSearch } from "react-icons/io";
 import TextInput from "@/app/components/input/input";
 import { FaAirbnb, FaPerson } from "react-icons/fa6";
 import { createStaff, fetchStaff } from "@/app/services/staff.service";
+import { STAFF_PAGE } from "@/app/common/data/meta.data";
+import Head from "next/head";
 
 const Staff = () => {
     const pathname = usePathname();
@@ -177,6 +179,10 @@ const Staff = () => {
 
     return (
         <>
+            <Head>
+                <title>{STAFF_PAGE.title}</title>
+                <meta name="description" content={STAFF_PAGE.description} />
+            </Head>
             <Modal isOpen={open} onClose={onCloseModal} size="2xl">
                 <ModalContent>
                     {(onClose) => (

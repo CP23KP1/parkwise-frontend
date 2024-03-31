@@ -24,6 +24,8 @@ import {
 import { ZoneRowData } from "@/app/types/data/zone";
 import { createParking, fetchParking } from "@/app/services/parking.service";
 import { fetchZone } from "@/app/services/device.service";
+import Head from "next/head";
+import { PARKING_PAGE } from "@/app/common/data/meta.data";
 
 const Parking = () => {
     const [open, setOpen] = useState(false);
@@ -103,7 +105,6 @@ const Parking = () => {
 
         if (!isNameInValidated && !isAmountInValidated && +zoneId) {
             await createParking(name, desc, +amount, +zoneId);
-            setOpen(false);
         }
     };
 
@@ -166,6 +167,10 @@ const Parking = () => {
 
     return (
         <>
+            <Head>
+                <title>{PARKING_PAGE.title}</title>
+                <meta name="description" content={PARKING_PAGE.description} />
+            </Head>
             <Modal isOpen={open} onClose={onCloseModal} size="xl">
                 <ModalContent>
                     {(onClose) => (

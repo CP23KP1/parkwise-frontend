@@ -28,6 +28,8 @@ import {
     fetchDevice,
     fetchZone,
 } from "@/app/services/device.service";
+import { DEVICE_PAGE } from "@/app/common/data/meta.data";
+import Head from "next/head";
 
 const Device = () => {
     const [open, setOpen] = useState(false);
@@ -187,6 +189,10 @@ const Device = () => {
 
     return (
         <>
+            <Head>
+                <title>{DEVICE_PAGE.title}</title>
+                <meta name="description" content={DEVICE_PAGE.description} />
+            </Head>
             <Modal isOpen={open} onClose={onCloseModal} size="xl">
                 <ModalContent>
                     {(onClose) => (

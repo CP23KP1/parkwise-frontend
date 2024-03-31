@@ -25,6 +25,8 @@ import {
     searchEmergency,
 } from "@/app/services/emergency.service";
 import { activeChoice } from "@/app/utils/constants";
+import Head from "next/head";
+import { EMERGENCY_PAGE } from "@/app/common/data/meta.data";
 
 const Emergency = () => {
     const [data, setData] = useState<EmergencyRowData[]>([]);
@@ -93,6 +95,10 @@ const Emergency = () => {
 
     return (
         <>
+            <Head>
+                <title>{EMERGENCY_PAGE.title}</title>
+                <meta name="description" content={EMERGENCY_PAGE.description} />
+            </Head>
             <Modal isOpen={open} onClose={onCloseModal} size="2xl">
                 <ModalContent>
                     {(onClose) => (

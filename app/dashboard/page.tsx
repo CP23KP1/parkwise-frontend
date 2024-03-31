@@ -12,6 +12,9 @@ import dayjs from "dayjs";
 import dynamic from "next/dynamic";
 import { ApexOptions } from "apexcharts";
 import ReportCard from "../components/report-card";
+import { Metadata } from "next";
+import { DASHBOARD_PAGE } from "../common/data/meta.data";
+import Head from "next/head";
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const Dashboard: React.FC = () => {
@@ -132,6 +135,10 @@ const Dashboard: React.FC = () => {
 
     return (
         <>
+            <Head>
+                <title>{DASHBOARD_PAGE.title}</title>
+                <meta name="description" content={DASHBOARD_PAGE.description} />
+            </Head>
             <div className="grid grid-cols-1 lg:grid-cols-4 pt-12 gap-8 lg:gap-2">
                 <SummaryCard
                     title="รถในระบบ 🚘"

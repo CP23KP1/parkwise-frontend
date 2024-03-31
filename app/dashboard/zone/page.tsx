@@ -33,6 +33,8 @@ import {
 import { IoIosSearch } from "react-icons/io";
 import { displayImageUrlWithSelectedImage } from "@/app/helper/display-image";
 import { createZone, fetchZone } from "@/app/services/zone.service";
+import { ZONE_PAGE } from "@/app/common/data/meta.data";
+import Head from "next/head";
 
 const Zone = () => {
     const [dataShow, setDataShow] = useState<ZoneRowData[]>([]);
@@ -269,6 +271,10 @@ const Zone = () => {
 
     return (
         <>
+            <Head>
+                <title>{ZONE_PAGE.title}</title>
+                <meta name="description" content={ZONE_PAGE.description} />
+            </Head>
             <Modal isOpen={open} onClose={onCloseModal} size="4xl">
                 <ModalContent>
                     {(onClose) => (

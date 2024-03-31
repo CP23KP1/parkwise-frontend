@@ -27,6 +27,8 @@ import {
 import { IoIosSearch } from "react-icons/io";
 import { provinces } from "@/app/common/data/province.data";
 import { createCar, fetchCar, fetchStaff } from "@/app/services/car.service";
+import { CAR_PAGE } from "@/app/common/data/meta.data";
+import Head from "next/head";
 
 const Car = () => {
     const [licensePlate, setLicensePlate] = useState("");
@@ -211,6 +213,10 @@ const Car = () => {
 
     return (
         <>
+            <Head>
+                <title>{CAR_PAGE.title}</title>
+                <meta name="description" content={CAR_PAGE.description} />
+            </Head>
             <Modal isOpen={open} onClose={onCloseModal} size="2xl">
                 <ModalContent>
                     {(onClose) => (

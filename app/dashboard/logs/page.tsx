@@ -15,6 +15,8 @@ import {
     Select,
 } from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
+import { LOG_PAGE } from "@/app/common/data/meta.data";
+import Head from "next/head";
 
 interface DataLog {
     data: LogsRowData[];
@@ -113,95 +115,101 @@ const Logs = () => {
     );
 
     return (
-        <div className="w-full pl-10 md:pl-0">
-            <div>
-                <h1 className="text-xl font-bold">Logs</h1>
-                <div className="my-6">
-                    <Autocomplete
-                        size="sm"
-                        items={zoneData}
-                        placeholder="เลือกโซน"
-                        className="max-w-xs"
-                        selectedKey={selectedZone}
-                        onSelectionChange={setSelectedZone as any}
-                        inputValue={getZoneAutoCompleteLabel(selectedZone)}
-                        isClearable={false}
-                    >
-                        {(item) => (
-                            <AutocompleteItem key={item.value}>
-                                {item.label}
-                            </AutocompleteItem>
-                        )}
-                    </Autocomplete>
-                </div>
+        <>
+            <Head>
+                <title>{LOG_PAGE.title}</title>
+                <meta name="description" content={LOG_PAGE.description} />
+            </Head>
+            <div className="w-full pl-10 md:pl-0">
+                <div>
+                    <h1 className="text-xl font-bold">Logs</h1>
+                    <div className="my-6">
+                        <Autocomplete
+                            size="sm"
+                            items={zoneData}
+                            placeholder="เลือกโซน"
+                            className="max-w-xs"
+                            selectedKey={selectedZone}
+                            onSelectionChange={setSelectedZone as any}
+                            inputValue={getZoneAutoCompleteLabel(selectedZone)}
+                            isClearable={false}
+                        >
+                            {(item) => (
+                                <AutocompleteItem key={item.value}>
+                                    {item.label}
+                                </AutocompleteItem>
+                            )}
+                        </Autocomplete>
+                    </div>
 
-                {/* <select
+                    {/* <select
           className="form-select block border-solid border-2 rounded-md w-32 h-10 border-gray-600 my-4"
           onChange={(e) => setSelectedZone(e.target.value)}
         >
           {zone &&
             zone.map((item) => <option value={item.id}>{item.name}</option>)}
         </select> */}
-            </div>
-            <div className="flex flex-col md:flex-row gap-5">
-                <div>
-                    <div className="w-full text-center md:w-96 flex justify-center">
-                        <img
-                            className="text-center rounded-md"
-                            src={latestData && latestData.licenseUrl}
+                </div>
+                <div className="flex flex-col md:flex-row gap-5">
+                    <div>
+                        <div className="w-full text-center md:w-96 flex justify-center">
+                            <img
+                                className="text-center rounded-md"
+                                src={latestData && latestData.licenseUrl}
+                            />
+                        </div>
+                    </div>
+                    <div className="w-full md:w-2/5">
+                        <h1 className="text-base md:text-xl font-bold">
+                            ใช้งานล่าสุด
+                        </h1>
+                        <div className="mt-8 grid grid-cols-2 gap-y-4">
+                            <h1 className="text-base md:text-xl">
+                                รถยนต์ทะเบียน:{" "}
+                            </h1>
+                            <h1 className="font-bold md:text-xl">
+                                {(latestData && latestData.car.licensePlate) ||
+                                    "ไม่มีข้อมูล"}
+                            </h1>
+                            <h1 className="text-base md:text-xl">
+                                ชื่อผู้ใช้บริการ:{" "}
+                            </h1>
+                            <h1 className="text-base md:text-xl">
+                                {latestData && latestData.staff.firstname}
+                                {latestData && " " + latestData.staff.lastname}
+                            </h1>
+                        </div>
+                    </div>
+                </div>
+                <div className="mt-4">
+                    <div className="flex justify-between my-4 align-middle">
+                        <div className="w-10/12 flex align-middle">
+                            <Input
+                                className="w-8/12 md:w-4/12 h-10"
+                                variant="bordered"
+                                type="text"
+                                placeholder="ค้นหา"
+                                labelPlacement="outside"
+                                startContent={
+                                    <IoIosSearch className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                                }
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <ResponsiveLogsTable data={data as any[]} />
+                    <div className="mt-8 flex justify-end align-middle gap-4">
+                        <Pagination
+                            isCompact
+                            showControls
+                            total={allPage}
+                            initialPage={page}
+                            onChange={(page) => setPage(page)}
                         />
                     </div>
                 </div>
-                <div className="w-full md:w-2/5">
-                    <h1 className="text-base md:text-xl font-bold">
-                        ใช้งานล่าสุด
-                    </h1>
-                    <div className="mt-8 grid grid-cols-2 gap-y-4">
-                        <h1 className="text-base md:text-xl">
-                            รถยนต์ทะเบียน:{" "}
-                        </h1>
-                        <h1 className="font-bold md:text-xl">
-                            {(latestData && latestData.car.licensePlate) ||
-                                "ไม่มีข้อมูล"}
-                        </h1>
-                        <h1 className="text-base md:text-xl">
-                            ชื่อผู้ใช้บริการ:{" "}
-                        </h1>
-                        <h1 className="text-base md:text-xl">
-                            {latestData && latestData.staff.firstname}
-                            {latestData && " " + latestData.staff.lastname}
-                        </h1>
-                    </div>
-                </div>
             </div>
-            <div className="mt-4">
-                <div className="flex justify-between my-4 align-middle">
-                    <div className="w-10/12 flex align-middle">
-                        <Input
-                            className="w-8/12 md:w-4/12 h-10"
-                            variant="bordered"
-                            type="text"
-                            placeholder="ค้นหา"
-                            labelPlacement="outside"
-                            startContent={
-                                <IoIosSearch className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
-                            }
-                            onChange={(e) => setSearch(e.target.value)}
-                        />
-                    </div>
-                </div>
-                <ResponsiveLogsTable data={data as any[]} />
-                <div className="mt-8 flex justify-end align-middle gap-4">
-                    <Pagination
-                        isCompact
-                        showControls
-                        total={allPage}
-                        initialPage={page}
-                        onChange={(page) => setPage(page)}
-                    />
-                </div>
-            </div>
-        </div>
+        </>
     );
 };
 

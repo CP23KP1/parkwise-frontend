@@ -26,6 +26,8 @@ import {
     Pagination,
 } from "@nextui-org/react";
 import { IoIosSearch } from "react-icons/io";
+import Head from "next/head";
+import { ADMIN_PAGE } from "@/app/common/data/meta.data";
 
 const User = () => {
     const [open, setOpen] = useState(false);
@@ -153,6 +155,10 @@ const User = () => {
     };
     return (
         <>
+            <Head>
+                <title>{ADMIN_PAGE.title} | </title>
+                <meta name="description" content={ADMIN_PAGE.description} />
+            </Head>
             <Modal isOpen={open} onClose={onCloseModal} size="xl">
                 <ModalContent>
                     {(onClose) => (
