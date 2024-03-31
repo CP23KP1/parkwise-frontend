@@ -68,16 +68,17 @@ const Login = () => {
                 <title>{LOGIN_PAGE.title}</title>
                 <meta name="description" content={LOGIN_PAGE.description} />
             </Head>
-            <div className="login-bg min-h-screen flex justify-center items-center bg-gradient-to-b from-blue-500 to-blue-700">
+            <div className="login-bg min-h-screen flex justify-center items-center bg-gradient-to-b from-blue-100 to-blue-700">
                 <Card className="w-full max-w-md bg-white p-4" shadow="md">
                     <CardBody>
                         <div className="text-center">
                             <img
-                                src={getPublicBasePath("/menu/car.png")}
+                                src={getPublicBasePath(
+                                    "/logo/transparent-logo.png"
+                                )}
                                 alt="KMUTT Logo"
-                                className="w-16 mx-auto mb-4"
+                                className="w-64 mx-auto mb-12"
                             />
-                            <h2 className="text-xl font-bold mb-4">ParkWise</h2>
                         </div>
                         <div className="space-y-4">
                             <div className="relative">

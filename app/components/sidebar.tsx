@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { logout } from "../helper/auth";
 import { getPublicBasePath } from "../helper/basePath";
 import { Button, Listbox, ListboxItem, cn } from "@nextui-org/react";
@@ -7,6 +7,8 @@ import { FaCartPlus } from "react-icons/fa6";
 import { usePathname, useRouter } from "next/navigation";
 import { menuType } from "../types/data/menu";
 import { log } from "console";
+import { getProfile } from "../services/auth.service";
+import { Profile } from "../types/data/profile";
 
 interface SidebarProps {
     open?: boolean;
@@ -18,9 +20,19 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
     const widthMobile = openSidebar ? "w-16 md:w-56" : "w-16";
     const router = useRouter();
     const pathname = usePathname();
+    const [profile, setProfile] = useState<Profile | null>(null);
 
     const handleClickOpenSidebar = () => {
         setOpenSidebar(!openSidebar);
+    };
+
+    useEffect(() => {
+        fetchProflie();
+    }, []);
+
+    const fetchProflie = async () => {
+        const profile = await getProfile();
+        setProfile(profile);
     };
 
     const renderLogout = () => {
@@ -74,18 +86,42 @@ const Sidebar: React.FC<SidebarProps> = ({ open = false }) => {
                     </div>
                     {openSidebar && (
                         <>
-                            {/* <div className="w-10">
+                            <div className="w-36">
                                 <img
-                                    src={getPublicBasePath('/logo/kmutt_logo.jpg')}
-                                    alt="KMUTT Logo"
+                                    src={getPublicBasePath("/logo/logo-bg.png")}
+                                    alt="Parkwise Logo"
                                 />
-                            </div> */}
-                            <div className="pr-12">
-                                <h1 className="font-bold">ParkWise</h1>
                             </div>
+                            {/* <div className="pr-12">
+                                <h1 className="font-bold">ParkWise</h1>
+                            </div> */}
                         </>
                     )}
                 </div>
+                {openSidebar && (
+                    <>
+                        <div className="border-b-2 border-gray-200 mb-6"></div>
+                        <div className="flex flex-col justify-center">
+                            <div>
+                                <h2 className="font-bold text-center text-[20px]">
+                                    {profile?.firstname} {profile?.lastname}
+                                </h2>
+                            </div>
+                            <div>
+                                <h3 className="italic text-center text-[14px] text-gray-500">
+                                    ตำแหน่ง:{" "}
+                                    <span className="font-bold text-black">
+                                        {profile?.type === "admin"
+                                            ? "Admin"
+                                            : "User"}
+                                    </span>
+                                </h3>
+                            </div>
+                        </div>
+                        <div className="border-b-2 border-gray-200 my-6"></div>
+                    </>
+                )}
+
                 <div
                     className="w-full"
                     style={{
