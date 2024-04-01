@@ -6,16 +6,50 @@ import { countCar, countDevice, countStaff } from "../services/device.service";
 import { countZone } from "../services/zone.service";
 import {
     getReportByDays,
-    getReportByTopTenByTimeRange,
+    getReportTopTenByZone,
 } from "../services/report.service";
 import dayjs from "dayjs";
 import dynamic from "next/dynamic";
 import { ApexOptions } from "apexcharts";
 import ReportCard from "../common/components/report-card";
-import { Metadata } from "next";
-import { DASHBOARD_PAGE } from "../common/data/meta.data";
-import Head from "next/head";
+import {
+    Table,
+    TableHeader,
+    TableColumn,
+    TableBody,
+    TableRow,
+    TableCell,
+} from "@nextui-org/react";
+import { TopTenByZoneReport } from "../types/data/report.response";
 const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
+
+const columns = [
+    {
+        name: "โซน",
+        uid: "zoneName",
+        sortable: true,
+    },
+    {
+        name: "เช้า",
+        uid: "morning",
+        sortable: true,
+    },
+    {
+        name: "บ่าย",
+        uid: "afternoon",
+        sortable: true,
+    },
+    {
+        name: "เย็น",
+        uid: "evening",
+        sortable: true,
+    },
+    {
+        name: "รวม",
+        uid: "total",
+        sortable: true,
+    },
+];
 
 const DashboardPage: React.FC = () => {
     const [zone, setZone] = useState(0);
@@ -27,26 +61,8 @@ const DashboardPage: React.FC = () => {
     const [topTenByTimeRangeSeries, setTopTenByTimeRangeSeries] = useState<
         number[]
     >([]);
-    const [topTenByTimeRangeOptions, setTopTenByTimeRangeOptions] = useState({
-        chart: {
-            width: 380,
-            type: "pie",
-        },
-        labels: [],
-        responsive: [
-            {
-                breakpoint: 480,
-                options: {
-                    chart: {
-                        width: 200,
-                    },
-                    legend: {
-                        position: "bottom",
-                    },
-                },
-            },
-        ],
-    } as ApexOptions);
+
+    const [topTenByZone, setTopTenByZone] = useState<TopTenByZoneReport[]>([]);
 
     const [byDaysSeries, setByDaysSeries] = useState([
         {
@@ -80,22 +96,16 @@ const DashboardPage: React.FC = () => {
         await countZone(setZone);
         await countCar(setCar);
         await countStaff(setStaff);
-        const topTenByTimeRangeResponse = await getReportByTopTenByTimeRange(
-            dayjs().startOf("month").format("YYYY-MM-DD"),
-            dayjs().endOf("month").format("YYYY-MM-DD")
+        const topTenByZoneReport = await getReportTopTenByZone(
+            dayjs().startOf("year").format("YYYY-MM-DD"),
+            dayjs().endOf("year").format("YYYY-MM-DD")
         );
         const byDaysResponse = await getReportByDays();
-        if (topTenByTimeRangeResponse) {
-            setTopTenByTimeRangeSeries([
-                topTenByTimeRangeResponse?.morning,
-                topTenByTimeRangeResponse?.afternoon,
-                topTenByTimeRangeResponse?.evening,
-            ]);
-            setTopTenByTimeRangeOptions({
-                ...topTenByTimeRangeOptions,
-                labels: ["เช้า", "บ่าย", "เย็น"],
-            });
+
+        if (topTenByZoneReport?.length) {
+            setTopTenByZone(topTenByZoneReport);
         }
+
         if (byDaysResponse) {
             const mapValues = {
                 Sunday: 0,
@@ -125,12 +135,24 @@ const DashboardPage: React.FC = () => {
         }
     };
 
-    const getReportByTopTenByTimeRangeTitle = () => {
-        return `ช่วงเวลาที่มีการจอด ประจำเดือนนี้`;
+    const getTopTenByZoneReportTitle = () => {
+        return `โซนที่มีการใช้งานมากที่สุด ประจำเดือนนี้`;
     };
 
-    const getReportByDaysTitle = () => {
+    const getByDaysReportTitle = () => {
         return `วันที่มีการใช้งาน ประจำเดือนนี้`;
+    };
+
+    const renderCell = (
+        item: TopTenByZoneReport,
+        columnKey: keyof TopTenByZoneReport
+    ) => {
+        const cellValue = item[columnKey];
+
+        switch (columnKey) {
+            default:
+                return cellValue;
+        }
     };
 
     return (
@@ -155,18 +177,54 @@ const DashboardPage: React.FC = () => {
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 pt-12 gap-8 lg:gap-2">
                 <div className="col-span-1">
-                    <ReportCard title={getReportByTopTenByTimeRangeTitle()}>
-                        <ApexChart
-                            options={topTenByTimeRangeOptions}
-                            series={topTenByTimeRangeSeries}
-                            type="pie"
-                            width={"100%"}
-                            height={400}
-                        />
+                    <ReportCard title={getTopTenByZoneReportTitle()}>
+                        <Table
+                            aria-label="Example table with custom cells, pagination and sorting"
+                            isHeaderSticky
+                            classNames={{
+                                wrapper: "max-h-full",
+                            }}
+                            // sortDescriptor={sortDescriptor}
+                            topContentPlacement="outside"
+                            // onSortChange={setSortDescriptor}
+                        >
+                            <TableHeader columns={columns}>
+                                {(column) => (
+                                    <TableColumn
+                                        key={column.uid}
+                                        align={
+                                            column.uid === "actions"
+                                                ? "center"
+                                                : "start"
+                                        }
+                                        allowsSorting={column.sortable}
+                                    >
+                                        {column.name}
+                                    </TableColumn>
+                                )}
+                            </TableHeader>
+                            <TableBody
+                                emptyContent={"ไม่มีข้อมูลโซน"}
+                                items={topTenByZone}
+                            >
+                                {(item) => (
+                                    <TableRow key={item.id}>
+                                        {(columnKey) => (
+                                            <TableCell>
+                                                {renderCell(
+                                                    item,
+                                                    columnKey as keyof TopTenByZoneReport
+                                                )}
+                                            </TableCell>
+                                        )}
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
                     </ReportCard>
                 </div>
                 <div className="col-span-2">
-                    <ReportCard title={getReportByDaysTitle()}>
+                    <ReportCard title={getByDaysReportTitle()}>
                         <ApexChart
                             options={byDaysOptions}
                             series={byDaysSeries}

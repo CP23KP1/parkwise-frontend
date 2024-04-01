@@ -1,6 +1,9 @@
 import axios from "axios";
 import { checkAuth } from "../helper/auth";
-import { TopTenByTimeRangeReport } from "../types/data/report.response";
+import {
+    TopTenByTimeRangeReport,
+    TopTenByZoneReport,
+} from "../types/data/report.response";
 
 export const getReportByTopTenByTimeRange = async (
     start: string,
@@ -12,6 +15,31 @@ export const getReportByTopTenByTimeRange = async (
             const response = await axios.get<TopTenByTimeRangeReport>(
                 process.env.NEXT_PUBLIC_API_HOST +
                     "/reports/top-ten-time-range",
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                    params: {
+                        timeStart: start,
+                        timeEnd: end,
+                    },
+                }
+            );
+            return response.data;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getReportTopTenByZone = async (
+    start: string,
+    end: string
+): Promise<TopTenByZoneReport[] | undefined> => {
+    try {
+        if (checkAuth()) {
+            const token = localStorage.getItem("access_token");
+            const response = await axios.get<TopTenByZoneReport[]>(
+                process.env.NEXT_PUBLIC_API_HOST +
+                    "/reports/top-ten-parking-zone",
                 {
                     headers: { Authorization: `Bearer ${token}` },
                     params: {
