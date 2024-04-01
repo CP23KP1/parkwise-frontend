@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import liff from "@line/liff";
-import TextInput from "@/app/components/input/input";
+import TextInput from "@/app/common/components/input/input";
 
 const Line = () => {
     const [profile, setProfile] = useState(Object);

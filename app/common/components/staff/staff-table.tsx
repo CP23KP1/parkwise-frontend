@@ -311,7 +311,7 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                             </div>
                                             <div className="col-span-2">
                                                 <TextInput
-                                                    label="อีเมลล์"
+                                                    label="อีเมล"
                                                     key="email"
                                                     type="email"
                                                     onChange={(e) =>

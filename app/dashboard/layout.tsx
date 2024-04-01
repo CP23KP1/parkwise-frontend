@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Sidebar from "../components/sidebar";
+import Sidebar from "../common/components/sidebar";
 import { Kanit } from "next/font/google";
 import { getProfile } from "../services/auth.service";
 

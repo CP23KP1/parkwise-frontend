@@ -11,7 +11,7 @@ export const parkingColumns = [
 export const staffColumns = [
     { name: "ชื่อ", uid: "firstname", sortable: true },
     { name: "นามสกุล", uid: "lastname", sortable: true },
-    { name: "อีเมลล์", uid: "email", sortable: true },
+    { name: "อีเมล", uid: "email", sortable: true },
     { name: "เบอร์มือถือ", uid: "phoneNumber", sortable: true },
     //* Comment
     // { name: "ตำแหน่ง", uid: "position", sortable: true },
@@ -150,7 +150,7 @@ export const userColumns = [
         sortable: true,
     },
     {
-        name: "อีเมลล์",
+        name: "อีเมล",
         uid: "email",
         sortable: true,
     },

@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { logout } from "../helper/auth";
-import { getPublicBasePath } from "../helper/basePath";
+import { logout } from "../../helper/auth";
+import { getPublicBasePath } from "../../helper/basePath";
 import { Button, Listbox, ListboxItem, cn } from "@nextui-org/react";
 import { FaCartPlus } from "react-icons/fa6";
 import { usePathname, useRouter } from "next/navigation";
-import { menuType } from "../types/data/menu";
+import { menuType } from "../../types/data/menu";
 import { log } from "console";
-import { getProfile } from "../services/auth.service";
-import { Profile } from "../types/data/profile";
+import { getProfile } from "../../services/auth.service";
+import { Profile } from "../../types/data/profile";
 
 interface SidebarProps {
     open?: boolean;
