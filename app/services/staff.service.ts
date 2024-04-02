@@ -193,7 +193,13 @@ const isRequiredFieldValidated = (
     email: string,
     phoneNumber: string
 ) => {
-    if (!firstname || !lastname || !email || !phoneNumber) {
+    if (
+        !firstname ||
+        !lastname ||
+        !email ||
+        phoneNumber.length < 10 ||
+        phoneNumber.length > 10
+    ) {
         return false;
     }
     return true;

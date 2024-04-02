@@ -7,7 +7,7 @@ export const createEmergencyNumber = async (
     phoneNumber: string,
     active: boolean
 ) => {
-    if (!name || !phoneNumber) {
+    if (!name || phoneNumber.length < 10 || phoneNumber.length > 10) {
         return;
     }
     try {
@@ -80,6 +80,9 @@ export const editEmergency = async (
     phoneNumber: string,
     active: boolean
 ) => {
+    if (!name || phoneNumber.length < 10 || phoneNumber.length > 10) {
+        return;
+    }
     try {
         Swal.isLoading();
         if (checkAuth()) {

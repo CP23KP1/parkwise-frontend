@@ -87,9 +87,8 @@ const ResponsiveEmergencyTable: React.FC<Props> = ({ data }) => {
         setLoading(true);
         try {
             const isNameInValidated = inValidateLength(name, 1, checked);
-            const isPhoneNumberInValidated = inValidateLength(
+            const isPhoneNumberInValidated = inValidatePhone(
                 phoneNumber,
-                1,
                 checked
             );
             if (
