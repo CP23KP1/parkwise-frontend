@@ -33,7 +33,9 @@ const LogsPage = () => {
     const [selectedZone, setSelectedZone] = useState("1");
     const [allPage, setAllPage] = useState(0);
 
-    const [token, setToken] = useState("");
+    const [token, setToken] = useState(
+        localStorage.getItem("access_token") || ""
+    );
 
     const fetcher = (url: string) =>
         axios
@@ -84,7 +86,7 @@ const LogsPage = () => {
                 search ? `&search=${search}` : ""
             }${selectedZone ? `&zoneId=${selectedZone}` : ""}`,
         fetcher,
-        { refreshInterval: 1000 }
+        { refreshInterval: 500 }
     );
 
     useEffect(() => {
@@ -93,6 +95,7 @@ const LogsPage = () => {
     }, []);
 
     useEffect(() => {
+        setToken(localStorage.getItem("access_token") || "");
         if (swrData) {
             setData(swrData.data);
         }
