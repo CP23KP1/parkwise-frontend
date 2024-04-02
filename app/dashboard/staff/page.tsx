@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import StaffPage from "./components/StaffPage";
 import { STAFF_PAGE } from "@/app/common/data/meta.data";
+import { getPublicBasePath } from "@/app/helper/basePath";
 
 export const metadata: Metadata = {
     title: STAFF_PAGE.title,
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
             rel: "icon",
             type: "image/x-icon",
             sizes: "32x32",
-            url: "/favicon.ico",
+            url: getPublicBasePath("/favicon.ico"),
         },
     ],
 };

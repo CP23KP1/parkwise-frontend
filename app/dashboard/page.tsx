@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import DashboardPage from "./DashboardPage";
 import { DASHBOARD_PAGE } from "../common/data/meta.data";
+import { getPublicBasePath } from "../helper/basePath";
 
 export const metadata: Metadata = {
     title: DASHBOARD_PAGE.title,
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
             rel: "icon",
             type: "image/x-icon",
             sizes: "32x32",
-            url: "/favicon.ico",
+            url: getPublicBasePath("/favicon.ico"),
         },
     ],
 };
