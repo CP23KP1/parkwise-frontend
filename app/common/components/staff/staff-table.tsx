@@ -274,7 +274,9 @@ const ResponsiveStaffTable: React.FC<Props> = ({ data }) => {
                                                     label="ชื่อจริง"
                                                     key="firstname"
                                                     onChange={(e) =>
-                                                        setEmail(e.target.value)
+                                                        setFirstName(
+                                                            e.target.value
+                                                        )
                                                     }
                                                     error={inValidateLength(
                                                         firstName,
