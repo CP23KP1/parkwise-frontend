@@ -5,6 +5,14 @@ import LoginPage from "./components/LoginPage";
 export const metadata: Metadata = {
     title: LOGIN_PAGE.title,
     description: LOGIN_PAGE.description,
+    icons: [
+        {
+            rel: "icon",
+            type: "image/x-icon",
+            sizes: "32x32",
+            url: "/favicon.ico",
+        },
+    ],
 };
 
 const Login = () => {

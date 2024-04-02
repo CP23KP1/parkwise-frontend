@@ -1,20 +1,17 @@
 "use client";
-import { StaffRowData } from "@/app/types/data/staff";
-import ResponsiveStaffTable from "@/app/common/components/staff/staff-table";
-import React, { useEffect, useRef, useState } from "react";
-import "react-responsive-modal/styles.css";
 import FilterButton from "@/app/common/components/button/filter";
 import { FilterMenuProps } from "@/app/common/components/button/filter-menu";
-import { usePathname } from "next/navigation";
-import { getPublicBasePath } from "@/app/helper/basePath";
-import { CAN_NOT_BE_EMPTY, PHONE_LENGTH_INVALID } from "@/app/helper/wording";
+import TextInput from "@/app/common/components/input/input";
+import ResponsiveStaffTable from "@/app/common/components/staff/staff-table";
+import { STAFF_PAGE } from "@/app/common/data/meta.data";
 import {
     inValidateEmail,
-    inValidateEmailWording,
     inValidateLength,
     inValidatePhone,
-    inValidatePhoneWording,
 } from "@/app/helper/validate";
+import { CAN_NOT_BE_EMPTY, PHONE_LENGTH_INVALID } from "@/app/helper/wording";
+import { createStaff, fetchStaff } from "@/app/services/staff.service";
+import { StaffRowData } from "@/app/types/data/staff";
 import {
     Avatar,
     Button,
@@ -28,12 +25,11 @@ import {
     Pagination,
     Tooltip,
 } from "@nextui-org/react";
-import { IoIosSearch } from "react-icons/io";
-import TextInput from "@/app/common/components/input/input";
-import { FaAirbnb, FaPerson } from "react-icons/fa6";
-import { createStaff, fetchStaff } from "@/app/services/staff.service";
-import { STAFF_PAGE } from "@/app/common/data/meta.data";
 import Head from "next/head";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
+import { IoIosSearch } from "react-icons/io";
+import "react-responsive-modal/styles.css";
 
 const StaffPage = () => {
     const pathname = usePathname();
