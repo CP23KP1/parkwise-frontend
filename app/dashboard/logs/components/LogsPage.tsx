@@ -33,14 +33,14 @@ const LogsPage = () => {
     const [selectedZone, setSelectedZone] = useState("1");
     const [allPage, setAllPage] = useState(0);
 
-    const [token, setToken] = useState(
-        localStorage.getItem("access_token") || ""
-    );
-
     const fetcher = (url: string) =>
         axios
             .get(url, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "access_token"
+                    )}`,
+                },
             })
             .then((res) => res.data)
             .then((res) => {
@@ -51,7 +51,11 @@ const LogsPage = () => {
     const fetcherLatest = (url: string) =>
         axios
             .get(url, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem(
+                        "access_token"
+                    )}`,
+                },
             })
             .then((res) => res.data)
             .then((res) => {
@@ -67,8 +71,20 @@ const LogsPage = () => {
         { refreshInterval: 1000 }
     );
 
+    const { data: swrData, error } = useSWR(
+        process.env.NEXT_PUBLIC_API_HOST +
+            `/license-plate?page=${page}&limit=${limit}${
+                search ? `&search=${search}` : ""
+            }${selectedZone ? `&zoneId=${selectedZone}` : ""}`,
+        fetcher,
+        { refreshInterval: 500 }
+    );
+
     useEffect(() => {
-        setToken(localStorage.getItem("access_token") || "");
+        fetchZone(setZone, setSelectedZone);
+    }, []);
+
+    useEffect(() => {
         if (
             latestSwrData &&
             latestSwrData.data &&
@@ -80,22 +96,7 @@ const LogsPage = () => {
         }
     }, [latestSwrData]);
 
-    const { data: swrData, error } = useSWR(
-        process.env.NEXT_PUBLIC_API_HOST +
-            `/license-plate?page=${page}&limit=${limit}${
-                search ? `&search=${search}` : ""
-            }${selectedZone ? `&zoneId=${selectedZone}` : ""}`,
-        fetcher,
-        { refreshInterval: 500 }
-    );
-
     useEffect(() => {
-        setToken(localStorage.getItem("access_token") || "");
-        fetchZone(setZone, setSelectedZone);
-    }, []);
-
-    useEffect(() => {
-        setToken(localStorage.getItem("access_token") || "");
         if (swrData) {
             setData(swrData.data);
         }
