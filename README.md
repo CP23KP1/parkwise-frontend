@@ -1,17 +1,77 @@
+# Parkwise README
+
+Visit the repository via [Parkwise on Github](https://github.com/CP23KP1/parkwise-frontend)
+
+Visit the Application via [Parkwise](https://capstone23.sit.kmutt.ac.th/kp1/admin)
+
+![Logo](/public/logo/logo-bg.png)
+
+## Table of Contents
+
+1. Requirements for Project Installation
+2. Version of Microsoft Word Used
+3. Information of Students
+
+## Requirements for Project Installation
+
+#### 1. Hardware Requirements
+
+To using Parkwise with fully functionallity the devices must have
+
+-   Can access the internet (http/https)
+-   Can access [Parkwise](https://capstone23.sit.kmutt.ac.th/kp1/admin) Website
+    1.1 Desktop/Laptop
+-   OS:WIN/MACOS
+-   No specific hardware requirement
+    1.2 Mobile
+-   OS:Andriod/IOS
+-   No specific hardware requirement
+
+#### 2. Software Requirements
+
+-   Text Editor tools (Visual studio version 1.85.1 or later - recommendation)
+-   Docker (Latest)
+-   Firebase (BaaS - Storage)
+
+#### 3. Library Requirements
+
+3.1 Environment
+
+-   Node.js (version 18.x.x or later)
+-   **Frontend**
+    -   React.js (version 18.2.0)
+    -   Next.js (version 14.0.3)
+-   **CSS Framework**
+    -   NextUI (version 2.2.9)
+    -   Tailwindcss (version 3.3.3)
+-   **Database**
+    -   MySQL (version 8 or later)
+    -   Firebase (version 10.4.0)
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
-First, run the development server:
+Software architecture of Parkwise
+
+![Parkwise-architecture](https://firebasestorage.googleapis.com/v0/b/Parkwise-de5f5.appspot.com/o/common%2Farchitecture.png?alt=media&token=595183dd-96e1-4d09-9696-51803d7b4043)
+
+> Pre-requiresite for running application correctly:
+
+1. First, run the development server:
 
 ```bash
+# Installation all needed packages
+yarn
+```
+
+```bash
+# Running project
 npm run dev
 # or
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -20,17 +80,27 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
+2. Enter the key environment to running the project.
 
-To learn more about Next.js, take a look at the following resources:
+## Information of Students
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Student 1:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+-   StudentId: 63130500002
+-   Name: Karunpat Promvisut
+-   Email: karunat.promvisut@mail.kmutt.ac.th
+-   Telephone: 095-469-8230
 
-## Deploy on Vercel
+Student 2:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+-   StudentId: 63130500214
+-   Name: Nonthakorn Inthong
+-   Email: nonthakorn.inthong@mail.kmutt.ac.th
+-   Telephone: 099-286-0332
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Student 3:
+
+-   StudentId: 63130500217
+-   Name: Pathompong Srikitkaseamwet
+-   Email: Pathompong.Pepo@mail.kmutt.ac.th
+-   Telephone: 095-747-3374
