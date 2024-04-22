@@ -42,6 +42,16 @@ export const inValidatePasswordWording = (password: string) => {
     return "";
 };
 
+export const inValidateSelected = (value: number, checked: boolean) => {
+    if (checked) {
+        if (value >= 1) {
+            return false;
+        }
+        return true;
+    }
+    return false;
+};
+
 export const inValidateLength = (
     value: string,
     length: number,

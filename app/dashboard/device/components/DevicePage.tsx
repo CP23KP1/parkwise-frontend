@@ -9,7 +9,7 @@ import TextInput from "@/app/common/components/input/input";
 import { ZoneRowData } from "@/app/types/data/zone";
 import { getPublicBasePath } from "@/app/helper/basePath";
 import { CAN_NOT_BE_EMPTY } from "@/app/helper/wording";
-import { inValidateLength } from "@/app/helper/validate";
+import { inValidateLength, inValidateSelected } from "@/app/helper/validate";
 import {
     Button,
     Input,
@@ -49,6 +49,7 @@ const DevicePage = () => {
     const [loading, setLoading] = useState(false);
 
     const onOpenModal = () => setOpen(true);
+
     const onCloseModal = () => {
         setName("");
         setDescription("");
@@ -278,6 +279,11 @@ const DevicePage = () => {
                                             key="zone"
                                             onChange={handleZoneChange}
                                             value={zoneId}
+                                            defaultSelectedKeys={[
+                                                zones.length
+                                                    ? zones[0].id.toString()
+                                                    : "",
+                                            ]}
                                         >
                                             {zones.map((zone) => (
                                                 <SelectItem

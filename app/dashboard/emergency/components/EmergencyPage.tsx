@@ -159,6 +159,7 @@ const EmergencyPage = () => {
                                                         )
                                                     }
                                                     value={String(active)}
+                                                    defaultSelectedKeys={["1"]}
                                                 >
                                                     {activeChoice.map(
                                                         (active) => (

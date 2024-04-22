@@ -232,6 +232,11 @@ const ParkingPage = () => {
                                             key="zone"
                                             onChange={handleZoneChange}
                                             value={zoneId}
+                                            defaultSelectedKeys={[
+                                                zones.length
+                                                    ? zones[0].id.toString()
+                                                    : "",
+                                            ]}
                                         >
                                             {zones.map((zone) => (
                                                 <SelectItem
