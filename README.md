@@ -1,4 +1,4 @@
-# Parkwise README
+# :car: Parkwise  README
 
 Visit the repository via [Parkwise on Github](https://github.com/CP23KP1/parkwise-frontend)
 
@@ -84,7 +84,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 2. Enter the key environment to running the project.
 
 
-# Admin manaual
+# Admin manaual :open_book:
 
 System for system administrators
 
