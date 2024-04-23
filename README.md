@@ -10,7 +10,8 @@ Visit the Application via [Parkwise](https://capstone23.sit.kmutt.ac.th/kp1/admi
 
 1. Requirements for Project Installation
 2. Version of Microsoft Word Used
-3. Information of Students
+3. Admin Manaual
+4. Information of Students
 
 ## Requirements for Project Installation
 
