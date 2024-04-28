@@ -18,7 +18,7 @@ export const menuType = [
         link: getPublicBasePath("/dashboard/parking"),
     },
     {
-        name: "เจ้าหน้าที่",
+        name: "ผู้ใช้งาน",
         icon: <RiAdminFill />,
         link: getPublicBasePath("/dashboard/staff"),
     },

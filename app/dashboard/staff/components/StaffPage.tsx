@@ -189,44 +189,7 @@ const StaffPage = () => {
                                 </span>
                             </ModalHeader>
                             <ModalBody>
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div className="col-span-1">
-                                        <div className="h-full flex flex-row justify-center items-center p-2">
-                                            <input
-                                                className="hidden"
-                                                type="file"
-                                                accept="image/*"
-                                                onChange={handleImageChange}
-                                                ref={inputRef}
-                                                placeholder="Upload Image"
-                                            />
-
-                                            <Tooltip
-                                                color="primary"
-                                                content="Edit Car Image"
-                                                className="capitalize text-white"
-                                            >
-                                                {isUploadImageLoading ? (
-                                                    <CircularProgress
-                                                        color="primary"
-                                                        aria-label="Loading..."
-                                                    />
-                                                ) : (
-                                                    <Avatar
-                                                        className="hover:cursor-pointer w-32 h-32"
-                                                        isBordered
-                                                        src={
-                                                            selectedImage ??
-                                                            "https://images.unsplash.com/broken"
-                                                        }
-                                                        onClick={() => {
-                                                            inputRef.current.click();
-                                                        }}
-                                                    ></Avatar>
-                                                )}
-                                            </Tooltip>
-                                        </div>
-                                    </div>
+                                <div className="grid gap-3">
                                     <div className="col-span-1">
                                         <div className="grid grid-cols-2 gap-3">
                                             <div className="col-span-1">

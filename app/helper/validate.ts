@@ -1,7 +1,8 @@
 export const inValidatePassword = (password: string, checked: boolean) => {
     const lengthCheck = password.length >= 8;
 
-    const regexCheck = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]+$/;
+    const regexCheck = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
+
     if (checked) {
         if (lengthCheck && regexCheck.test(password)) {
             return false;
