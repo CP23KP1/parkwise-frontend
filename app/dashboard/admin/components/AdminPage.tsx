@@ -145,9 +145,9 @@ const AdminPage = () => {
         const isEmailInValidated = inValidateEmail(email, checked);
 
         if (
-            isFirstnameInValidated ||
-            isLastnameInValidated ||
-            isEmailInValidated
+            !isFirstnameInValidated ||
+            !isLastnameInValidated ||
+            !isEmailInValidated
         ) {
             await createUser(email, password, firstName, lastName);
         }
